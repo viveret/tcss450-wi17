@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id="pi:main" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="GRADLE" external.system.module.group="" external.system.module.type="sourceSet" external.system.module.version="unspecified" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="false">
+    <output url="file://$MODULE_DIR$/../../build/classes/main" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../src/main">
+      <sourceFolder url="file://$MODULE_DIR$/../../src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../src/main/resources" type="java-resource" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Gradle: edu.stanford.nlp:stanford-corenlp:3.7.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.protobuf:protobuf-java:3.1.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.slf4j:jcl-over-slf4j:1.7.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.slf4j:slf4j-log4j12:1.7.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.apple:AppleJavaExtensions:1.4" level="project" />
+    <orderEntry type="library" name="Gradle: de.jollyday:jollyday:0.4.9" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.commons:commons-lang3:3.3.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.lucene:lucene-queryparser:4.10.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.lucene:lucene-analyzers-common:4.10.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.lucene:lucene-queries:4.10.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.lucene:lucene-core:4.10.3" level="project" />
+    <orderEntry type="library" name="Gradle: javax.servlet:javax.servlet-api:3.0.1" level="project" />
+    <orderEntry type="library" name="Gradle: com.io7m.xom:xom:1.2.10" level="project" />
+    <orderEntry type="library" name="Gradle: joda-time:joda-time:2.9" level="project" />
+    <orderEntry type="library" name="Gradle: com.googlecode.efficient-java-matrix-library:ejml:0.23" level="project" />
+    <orderEntry type="library" name="Gradle: org.glassfish:javax.json:1.0.4" level="project" />
+    <orderEntry type="library" name="Gradle: de.sciss:sphinx4-core:1.0.0" level="project" />
+    <orderEntry type="library" name="Gradle: de.sciss:sphinx4-data:1.0.0" level="project" />
+    <orderEntry type="library" name="Gradle: javax.xml.bind:jaxb-api:2.2.7" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.lucene:lucene-sandbox:4.10.3" level="project" />
+    <orderEntry type="library" name="Gradle: xerces:xercesImpl:2.8.0" level="project" />
+    <orderEntry type="library" name="Gradle: xalan:xalan:2.7.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.commons:commons-math3:3.6" level="project" />
+    <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.12" level="project" />
+    <orderEntry type="library" name="Gradle: log4j:log4j:1.2.17" level="project" />
+    <orderEntry type="library" name="Gradle: xml-apis:xml-apis:2.0.2" level="project" />
+  </component>
+</module>
