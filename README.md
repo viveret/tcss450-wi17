@@ -1,0 +1,1 @@
+Using Sphinx4 for Voice to Text, and Stanford-CoreNLP for language processing.
