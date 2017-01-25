@@ -11,14 +11,14 @@
 
 package com.viveret.pilexa.pi;
 
-import java.io.InputStream;
-
 import edu.cmu.sphinx.api.Configuration;
 import edu.cmu.sphinx.api.SpeechResult;
 import edu.cmu.sphinx.api.StreamSpeechRecognizer;
 import edu.cmu.sphinx.decoder.adaptation.Stats;
 import edu.cmu.sphinx.decoder.adaptation.Transform;
 import edu.cmu.sphinx.result.WordResult;
+
+import java.io.InputStream;
 
 /**
  * A simple example that shows how to transcribe a continuous audio file that
