@@ -1,7 +1,9 @@
 package com.viveret.pilexa.pi.defaultskills;
 
 import com.viveret.pilexa.pi.AbstractSkill;
+import com.viveret.pilexa.pi.ConcretePiLexaService;
 import com.viveret.pilexa.pi.Intent;
+import com.viveret.pilexa.pi.PiLexaService;
 
 import java.util.Arrays;
 import java.util.List;
@@ -16,10 +18,26 @@ public class RepeatBackToMeSkill extends AbstractSkill {
                 0, null);
     }
 
+    /**
+     * Test method for Repeat back to me skill
+     *
+     * @param args main arguments
+     */
+    public static void main(String[] args) {
+        PiLexaService pilexa = new ConcretePiLexaService();
+        pilexa.connect();
+
+        pilexa.interpretUtterance("repeat back to me I am a good Alexa clone");
+
+        pilexa.disconnect();
+    }
+
     @Override
     public boolean understandsIntent(Intent i) {
-        List<String> verbs = Arrays.asList("set", "start");
-        return verbs.contains(i.getIntentVerb());
+        List<String> verbs = Arrays.asList("repeat", "say", "tell");
+        boolean rightVerbs = verbs.contains(i.getIntentVerb());
+        // boolean rightSubject =
+        return false;
     }
 
     @Override

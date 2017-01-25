@@ -3,10 +3,12 @@ package com.viveret.pilexa.pi;
 /**
  * Created by viveret on 1/24/17.
  */
-public class PiLexaService implements IPiLexaService {
+public interface PiLexaService {
+    void connect();
 
-    @Override
-    public int interpretUtterance(String str) {
-        return 0;
-    }
+    void disconnect();
+
+    boolean isConnected();
+
+    int interpretUtterance(String str);
 }

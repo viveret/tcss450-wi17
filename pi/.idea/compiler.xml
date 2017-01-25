@@ -2,8 +2,8 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel target="1.9">
-      <module name="pi_main" target="1.9" />
-      <module name="pi_test" target="1.9" />
+      <module name="pi_main" target="1.8" />
+      <module name="pi_test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
