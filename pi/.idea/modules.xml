@@ -3,8 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/pi.iml" filepath="$PROJECT_DIR$/.idea/modules/pi.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/pi_main.iml" filepath="$PROJECT_DIR$/.idea/modules/pi_main.iml" group="pi" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/pi_test.iml" filepath="$PROJECT_DIR$/.idea/modules/pi_test.iml" group="pi" />
     </modules>
   </component>
 </project>

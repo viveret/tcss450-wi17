@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="de.sciss:sphinx4-core:1.0.0" type="repository">
+    <properties maven-id="de.sciss:sphinx4-core:1.0.0" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/sphinx4-core-1.0.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/commons-math3-3.6.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/lib/sphinx4-core-1.0.0-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>

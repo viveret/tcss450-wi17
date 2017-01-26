@@ -1,14 +1,18 @@
 package com.viveret.pilexa.pi;
 
+import java.util.List;
+
 /**
  * Created by viveret on 1/24/17.
  */
 public abstract class AbstractSkill implements Skill {
     private String myDisplayName, myShortDesc, myDesc, myPublisher, myVersionStr, myIconUrl;
     private int myVersionNumber;
+    private UtteranceToIntent myUtteranceTranslator;
 
     public AbstractSkill(String theDisplayName, String theShortDesc, String theDesc, String thePublisher,
-                         String theVersionStr, int theVersionNum, String theIconUrl) {
+                         String theVersionStr, int theVersionNum, String theIconUrl,
+                         UtteranceToIntent theUtteranceTranslator) {
         myDisplayName = theDisplayName;
         myShortDesc = theShortDesc;
         myDesc = theDesc;
@@ -16,6 +20,7 @@ public abstract class AbstractSkill implements Skill {
         myVersionStr = theVersionStr;
         myVersionNumber = theVersionNum;
         myIconUrl = theIconUrl;
+        myUtteranceTranslator = theUtteranceTranslator;
     }
 
     @Override
@@ -51,5 +56,10 @@ public abstract class AbstractSkill implements Skill {
     @Override
     public String getIconUrl() {
         return myIconUrl;
+    }
+
+    @Override
+    public UtteranceToIntent getUtteranceTranslator() {
+        return myUtteranceTranslator;
     }
 }

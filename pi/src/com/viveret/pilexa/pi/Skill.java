@@ -1,5 +1,7 @@
 package com.viveret.pilexa.pi;
 
+import java.util.List;
+
 /**
  * Created by viveret on 1/24/17.
  */
@@ -18,7 +20,7 @@ public interface Skill {
 
     String getIconUrl();
 
-    boolean understandsIntent(Intent i);
-
     int processIntent(Intent i);
+
+    UtteranceToIntent getUtteranceTranslator();
 }
