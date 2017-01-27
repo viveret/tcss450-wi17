@@ -10,5 +10,5 @@ public interface PiLexaService {
 
     boolean isConnected();
 
-    int interpretUtterance(String str);
+    int interpret(String str);
 }

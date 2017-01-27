@@ -1,6 +1,10 @@
 package com.viveret.pilexa.pi.defaultskills;
 
-import com.viveret.pilexa.pi.*;
+import com.viveret.pilexa.pi.AbstractSkill;
+import com.viveret.pilexa.pi.ConcretePiLexaService;
+import com.viveret.pilexa.pi.Intent;
+import com.viveret.pilexa.pi.PiLexaService;
+import com.viveret.pilexa.pi.invocation.InvocationPattern;
 
 import java.util.Arrays;
 import java.util.List;
@@ -9,7 +13,11 @@ import java.util.List;
  * Created by viveret on 1/24/17.
  */
 public class RepeatBackToMeSkill extends AbstractSkill {
-    private static class MyUtteranceTranslator implements UtteranceToIntent {
+    static {
+        ConcretePiLexaService.registerSkill(new RepeatBackToMeSkill());
+    }
+
+    /*private static class MyUtteranceTranslator implements UtteranceToIntent {
         @Override
         public boolean understandsUtterance(Utterance u) {
             List<String> verbs = Arrays.asList("repeat", "say");
@@ -22,12 +30,12 @@ public class RepeatBackToMeSkill extends AbstractSkill {
         public Intent fromUtterance(Utterance u) {
             return null;//u.getRealVerb();
         }
-    }
+    }*/
 
     public RepeatBackToMeSkill() {
         super("Repeat Back To Me", "Repeat a phrase back to you",
                 "Repeat a phrase back to you", "PiLexa", "0.0.0.0",
-                0, null, new MyUtteranceTranslator());
+                0, null);
     }
 
     /**
@@ -39,7 +47,8 @@ public class RepeatBackToMeSkill extends AbstractSkill {
         PiLexaService pilexa = new ConcretePiLexaService();
         pilexa.connect();
 
-        pilexa.interpretUtterance("repeat back to me I am a good Alexa clone");
+        String str = "repeat back to me I am a good Alexa clone";
+        pilexa.interpret(str);
 
         pilexa.disconnect();
     }
@@ -47,5 +56,11 @@ public class RepeatBackToMeSkill extends AbstractSkill {
     @Override
     public int processIntent(Intent i) {
         return 0;
+    }
+
+    @Override
+    public List<InvocationPattern> getInvocations() {
+        InvocationPattern[] invos = {InvocationPattern.parse("repeat back to me %phrase:string%")};
+        return Arrays.asList(invos);
     }
 }

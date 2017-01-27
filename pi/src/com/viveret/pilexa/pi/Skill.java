@@ -1,5 +1,7 @@
 package com.viveret.pilexa.pi;
 
+import com.viveret.pilexa.pi.invocation.InvocationPattern;
+
 import java.util.List;
 
 /**
@@ -22,5 +24,5 @@ public interface Skill {
 
     int processIntent(Intent i);
 
-    UtteranceToIntent getUtteranceTranslator();
+    List<InvocationPattern> getInvocations();
 }
