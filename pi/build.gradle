@@ -1,0 +1,64 @@
+apply plugin: 'java'
+//apply plugin: 'application'
+//mainClassName = 'com.viveret.pilexa.pi.Main'
+
+repositories { mavenCentral() }
+
+dependencies {
+    compile group: 'edu.stanford.nlp', name: 'stanford-corenlp', version: '3.7.0'
+    compile group: 'edu.stanford.nlp', name: 'stanford-corenlp', version: '3.7.0', classifier: 'models'
+    compile group: 'edu.stanford.nlp', name: 'stanford-corenlp', version: '3.7.0', classifier: 'models-english'
+    compile group: 'edu.stanford.nlp', name: 'stanford-parser', version: '3.7.0'
+    //compile group: 'edu.stanford.nlp', name: 'stanford-pos-tagger', version: '3.0.2'
+    
+    compile group: 'de.sciss', name: 'sphinx4', version: '1.0.0'
+    
+    compile group: 'com.google.protobuf', name: 'protobuf-java', version: '3.1.0'
+
+    compile group: 'org.slf4j', name: 'jcl-over-slf4j', version: '1.7.0'
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.0'
+    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.0'
+    compile group: 'log4j', name: 'log4j', version: '1.2.14'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/'
+        }
+        resources {
+            srcDir 'res/'
+        }
+    }
+}
+
+task runJava(type: JavaExec) {
+    classpath sourceSets.main.runtimeClasspath.asPath
+    main = "com.viveret.pilexa.pi.Main"
+}
+
+/*jar { 
+    from {
+        configurations.compile.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+        configurations.runtime.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+  manifest {
+    attributes(    
+        'Built-By': System.getProperty('user.name'),
+        'Built-Date': new Date(),
+        'Built-JDK': System.getProperty('java.version'),
+        "Main-Class": 'com.viveret.pilexa.pi.Main'
+      )
+  }
+}*/
+
+/*buildscript {
+    dependencies {
+        classpath fileTree(dir: '../../build/libs', include: '*.jar', excludes: ['*javadoc.jar', '*sources.jar'])
+    }
+}
+*/
