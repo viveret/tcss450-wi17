@@ -29,7 +29,7 @@ public class PhraseToken {
         return myType;
     }
 
-    public boolean matches(CoreLabel w) {
+    public MatchResult matches(CoreLabel w) {
         String text = w.get(CoreAnnotations.TextAnnotation.class);
         // this is the POS tag of the token
         String pos = w.get(CoreAnnotations.PartOfSpeechAnnotation.class);
@@ -38,20 +38,20 @@ public class PhraseToken {
 
         switch (getType()) {
             case IGNORE:
-                return true;
+                return new MatchResult(0, true);
             case ARGUMENT:
                 switch (getContent()) {
                     case "string":
-                        return true;
+                        return new MatchResult(.3, true);
                     case "int":
-                        return "NUMBER".equals(ne);
+                        return new MatchResult(.75, "NUMBER".equals(ne));
                 }
                 break;
             case MATCH:
-                return getContent().toLowerCase().equals(text.toLowerCase());
+                return new MatchResult(1, getContent().toLowerCase().equals(text.toLowerCase()));
         }
 
-        return false;
+        return new MatchResult(0, false);
     }
 
     @Override

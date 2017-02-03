@@ -1,0 +1,6 @@
+{
+  "skills": [
+    "com.viveret.pilexa.pi.defaultskills.CalendarSkill",
+    "com.viveret.pilexa.pi.defaultskills.RepeatBackToMeSkill"
+  ]
+}

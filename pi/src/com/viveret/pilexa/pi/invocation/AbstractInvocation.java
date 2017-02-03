@@ -1,9 +1,7 @@
 package com.viveret.pilexa.pi.invocation;
 
-import com.viveret.pilexa.pi.Skill;
 import edu.stanford.nlp.ling.CoreLabel;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +17,12 @@ public class AbstractInvocation implements Invocation {
     public AbstractInvocation(InvocationPattern thePattern, Map<String, InvocationToken> theTokens, double theConfidence) {
         myPattern = thePattern;
         myTokens = new HashMap<>(theTokens);
-        myConfidence = theConfidence;
+        if (theConfidence < 0)
+            myConfidence = 0;
+        else if (theConfidence > 1)
+            myConfidence = 1;
+        else
+            myConfidence = theConfidence;
     }
 
     @Override

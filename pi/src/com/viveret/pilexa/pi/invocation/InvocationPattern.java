@@ -1,6 +1,5 @@
 package com.viveret.pilexa.pi.invocation;
 
-import com.viveret.pilexa.pi.Skill;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.util.CoreMap;
@@ -56,7 +55,7 @@ public class InvocationPattern {
         Logger log = Logger.getRootLogger();
 
         Map<String, InvocationToken> args = new HashMap<>();
-        double confidence = 0.0;
+        double confidence = 0;
 
         // traversing the words in the current sentence
         // a CoreLabel is a CoreMap with additional token-specific methods
@@ -75,17 +74,21 @@ public class InvocationPattern {
                         PhraseToken delimPatt = myTokens.get(i);
                         while (j < words.size()) {
                             word = words.get(j);
-                            if (delimPatt.matches(word)) {
+                            MatchResult r = delimPatt.matches(word);
+                            if (r.didMatch()) {
                                 break;
                             } else {
+                                confidence += r.getConfidence();
                                 j++;
                             }
                         }
                     }
                     break;
                 case MATCH:
-                    if (patt.matches(word)) {
+                    MatchResult r = patt.matches(word);
+                    if (r.didMatch()) {
                         j++;
+                        confidence += r.getConfidence();
                     } else {
                         i++;
                     }
@@ -94,20 +97,23 @@ public class InvocationPattern {
                     boolean isAtEnd = (j + 1 == words.size());
                     boolean nextIsTrue = false;
                     if (!isAtEnd && i + 1 < myTokens.size()) {
-                        nextIsTrue = myTokens.get(i + 1).matches(words.get(j));
+                        MatchResult r2 = myTokens.get(i + 1).matches(words.get(j));
+                        confidence += r2.getConfidence();
+                        nextIsTrue = r2.didMatch();
                     }
 
-                    boolean matches = patt.matches(word);
-                    if ((matches && !nextIsTrue) || isAtEnd) {
+                    MatchResult matches = patt.matches(word);
+                    if ((matches.didMatch() && !nextIsTrue) || isAtEnd) {
                         if (wordsIncluded == null) {
                             wordsIncluded = new ArrayList<>();
                         }
 
                         wordsIncluded.add(word);
+                        confidence += matches.getConfidence();
                         j++;
                     }
 
-                    if (!matches || isAtEnd || nextIsTrue) {
+                    if (!matches.didMatch() || isAtEnd || nextIsTrue) {
                         args.put(patt.getLabel(),
                                 new InvocationToken(patt.getContent(), wordsIncluded));
                         wordsIncluded = null;
@@ -117,6 +123,7 @@ public class InvocationPattern {
             }
         }
 
-        return new AbstractInvocation(this, args, 1.0);
+        confidence /= words.size();
+        return new AbstractInvocation(this, args, confidence);
     }
 }

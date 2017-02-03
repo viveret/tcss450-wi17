@@ -1,6 +1,5 @@
 package com.viveret.pilexa.pi.invocation;
 
-import com.viveret.pilexa.pi.Skill;
 import edu.stanford.nlp.ling.CoreLabel;
 
 import java.util.List;

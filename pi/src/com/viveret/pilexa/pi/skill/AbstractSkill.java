@@ -1,4 +1,4 @@
-package com.viveret.pilexa.pi;
+package com.viveret.pilexa.pi.skill;
 
 /**
  * Created by viveret on 1/24/17.

@@ -1,4 +1,4 @@
-package com.viveret.pilexa.pi;
+package com.viveret.pilexa.pi.skill;
 
 import com.viveret.pilexa.pi.invocation.InvocationPattern;
 import com.viveret.pilexa.pi.util.SimpleTuple;
