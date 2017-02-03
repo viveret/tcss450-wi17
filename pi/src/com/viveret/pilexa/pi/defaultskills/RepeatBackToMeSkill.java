@@ -1,12 +1,10 @@
 package com.viveret.pilexa.pi.defaultskills;
 
-import com.viveret.pilexa.pi.AbstractSkill;
-import com.viveret.pilexa.pi.ConcretePiLexaService;
-import com.viveret.pilexa.pi.Intent;
-import com.viveret.pilexa.pi.PiLexaService;
-import com.viveret.pilexa.pi.invocation.InvocationPattern;
+import com.viveret.pilexa.pi.*;
+import com.viveret.pilexa.pi.invocation.*;
+import com.viveret.pilexa.pi.util.SimpleTuple;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,26 +15,13 @@ public class RepeatBackToMeSkill extends AbstractSkill {
         ConcretePiLexaService.registerSkill(new RepeatBackToMeSkill());
     }
 
-    /*private static class MyUtteranceTranslator implements UtteranceToIntent {
-        @Override
-        public boolean understandsUtterance(Utterance u) {
-            List<String> verbs = Arrays.asList("repeat", "say");
-            boolean rightVerbs = verbs.contains(u.getReducedVerb());
-            boolean rightSubject = u.getReducedSubject() == null || u.getReducedSubject().equals("me");
-            return rightVerbs && rightSubject;
-        }
-
-        @Override
-        public Intent fromUtterance(Utterance u) {
-            return null;//u.getRealVerb();
-        }
-    }*/
-
     public RepeatBackToMeSkill() {
         super("Repeat Back To Me", "Repeat a phrase back to you",
                 "Repeat a phrase back to you", "PiLexa", "0.0.0.0",
                 0, null);
     }
+
+    private static final PiLexaService pilexa = new ConcretePiLexaService();
 
     /**
      * Test method for Repeat back to me skill
@@ -44,7 +29,6 @@ public class RepeatBackToMeSkill extends AbstractSkill {
      * @param args main arguments
      */
     public static void main(String[] args) {
-        PiLexaService pilexa = new ConcretePiLexaService();
         pilexa.connect();
 
         String str = "repeat back to me I am a good Alexa clone";
@@ -54,13 +38,19 @@ public class RepeatBackToMeSkill extends AbstractSkill {
     }
 
     @Override
-    public int processIntent(Intent i) {
-        return 0;
+    public List<SimpleTuple<InvocationPattern, Intent>> getPossibleIntents() {
+        List<SimpleTuple<InvocationPattern, Intent>> ret = new ArrayList<>();
+
+        ret.add(new SimpleTuple<>(InvocationPattern.parse("repeat back to me %phrase:string%"), new MainIntent()));
+
+        return ret;
     }
 
-    @Override
-    public List<InvocationPattern> getInvocations() {
-        InvocationPattern[] invos = {InvocationPattern.parse("repeat back to me %phrase:string%")};
-        return Arrays.asList(invos);
+    private class MainIntent implements Intent {
+        @Override
+        public void processInvocation(Invocation i) {
+            pilexa.getLog().debug("Going to repeat back \"" + i.getValue("phrase") + "\"");
+
+        }
     }
 }

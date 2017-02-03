@@ -1,6 +1,7 @@
 package com.viveret.pilexa.pi;
 
 import com.viveret.pilexa.pi.invocation.InvocationPattern;
+import com.viveret.pilexa.pi.util.SimpleTuple;
 
 import java.util.List;
 
@@ -22,7 +23,5 @@ public interface Skill {
 
     String getIconUrl();
 
-    int processIntent(Intent i);
-
-    List<InvocationPattern> getInvocations();
+    List<SimpleTuple<InvocationPattern, Intent>> getPossibleIntents();
 }

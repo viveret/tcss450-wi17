@@ -1,5 +1,6 @@
 package com.viveret.pilexa.pi.invocation;
 
+import com.viveret.pilexa.pi.Skill;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.util.CoreMap;
@@ -54,7 +55,7 @@ public class InvocationPattern {
     public Invocation parse(CoreMap sentence) {
         Logger log = Logger.getRootLogger();
 
-        Map<String, Invocation.InvocationToken> tmpTokens = new HashMap<>();
+        Map<String, InvocationToken> args = new HashMap<>();
         double confidence = 0.0;
 
         // traversing the words in the current sentence
@@ -90,16 +91,25 @@ public class InvocationPattern {
                     }
                     break;
                 case ARGUMENT:
-                    if (patt.matches(word)) {
+                    boolean isAtEnd = (j + 1 == words.size());
+                    boolean nextIsTrue = false;
+                    if (!isAtEnd && i + 1 < myTokens.size()) {
+                        nextIsTrue = myTokens.get(i + 1).matches(words.get(j));
+                    }
+
+                    boolean matches = patt.matches(word);
+                    if ((matches && !nextIsTrue) || isAtEnd) {
                         if (wordsIncluded == null) {
                             wordsIncluded = new ArrayList<>();
                         }
 
                         wordsIncluded.add(word);
                         j++;
-                    } else {
-                        tmpTokens.put(patt.getLabel(),
-                                new Invocation.InvocationToken(patt.getContent(), wordsIncluded));
+                    }
+
+                    if (!matches || isAtEnd || nextIsTrue) {
+                        args.put(patt.getLabel(),
+                                new InvocationToken(patt.getContent(), wordsIncluded));
                         wordsIncluded = null;
                         i++;
                     }
@@ -107,6 +117,6 @@ public class InvocationPattern {
             }
         }
 
-        return new Invocation(tmpTokens, 1.0);
+        return new AbstractInvocation(this, args, 1.0);
     }
 }

@@ -6,7 +6,7 @@ import edu.stanford.nlp.ling.CoreLabel;
 /**
  * Created by viveret on 1/26/17.
  */
-class PhraseToken {
+public class PhraseToken {
     private TokenType myType;
     private String myLabel;
     private String myContent;
@@ -57,7 +57,10 @@ class PhraseToken {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("[" + getLabel() + " ");
+        sb.append("[");
+        if (getLabel() != null) {
+            sb.append("label = \"" + getLabel() + "\", ");
+        }
         sb.append("type = " + myType.toString());
         sb.append(", ");
         sb.append("content = \"" + myContent + "\"");

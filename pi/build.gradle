@@ -32,10 +32,10 @@ sourceSets {
     }
 }
 
-/*task runJava(type: JavaExec) {
+task run(type: JavaExec, dependsOn:build) {
     classpath sourceSets.main.runtimeClasspath.asPath
     main = "com.viveret.pilexa.pi.Main"
-}*/
+}
 
 /*jar { 
     from {
