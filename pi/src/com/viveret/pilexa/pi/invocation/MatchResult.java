@@ -8,7 +8,7 @@ public class MatchResult {
     private boolean myDidMatch;
 
     public MatchResult(double theConfidence, boolean theDidMatch) {
-        myConfidence = theConfidence;
+        myConfidence = (theDidMatch) ? theConfidence : 0;
         myDidMatch = theDidMatch;
     }
 
@@ -16,7 +16,7 @@ public class MatchResult {
         return myConfidence;
     }
 
-    public boolean didMatch() {
+    public boolean meetsCriteria() {
         return myDidMatch;
     }
 }

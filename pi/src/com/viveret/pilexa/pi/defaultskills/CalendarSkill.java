@@ -65,7 +65,7 @@ public class CalendarSkill extends AbstractSkill {
         @Override
         public Sayable processInvocation(Invocation i) {
             String theTime = Calendar.getInstance().getTime().toString();
-            return new Phrase(theTime);
+            return new Phrase("It is " + theTime + ".");
         }
     }
 
@@ -93,7 +93,7 @@ public class CalendarSkill extends AbstractSkill {
         @Override
         public Sayable processInvocation(Invocation i) {
             String theTime = new Date().toString();
-            return new Phrase("It is " + theTime);
+            return new Phrase("It is " + theTime + ".");
         }
     }
 }

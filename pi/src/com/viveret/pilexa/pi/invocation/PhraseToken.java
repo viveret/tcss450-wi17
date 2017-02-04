@@ -29,7 +29,7 @@ public class PhraseToken {
         return myType;
     }
 
-    public MatchResult matches(CoreLabel w) {
+    public MatchResult searchForMatch(CoreLabel w) {
         String text = w.get(CoreAnnotations.TextAnnotation.class);
         // this is the POS tag of the token
         String pos = w.get(CoreAnnotations.PartOfSpeechAnnotation.class);

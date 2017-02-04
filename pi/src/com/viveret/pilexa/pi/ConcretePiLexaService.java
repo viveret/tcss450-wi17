@@ -138,24 +138,26 @@ public class ConcretePiLexaService implements PiLexaService {
                 Invocation invc = tuple.a;
 
                 if (invc.getConfidence() < 0.5) {
-                    log.warn("Low confidence for " + tuple.b.getDisplayName() + ", " + invc.toString() + ". Removing.");
+                    log.warn("Low confidence for " + tuple.b.getDisplayName() + ", " + invc.getConfidence() +
+                            " for " + invc.getPattern() + ". Removing.");
                     invocs.remove(i);
                 } else if (i + 1 < invocs.size() &&
                         Math.abs(invc.getConfidence() - invocs.get(i + 1).a.getConfidence()) < CONFUSE_THRESHOLD) {
                     Invocation next = invocs.get(i + 1).a;
                     StringBuilder sbLog = new StringBuilder();
                     sbLog.append("Confused between invocations: ");
-                    sbLog.append(invc.toString());
+                    sbLog.append(invc.getPattern());
                     sbLog.append(" and ");
-                    sbLog.append(next.toString());
+                    sbLog.append(next.getPattern());
                     sbLog.append(". Moving to confused list.");
-                    log.info(sbLog.toString());
+                    log.warn(sbLog.toString());
 
                     confusedInvocs.add(new SimpleTuple<>(invc, next));
                     invocs.remove(i);
                     invocs.remove(i);
                 } else {
-                    log.debug("Acceptable invocation " + tuple.b.getDisplayName() + ", " + invc.toString() + " kept.");
+                    log.debug("Acceptable invocation " + tuple.b.getDisplayName() + ", " +
+                                    invc.getConfidence() + " for " + invc.getPattern() + " kept.");
                     i++;
                 }
             }
