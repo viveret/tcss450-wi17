@@ -1,8 +1,0 @@
-{
-  "skills": [
-    "com.viveret.pilexa.pi.defaultskills.ClockSkill",
-    "com.viveret.pilexa.pi.defaultskills.RepeatBackToMeSkill",
-    "com.viveret.pilexa.pi.defaultskills.JokeSkill",
-    "com.viveret.pilexa.pi.defaultskills.SalutationSkill"
-  ]
-}
