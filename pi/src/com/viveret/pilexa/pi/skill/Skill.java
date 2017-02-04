@@ -17,6 +17,8 @@ public interface Skill {
 
     String getPublisher();
 
+    String getPackageName();
+
     String getVersionString();
 
     int getVersionNumber();

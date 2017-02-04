@@ -1,7 +1,8 @@
 package com.viveret.pilexa.pi.defaultskills;
 
-import com.viveret.pilexa.pi.*;
-import com.viveret.pilexa.pi.invocation.*;
+import com.viveret.pilexa.pi.ConcretePiLexaService;
+import com.viveret.pilexa.pi.invocation.Invocation;
+import com.viveret.pilexa.pi.invocation.InvocationPattern;
 import com.viveret.pilexa.pi.sayable.Phrase;
 import com.viveret.pilexa.pi.sayable.Sayable;
 import com.viveret.pilexa.pi.skill.AbstractSkill;
@@ -16,14 +17,14 @@ import java.util.List;
 /**
  * Created by viveret on 1/24/17.
  */
-public class RepeatBackToMeSkill extends AbstractSkill {
+public class DebugSkill extends AbstractSkill {
     static {
-        ConcretePiLexaService.registerSkill(new RepeatBackToMeSkill());
+        ConcretePiLexaService.registerSkill(new DebugSkill());
     }
 
-    public RepeatBackToMeSkill() {
-        super("Repeat Back To Me", "Repeat a phrase back to you",
-                "Repeat a phrase back to you", "PiLexa", "0.0.0.0",
+    public DebugSkill() {
+        super("Debug", "Helps debugging",
+                "Helps debugging", "PiLexa", "0.0.0.0",
                 0, null);
     }
 
@@ -38,10 +39,7 @@ public class RepeatBackToMeSkill extends AbstractSkill {
 
         Intent i = new MainIntent();
 
-        ret.add(new SimpleTuple<>(InvocationPattern.parse("repeat back to me %phrase:string%"), i));
-        ret.add(new SimpleTuple<>(InvocationPattern.parse("repeat %phrase:string%"), i));
-        ret.add(new SimpleTuple<>(InvocationPattern.parse("tell me %phrase:string%"), i));
-        ret.add(new SimpleTuple<>(InvocationPattern.parse("say %phrase:string%"), i));
+        ret.add(new SimpleTuple<>(InvocationPattern.parse("debug print nlp tags %str:string%"), i));
 
         return ret;
     }
@@ -49,7 +47,7 @@ public class RepeatBackToMeSkill extends AbstractSkill {
     private class MainIntent implements Intent {
         @Override
         public Skill getAssociatedSkill() {
-            return RepeatBackToMeSkill.this;
+            return DebugSkill.this;
         }
 
         @Override
@@ -69,15 +67,10 @@ public class RepeatBackToMeSkill extends AbstractSkill {
 
         @Override
         public Sayable processInvocation(Invocation i) {
-            List<CoreLabel> toRepeat = i.getValue("phrase");
-            StringBuilder sb = new StringBuilder();
-
-            for (CoreLabel w : toRepeat) {
-                sb.append(w.word());
-                sb.append(" ");
+            for (CoreLabel w : i.getValue("str")) {
+                InvocationPattern.printInfoAboutWord(w);
             }
-            sb.setLength(sb.length() - 1);
-            return new Phrase(sb.toString());
+            return new Phrase("Done.");
         }
     }
 }

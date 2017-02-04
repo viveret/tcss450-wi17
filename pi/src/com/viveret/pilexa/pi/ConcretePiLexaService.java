@@ -58,7 +58,7 @@ public class ConcretePiLexaService implements PiLexaService {
         // build pipeline
         pipeline = new StanfordCoreNLP(
                 PropertiesUtils.asProperties(
-                        "annotators", "tokenize,ssplit,pos,lemma,ner,parse,natlog",
+                        "annotators", "tokenize,ssplit,pos,lemma,ner,parse,natlog,sentiment",
                         "ssplit.isOneSentence", "true",
                         "parse.model", "edu/stanford/nlp/models/srparser/englishSR.ser.gz",
                         "tokenize.language", "en"));
@@ -138,7 +138,7 @@ public class ConcretePiLexaService implements PiLexaService {
                 Invocation invc = tuple.a;
 
                 if (invc.getConfidence() < 0.5) {
-                    log.warn("Low confidence for " + tuple.b.getDisplayName() + ", " + invc.getConfidence() +
+                    log.debug("Low confidence for " + tuple.b.getDisplayName() + ", " + invc.getConfidence() +
                             " for " + invc.getPattern() + ". Removing.");
                     invocs.remove(i);
                 } else if (i + 1 < invocs.size() &&
@@ -156,7 +156,7 @@ public class ConcretePiLexaService implements PiLexaService {
                     invocs.remove(i);
                     invocs.remove(i);
                 } else {
-                    log.debug("Acceptable invocation " + tuple.b.getDisplayName() + ", " +
+                    log.info("Acceptable invocation " + tuple.b.getDisplayName() + ", " +
                                     invc.getConfidence() + " for " + invc.getPattern() + " kept.");
                     i++;
                 }

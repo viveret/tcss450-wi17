@@ -1,30 +1,33 @@
 package com.viveret.pilexa.pi.defaultskills;
 
-import com.viveret.pilexa.pi.*;
-import com.viveret.pilexa.pi.invocation.*;
+import com.viveret.pilexa.pi.ConcretePiLexaService;
+import com.viveret.pilexa.pi.invocation.Invocation;
+import com.viveret.pilexa.pi.invocation.InvocationPattern;
 import com.viveret.pilexa.pi.sayable.Phrase;
 import com.viveret.pilexa.pi.sayable.Sayable;
 import com.viveret.pilexa.pi.skill.AbstractSkill;
 import com.viveret.pilexa.pi.skill.Intent;
+import com.viveret.pilexa.pi.skill.JsonQueryIntent;
 import com.viveret.pilexa.pi.skill.Skill;
 import com.viveret.pilexa.pi.util.SimpleTuple;
-import edu.stanford.nlp.ling.CoreLabel;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by viveret on 1/24/17.
  */
-public class RepeatBackToMeSkill extends AbstractSkill {
+public class JokeSkill extends AbstractSkill {
     static {
-        ConcretePiLexaService.registerSkill(new RepeatBackToMeSkill());
-    }
-
-    public RepeatBackToMeSkill() {
-        super("Repeat Back To Me", "Repeat a phrase back to you",
-                "Repeat a phrase back to you", "PiLexa", "0.0.0.0",
-                0, null);
+        ConcretePiLexaService.registerSkill(new JokeSkill());
     }
 
     @Override
@@ -32,24 +35,25 @@ public class RepeatBackToMeSkill extends AbstractSkill {
         return this.getClass().getCanonicalName();
     }
 
+    public JokeSkill() {
+        super("Joke", "Tells you a joke.",
+                "Tells you a joke.", "PiLexa", "0.0.0.0",
+                0, null);
+    }
+
     @Override
     public List<SimpleTuple<InvocationPattern, Intent>> getPossibleIntents() {
         List<SimpleTuple<InvocationPattern, Intent>> ret = new ArrayList<>();
 
-        Intent i = new MainIntent();
-
-        ret.add(new SimpleTuple<>(InvocationPattern.parse("repeat back to me %phrase:string%"), i));
-        ret.add(new SimpleTuple<>(InvocationPattern.parse("repeat %phrase:string%"), i));
-        ret.add(new SimpleTuple<>(InvocationPattern.parse("tell me %phrase:string%"), i));
-        ret.add(new SimpleTuple<>(InvocationPattern.parse("say %phrase:string%"), i));
+        ret.add(new SimpleTuple<>(InvocationPattern.parse("tell me a joke"), new MainIntent()));
 
         return ret;
     }
 
-    private class MainIntent implements Intent {
+    private class MainIntent extends JsonQueryIntent {
         @Override
         public Skill getAssociatedSkill() {
-            return RepeatBackToMeSkill.this;
+            return JokeSkill.this;
         }
 
         @Override
@@ -69,15 +73,18 @@ public class RepeatBackToMeSkill extends AbstractSkill {
 
         @Override
         public Sayable processInvocation(Invocation i) {
-            List<CoreLabel> toRepeat = i.getValue("phrase");
-            StringBuilder sb = new StringBuilder();
+            Object tmp = getJson();
 
-            for (CoreLabel w : toRepeat) {
-                sb.append(w.word());
-                sb.append(" ");
+            if (tmp instanceof Sayable) {
+                return (Sayable) tmp;
+            } else {
+                return new Phrase((String) ((JSONObject) tmp).get("joke"));
             }
-            sb.setLength(sb.length() - 1);
-            return new Phrase(sb.toString());
+        }
+
+        @Override
+        public String getUrl() {
+            return "http://tambal.azurewebsites.net/joke/random";
         }
     }
 }

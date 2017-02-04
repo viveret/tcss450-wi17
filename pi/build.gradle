@@ -37,6 +37,7 @@ sourceSets {
 task run(type: JavaExec, dependsOn:build) {
     classpath sourceSets.main.runtimeClasspath.asPath
     main = "com.viveret.pilexa.pi.Main"
+    standardInput = System.in
 }
 
 /*jar { 
