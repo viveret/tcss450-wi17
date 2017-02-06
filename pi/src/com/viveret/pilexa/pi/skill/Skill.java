@@ -25,5 +25,5 @@ public interface Skill {
 
     String getIconUrl();
 
-    List<SimpleTuple<InvocationPattern, Intent>> getPossibleIntents();
+    List<Intent> getIntents();
 }

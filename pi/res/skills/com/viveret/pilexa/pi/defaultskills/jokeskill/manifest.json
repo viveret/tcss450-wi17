@@ -1,0 +1,20 @@
+{
+  "name": "Joke",
+  "shortDesc": "Tells you a joke.",
+  "longDesc": "Tells you a joke.",
+  "publisher": "PiLexa",
+  "versionString": "0.0.0.0",
+  "version": 0,
+  "iconUrl": "",
+
+  "intents": [
+    {
+      "className": "MainIntent",
+      "name": "Tell a joke.",
+      "desc": "Tells you a joke.",
+      "invocations": [
+        "tell me a joke"
+      ]
+    }
+  ]
+}

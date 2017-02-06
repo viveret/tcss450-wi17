@@ -2,7 +2,10 @@ apply plugin: 'java'
 //apply plugin: 'application'
 //mainClassName = 'com.viveret.pilexa.pi.Main'
 
-repositories { mavenCentral() }
+repositories {
+    mavenCentral()
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+}
 
 dependencies {
     compile group: 'edu.stanford.nlp', name: 'stanford-corenlp', version: '3.7.0'
@@ -10,8 +13,9 @@ dependencies {
     compile group: 'edu.stanford.nlp', name: 'stanford-corenlp', version: '3.7.0', classifier: 'models-english'
     compile group: 'edu.stanford.nlp', name: 'stanford-parser', version: '3.7.0'
     //compile group: 'edu.stanford.nlp', name: 'stanford-pos-tagger', version: '3.0.2'
-    
-    compile group: 'de.sciss', name: 'sphinx4', version: '1.0.0'
+
+    compile group: 'edu.cmu.sphinx', name: 'sphinx4-core', version: '5prealpha-SNAPSHOT'
+    compile group: 'edu.cmu.sphinx', name: 'sphinx4-data', version: '5prealpha-SNAPSHOT'
     
     compile group: 'com.google.protobuf', name: 'protobuf-java', version: '3.1.0'
 
@@ -39,6 +43,10 @@ task run(type: JavaExec, dependsOn:build) {
     main = "com.viveret.pilexa.pi.Main"
     standardInput = System.in
 }
+
+//task runNice(type:Exec) {
+//    commandLine 'nice -20 gradle run'
+//}
 
 /*jar { 
     from {

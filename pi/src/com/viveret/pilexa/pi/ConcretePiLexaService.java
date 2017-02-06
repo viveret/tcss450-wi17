@@ -5,7 +5,11 @@ import com.viveret.pilexa.pi.invocation.InvocationPattern;
 import com.viveret.pilexa.pi.sayable.Phrase;
 import com.viveret.pilexa.pi.skill.Intent;
 import com.viveret.pilexa.pi.skill.Skill;
+import com.viveret.pilexa.pi.skill.SkillManager;
 import com.viveret.pilexa.pi.util.SimpleTuple;
+import edu.cmu.sphinx.api.Configuration;
+import edu.cmu.sphinx.api.LiveSpeechRecognizer;
+import edu.cmu.sphinx.api.SpeechResult;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
@@ -33,25 +37,48 @@ import org.json.simple.parser.ParseException;
 public class ConcretePiLexaService implements PiLexaService {
     private static final double CONFUSE_THRESHOLD = 0.01;
 
-
-    private static final List<Skill> mySkills = new ArrayList<>();
     private Logger log;
     private StanfordCoreNLP pipeline;
 
-    public static final void registerSkill(Skill s) {
-        mySkills.add(s);
-    }
+    private LiveSpeechRecognizer recognizer;
 
     @Override
     public void connect() {
         BasicConfigurator.configure();
 
         initCoreNLP();
+        initSphinx4();
+        initPiLexa();
 
-        log = Logger.getRootLogger();// Logger.getLogger(getClass().getName());
-        log.info("Connected to PiLexa Service.");
+        run();
+    }
 
-        loadSkills();
+    public void run() {
+        String inputStr;
+        do {
+            inputStr = getUserInputFromVoice();
+            interpret(inputStr);
+        } while (!inputStr.equals("bye"));
+    }
+
+    public String getUserInputFromVoice() {
+        log.info("Getting user input through voice");
+        recognizer.startRecognition(true);
+
+        SpeechResult result;
+        while ((result = recognizer.getResult()) == null) {
+            new Phrase("Sorry, I couldn't understand what you said. Please try again.").speak();
+        }
+
+        // Pause recognition process.
+        recognizer.stopRecognition();
+
+        if (result == null) {
+            return null;
+        } else {
+            log.debug(result.getNbest(100));
+            return result.getHypothesis();
+        }
     }
 
     private void initCoreNLP() {
@@ -64,27 +91,34 @@ public class ConcretePiLexaService implements PiLexaService {
                         "tokenize.language", "en"));
     }
 
-    private void loadSkills() {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("pilexa-config.json").getFile());
-
-        JSONParser parser = new JSONParser();
+    private void initSphinx4() {
+        Configuration config = new Configuration();
+        config.setAcousticModelPath("resource:/edu/cmu/sphinx/models/en-us/en-us");
+        config.setDictionaryPath("resource:/edu/cmu/sphinx/models/en-us/cmudict-en-us.dict");
+        config.setLanguageModelPath("resource:/edu/cmu/sphinx/models/en-us/en-us.lm.bin");
         try {
-            JSONObject root = (JSONObject) parser.parse(new FileReader(file));
-            JSONArray skills = (JSONArray) root.get("skills");
-
-            for (int i = 0; i < skills.size(); i++) {
-                try {
-                    Class.forName((String) skills.get(i));
-                } catch (ClassNotFoundException e) {
-                    log.error("Skill not found: " + skills.get(i).toString());
-                }
-            }
+            recognizer = new LiveSpeechRecognizer(config);
         } catch (IOException e) {
             e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
         }
+    }
+
+    private void initPiLexa() {
+//        try {
+//            final String os = System.getProperty("os.name");
+//
+//            if (os.contains("Windows")) {
+//                Runtime.getRuntime().exec("");
+//            } else {
+//                Runtime.getRuntime().exec("renice ");
+//            }
+//        } catch (final Exception e) {
+//            //  Handle any exceptions.
+//        }
+        log = Logger.getRootLogger();// Logger.getLogger(getClass().getName());
+        log.info("Connected to PiLexa Service.");
+
+        SkillManager.inst().getSkills();
     }
 
     @Override
@@ -112,9 +146,11 @@ public class ConcretePiLexaService implements PiLexaService {
         for (CoreMap sentence : sentences) {
             List<SimpleTuple<Invocation, Intent>> invocs = new ArrayList<>();
 
-            for (Skill s : mySkills) {
-                for (SimpleTuple<InvocationPattern, Intent> patt : s.getPossibleIntents()) {
-                    invocs.add(new SimpleTuple<Invocation, Intent>(patt.a.parse(sentence), patt.b));
+            for (Skill s : SkillManager.inst().getSkills()) {
+                for (Intent i : s.getIntents()) {
+                    for (InvocationPattern pattern : i.getInvocationPatterns()) {
+                        invocs.add(new SimpleTuple<>(pattern.parse(sentence), i));
+                    }
                 }
             }
 
@@ -133,12 +169,12 @@ public class ConcretePiLexaService implements PiLexaService {
             List<SimpleTuple<Invocation, Invocation>> confusedInvocs = new ArrayList<>();
 
             int i = 0;
-            while(i < invocs.size()) {
+            while (i < invocs.size()) {
                 SimpleTuple<Invocation, Intent> tuple = invocs.get(i);
                 Invocation invc = tuple.a;
 
                 if (invc.getConfidence() < 0.5) {
-                    log.debug("Low confidence for " + tuple.b.getDisplayName() + ", " + invc.getConfidence() +
+                    log.warn("Low confidence for " + tuple.b.getDisplayName() + ", " + invc.getConfidence() +
                             " for " + invc.getPattern() + ". Removing.");
                     invocs.remove(i);
                 } else if (i + 1 < invocs.size() &&
@@ -156,8 +192,8 @@ public class ConcretePiLexaService implements PiLexaService {
                     invocs.remove(i);
                     invocs.remove(i);
                 } else {
-                    log.info("Acceptable invocation " + tuple.b.getDisplayName() + ", " +
-                                    invc.getConfidence() + " for " + invc.getPattern() + " kept.");
+                    log.debug("Acceptable invocation " + tuple.b.getDisplayName() + ", " +
+                            invc.getConfidence() + " for " + invc.getPattern() + " kept.");
                     i++;
                 }
             }

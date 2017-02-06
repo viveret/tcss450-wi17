@@ -4,7 +4,7 @@ package com.viveret.pilexa.pi.util;
  * Created by viveret on 2/4/17.
  */
 public class Math {
-    // using LevenshteinDistance
+    // using LevenshteinDistance, thank you https://en.wikipedia.org/wiki/Levenshtein_distance
     public static int strRawDiff(String s, String t)
     {
         // degenerate cases

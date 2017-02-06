@@ -12,12 +12,9 @@ import java.io.IOException;
  * Created by viveret on 2/4/17.
  */
 public abstract class JsonFromFileIntent extends JsonIntent {
-    @Override
-    public Object getJson() {
+    public Object getJson(String packageName) {
         ClassLoader classLoader = getClass().getClassLoader();
-
-        String pkgToPath = String.join("/", getAssociatedSkill().getPackageName().split("."));
-        String finalUrl = "skills/" + pkgToPath + "/" + getUrl();
+        String finalUrl = "skills/" + packageName + "." + getUrl();
         File file = new File(classLoader.getResource(finalUrl).getFile());
         JSONParser parser = new JSONParser();
 
