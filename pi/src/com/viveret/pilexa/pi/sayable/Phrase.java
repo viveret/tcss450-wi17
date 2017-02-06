@@ -28,5 +28,6 @@ public class Phrase extends Sayable {
     @Override
     public void speak() {
         log.info(getTextToSpeech());
+        sayOutLoud(getTextToSpeech());
     }
 }

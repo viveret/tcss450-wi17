@@ -4,6 +4,7 @@ apply plugin: 'java'
 
 repositories {
     mavenCentral()
+    jcenter()
     maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
 }
 
@@ -25,6 +26,8 @@ dependencies {
     compile group: 'log4j', name: 'log4j', version: '1.2.14'
 
     compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+    
+    compile group: 'de.dfki.mary', name: 'voice-cmu-slt-hsmm', version: '5.2'
 }
 
 sourceSets {
@@ -42,6 +45,8 @@ task run(type: JavaExec, dependsOn:build) {
     classpath sourceSets.main.runtimeClasspath.asPath
     main = "com.viveret.pilexa.pi.Main"
     standardInput = System.in
+    jvmArgs '-Xmx4096m', '-Xms1024m'
+    maxHeapSize = '2048m'
 }
 
 //task runNice(type:Exec) {

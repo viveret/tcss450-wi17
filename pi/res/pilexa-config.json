@@ -12,6 +12,7 @@
     "processPriority": 1
   },
   "system": {
-    "numThreadsPerCore": 2
+    "numThreadsPerCore": 2,
+    "voice": "default"
   }
 }

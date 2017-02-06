@@ -1,6 +1,5 @@
 package com.viveret.pilexa.pi.util;
 
-import com.viveret.pilexa.pi.skill.ManifestSkill;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -17,14 +16,6 @@ import java.util.List;
  */
 public class Config {
     private static Config myInst = null;
-
-    public static Config inst() {
-        if (myInst == null) {
-            myInst = new Config();
-        }
-        return myInst;
-    }
-
     private JSONObject myRoot;
 
     public Config() {
@@ -40,6 +31,13 @@ public class Config {
         }
     }
 
+    public static Config inst() {
+        if (myInst == null) {
+            myInst = new Config();
+        }
+        return myInst;
+    }
+
     public int getInt(String key) {
         JSONObject cur = myRoot;
         String[] keyCrumbs = key.split("\\.");
@@ -47,6 +45,15 @@ public class Config {
             cur = (JSONObject) cur.get(keyCrumbs[i]);
         }
         return (int) ((Long) cur.get(keyCrumbs[keyCrumbs.length - 1])).longValue();
+    }
+
+    public String getString(String key) {
+        JSONObject cur = myRoot;
+        String[] keyCrumbs = key.split("\\.");
+        for (int i = 0; i < keyCrumbs.length - 1; i++) {
+            cur = (JSONObject) cur.get(keyCrumbs[i]);
+        }
+        return (String) cur.get(keyCrumbs[keyCrumbs.length - 1]);
     }
 
     public List<String> getStringArray(String key) {
