@@ -46,9 +46,31 @@ public class ConcretePiLexaService implements PiLexaService {
     public void connect() {
         BasicConfigurator.configure();
 
-        initCoreNLP();
-        initSphinx4();
-        initPiLexa();
+        Thread t = new Thread(
+                () -> {
+                    initCoreNLP();
+                }
+        );
+        Thread t1 = new Thread(
+                () -> {
+                    initSphinx4();
+                }
+        );
+        Thread t2 = new Thread(
+                () -> {
+                    initPiLexa();
+                }
+        );
+        t.start();
+        t1.start();
+        t2.start();
+        try {
+            t.join();
+            t1.join();
+            t2.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         run();
     }
