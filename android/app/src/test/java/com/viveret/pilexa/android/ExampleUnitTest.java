@@ -1,4 +1,4 @@
-package pilexa.viveret.com.pilexa;
+package com.viveret.pilexa.android;
 
 import org.junit.Test;
 
