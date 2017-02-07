@@ -5,108 +5,52 @@ import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.util.CoreMap;
 import org.apache.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 /**
- * Created by viveret on 1/26/17.
+ * Created by viveret on 2/5/17.
  */
-public class InvocationPattern {
-    private static final String escapeChar = "%";
+public interface InvocationPattern {
+    static void printInfoAboutWord(CoreLabel w) {
+        String text = w.get(CoreAnnotations.TextAnnotation.class);
+        // this is the POS tag of the token
+        String pos = w.get(CoreAnnotations.PartOfSpeechAnnotation.class);
+        // this is the NER label of the token
+        String ne = w.get(CoreAnnotations.NamedEntityTagAnnotation.class);
 
-    private List<PhraseToken> myTokens;
-    private String myPhrase;
+        String isMonth = w.get(CoreAnnotations.MonthAnnotation.class);
+        String scat1 = w.get(CoreAnnotations.CategoryAnnotation.class);
+        String scat2 = w.get(CoreAnnotations.CommonWordsAnnotation.class);
+        String scat3 = w.get(CoreAnnotations.DayAnnotation.class);
+        String scat4 = w.get(CoreAnnotations.FeaturesAnnotation.class);
+        String scat5 = w.get(CoreAnnotations.GoldAnswerAnnotation.class);
+        String scat6 = w.get(CoreAnnotations.IsURLAnnotation.class);
+        String scat7 = w.get(CoreAnnotations.LabelAnnotation.class);
+        String scat8 = w.get(CoreAnnotations.MonthAnnotation.class);
+        String scat9 = w.get(CoreAnnotations.WordSenseAnnotation.class);
+        //String scat9 = w.get(CoreAnnotations.PercentAnnotation.class);
+        //String scat9 = w.get(CoreAnnotations.PhraseWordsAnnotation.class);
 
-    private InvocationPattern(String str, List<PhraseToken> theTokens) {
-        myPhrase = str;
-        myTokens = theTokens;
-    }
-
-    public static InvocationPattern parse(String s) {
         Logger log = Logger.getRootLogger();
-        List<PhraseToken> tmp = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
 
-        String[] tokenStrs = s.split("(\\s)");
+        sb.append("Word \"" + text + "\" ");
+        sb.append("pos = " + pos + ", ");
+        sb.append("ne = " + ne + ", ");
+        sb.append("month = " + isMonth + ", ");
+        sb.append("scat1 = " + scat1 + ", ");
+        sb.append("scat2 = " + scat2 + ", ");
+        sb.append("scat3 = " + scat3 + ", ");
+        sb.append("scat4 = " + scat4 + ", ");
+        sb.append("scat5 = " + scat5 + ", ");
+        sb.append("scat6 = " + scat6 + ", ");
+        sb.append("scat7 = " + scat7 + ", ");
+        sb.append("scat8 = " + scat8 + ", ");
+        sb.append("scat9 = " + scat9 + "");
 
-        for (String e : tokenStrs) {
-            PhraseToken t = null;
-            if (e.equals(escapeChar + escapeChar)) {
-                t = new PhraseToken(PhraseToken.TokenType.IGNORE, null, e);
-            } else if (e.startsWith(escapeChar) && e.endsWith(escapeChar) && e.length() > 2) {
-                String[] labelTypePair = e.substring(1, e.length() - 1).split(":");
-                if (labelTypePair.length != 2) {
-                    throw new IllegalArgumentException("Placeholder \"" + e + "\" must contain a label:type tag.");
-                }
-                t = new PhraseToken(PhraseToken.TokenType.ARGUMENT, labelTypePair[0], labelTypePair[1]);
-            } else {
-                t = new PhraseToken(PhraseToken.TokenType.MATCH, null, e);
-            }
-            tmp.add(t);
-        }
-
-        log.debug("Parsed phrase pattern: " + tmp.toString());
-
-        return new InvocationPattern(s, tmp);
+        log.debug(sb.toString());
     }
 
-    public Invocation parse(CoreMap sentence) {
-        Logger log = Logger.getRootLogger();
+    Invocation parse(CoreMap sentence);
 
-        Map<String, Invocation.InvocationToken> tmpTokens = new HashMap<>();
-        double confidence = 0.0;
-
-        // traversing the words in the current sentence
-        // a CoreLabel is a CoreMap with additional token-specific methods
-        List<CoreLabel> words = sentence.get(CoreAnnotations.TokensAnnotation.class);
-        List<CoreLabel> wordsIncluded = null;
-
-        int i = 0, j = 0;
-        for (; i < myTokens.size() && j < words.size(); ) {
-            PhraseToken patt = myTokens.get(i);
-            CoreLabel word = words.get(j);
-
-            switch (patt.getType()) {
-                case IGNORE:
-                    if (i + 1 < myTokens.size()) {
-                        i++;
-                        PhraseToken delimPatt = myTokens.get(i);
-                        while (j < words.size()) {
-                            word = words.get(j);
-                            if (delimPatt.matches(word)) {
-                                break;
-                            } else {
-                                j++;
-                            }
-                        }
-                    }
-                    break;
-                case MATCH:
-                    if (patt.matches(word)) {
-                        j++;
-                    } else {
-                        i++;
-                    }
-                    break;
-                case ARGUMENT:
-                    if (patt.matches(word)) {
-                        if (wordsIncluded == null) {
-                            wordsIncluded = new ArrayList<>();
-                        }
-
-                        wordsIncluded.add(word);
-                        j++;
-                    } else {
-                        tmpTokens.put(patt.getLabel(),
-                                new Invocation.InvocationToken(patt.getContent(), wordsIncluded));
-                        wordsIncluded = null;
-                        i++;
-                    }
-                    break;
-            }
-        }
-
-        return new Invocation(tmpTokens, 1.0);
-    }
+    @Override
+    String toString();
 }

@@ -1,0 +1,18 @@
+{
+  "skills": [
+    "com.viveret.pilexa.pi.defaultskills.clockskill",
+    "com.viveret.pilexa.pi.defaultskills.repeatbacktomeskill",
+    "com.viveret.pilexa.pi.defaultskills.jokeskill",
+    "com.viveret.pilexa.pi.defaultskills.salutationskill",
+    "com.viveret.pilexa.pi.defaultskills.debugskill"
+  ],
+  "server": {
+    "port": 8182,
+    "acceptTimeout": 1000,
+    "processPriority": 1
+  },
+  "system": {
+    "numThreadsPerCore": 2,
+    "voice": "default"
+  }
+}
