@@ -9,6 +9,7 @@ import com.viveret.pilexa.pi.util.NLPHelper;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.io.FileNotFoundException;
 import java.util.Iterator;
 
 /**
@@ -17,7 +18,16 @@ import java.util.Iterator;
 public class QueryDateIntent extends JsonFromFileIntent {
     @Override
     public Sayable processInvocation(Invocation i) {
-        Object tmp = getJson(getClass().getPackage().getName());
+        Object tmp = null;
+        try {
+            tmp = getJson(getClass().getPackage().getName());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        if (tmp == null) {
+            return new Phrase("Could not read from cache.");
+        }
 
         if (tmp instanceof Sayable) {
             return (Sayable) tmp;

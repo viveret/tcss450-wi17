@@ -51,6 +51,11 @@ task run(type: JavaExec, dependsOn:build) {
     maxHeapSize = '2048m'
 }
 
+task copyRuntimeLibs(type: Copy) {
+    into "$buildDir/dep"
+    from configurations.runtime
+}
+
 //task runNice(type:Exec) {
 //    commandLine 'nice -20 gradle run'
 //}

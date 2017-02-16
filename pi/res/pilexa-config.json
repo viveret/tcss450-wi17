@@ -6,6 +6,9 @@
     "com.viveret.pilexa.pi.defaultskills.salutationskill",
     "com.viveret.pilexa.pi.defaultskills.debugskill"
   ],
+  "input-methods": [
+    "com.viveret.pilexa.pi.inputmethods.TextInterfacePiLexaProxy"
+  ],
   "server": {
     "port": 8182,
     "acceptTimeout": 1000,
