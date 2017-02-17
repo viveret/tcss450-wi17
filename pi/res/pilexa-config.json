@@ -16,6 +16,8 @@
   },
   "system": {
     "numThreadsPerCore": 2,
-    "voice": "default"
+    "voice": "default",
+    "headless": true,
+    "name": "PiLexa CSS Gate"
   }
 }
