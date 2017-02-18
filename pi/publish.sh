@@ -30,6 +30,7 @@ EOC
 echo -e "\n### Publishing configuration files...\n"
 chmod -R 755 build/resources/main/*
 ${expect} << EOC
+set timeout -1
 ${cmd} build/resources/main/ ${username}@${endpoint}/
 expect "password:"
 send "${password}\r"
@@ -39,6 +40,7 @@ EOC
 echo -e "\n### Publishing libraries...\n"
 gradle copyRuntimeLibs
 ${expect} << EOC
+set timeout -1
 ${cmd} build/dep/ ${username}@${endpoint}/lib
 expect "Password:"
 send "${password}\r"

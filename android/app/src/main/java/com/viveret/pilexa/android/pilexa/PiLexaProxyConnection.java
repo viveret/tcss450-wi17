@@ -150,4 +150,27 @@ public class PiLexaProxyConnection {
             return null;
         }
     }
+
+    public String sendMessage(String msg) throws Exception {
+        try {
+            JSONObject args = new JSONObject();
+            args.put("op", "interpret");
+            args.put("val", msg);
+            JSONObject j = new JSONObject(getStringFromRequest(args));
+
+            if (j.has("status") && j.getInt("status") == 0) {
+                return j.getString("val");
+            } else {
+                throw new Exception(j.getString("msg"));
+            }
+        } catch (JSONException e) {
+            Log.e(LOGTAG, Log.getStackTraceString(e));
+            return null;
+        }
+    }
+
+
+    public interface PiLexaProxyConnectionHolder {
+        PiLexaProxyConnection getPilexa();
+    }
 }

@@ -132,7 +132,7 @@ public class ConcretePiLexaService implements PiLexaService {
     }
 
     @Override
-    public int interpret(String str) {
+    public String interpret(String str) {
         log.info("Interpreting \"" + str + "\"");
 
         Annotation document = new Annotation(str);
@@ -199,13 +199,17 @@ public class ConcretePiLexaService implements PiLexaService {
             }
 
             if (invocs.size() > 0) {
-                invocs.get(0).b.processInvocation(invocs.get(0).a).speak();
+                Sayable s = invocs.get(0).b.processInvocation(invocs.get(0).a);
+                s.speak();
+                return s.toString();
             } else {
-                new Phrase("Sorry, I did not understand that. Could you say that again?").speak();
+                Sayable s = new Phrase("Sorry, I did not understand that. Could you say that again?");
+                s.speak();
+                return s.toString();
             }
         }
 
-        return 0;
+        return "Unknown error";
     }
 
     @Override

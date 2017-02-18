@@ -38,7 +38,7 @@ public class MessageContent {
     }
 
     private static Message createDummyItem(int position) {
-        return new Message(String.valueOf(position), "Item " + position, makeDetails(position));
+        return new Message(String.valueOf(position), "Item " + position, makeDetails(position), position % 2 == 0);
     }
 
     private static String makeDetails(int position) {

@@ -12,7 +12,7 @@ public interface PiLexaService extends Runnable {
 
     boolean isConnected();
 
-    int interpret(String str);
+    String interpret(String str);
 
     Logger getLog();
 }

@@ -24,7 +24,7 @@ public abstract class AbstractPiLexaServiceProxy implements PiLexaService {
     }
 
     @Override
-    public int interpret(String str) {
+    public String interpret(String str) {
         return inst.interpret(str);
     }
 

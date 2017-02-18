@@ -15,6 +15,7 @@ import java.util.List;
  * TODO: Replace the implementation with code for your data type.
  */
 public class MyMessageRecyclerViewAdapter extends RecyclerView.Adapter<MyMessageRecyclerViewAdapter.ViewHolder> {
+    private static final int USER = 0, OTHER = 1;
 
     private final List<Message> mValues;
 
@@ -22,12 +23,34 @@ public class MyMessageRecyclerViewAdapter extends RecyclerView.Adapter<MyMessage
         mValues = items;
     }
 
+    //Returns the view type of the item at position for the purposes of view recycling.
+    @Override
+    public int getItemViewType(int position) {
+        if (mValues.get(position).isFromUser) {
+            return USER;
+        } else {
+            return OTHER;
+        }
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        //parent.get
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.message_item, parent, false);
-        return new ViewHolder(view);
+        ViewHolder viewHolder = null;
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+
+        switch (viewType) {
+            case USER:
+                View v1 = inflater.inflate(R.layout.message_item, parent, false);
+                viewHolder = new ViewHolder(v1);
+                break;
+            case OTHER:
+                View v2 = inflater.inflate(R.layout.message_item_other, parent, false);
+                viewHolder = new ViewHolder(v2);
+                break;
+        }
+
+
+        return viewHolder;
     }
 
     @Override

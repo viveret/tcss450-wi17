@@ -19,7 +19,7 @@ public abstract class Sayable {
     private static MaryInterface marytts = null;
 
     public static void init() {
-        if (!Config.inst().getBoolean("system.headless")) {
+        if (!Config.inst().getBoolean("system.voiceless")) {
             try {
                 marytts = new LocalMaryInterface();
                 log.info("I currently have " + marytts.getAvailableVoices() + " voices in "

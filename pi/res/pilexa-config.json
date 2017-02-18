@@ -7,9 +7,10 @@
     "com.viveret.pilexa.pi.defaultskills.debugskill"
   ],
   "input-methods": [
-    "com.viveret.pilexa.pi.inputmethods.TextInterfacePiLexaProxy"
+    "com.viveret.pilexa.pi.inputmethods.ServerPiLexaProxy"
   ],
   "server": {
+    "hostname": "localhost",
     "port": 8182,
     "acceptTimeout": 1000,
     "processPriority": 1
@@ -18,6 +19,7 @@
     "numThreadsPerCore": 2,
     "voice": "default",
     "headless": true,
+    "voiceless": true,
     "name": "PiLexa CSS Gate"
   }
 }

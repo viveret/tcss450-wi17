@@ -8,10 +8,13 @@ public class Message {
     public final String content;
     public final String details;
 
-    public Message(String id, String content, String details) {
+    public final boolean isFromUser;
+
+    public Message(String id, String content, String details, boolean isFromUser) {
         this.id = id;
         this.content = content;
         this.details = details;
+        this.isFromUser = isFromUser;
     }
 
     @Override

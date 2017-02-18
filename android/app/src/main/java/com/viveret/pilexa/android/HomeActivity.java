@@ -23,7 +23,7 @@ import java.net.ConnectException;
 import java.net.MalformedURLException;
 
 public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, PiLexaProxyConnection.PiLexaProxyConnectionHolder {
 
     private PiLexaProxyConnection pilexa;
 
@@ -154,5 +154,10 @@ public class HomeActivity extends AppCompatActivity
     public void onPause() {
         super.onPause();
         pilexa = null;
+    }
+
+    @Override
+    public PiLexaProxyConnection getPilexa() {
+        return pilexa;
     }
 }
