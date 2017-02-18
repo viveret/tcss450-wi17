@@ -18,6 +18,7 @@ expect eof
 EOC
 
 echo -e "\n### Publishing php code...\n"
+chmod -R 755 src/com/viveret/pilexa/pi/*
 ${expect} << EOC
 set timeout -1
 ${cmd} src/com/viveret/pilexa/pi/php/ ${username}@${endpoint}/
@@ -27,6 +28,7 @@ expect eof
 EOC
 
 echo -e "\n### Publishing configuration files...\n"
+chmod -R 755 build/resources/main/*
 ${expect} << EOC
 ${cmd} build/resources/main/ ${username}@${endpoint}/
 expect "password:"

@@ -1,10 +1,10 @@
 package com.viveret.pilexa.android;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,9 +12,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
+
+import com.viveret.pilexa.android.pilexa.PiLexaProxyConnection;
+
+import java.net.ConnectException;
+import java.net.MalformedURLException;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private PiLexaProxyConnection pilexa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,12 +32,43 @@ public class HomeActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    pilexa = PiLexaProxyConnection.attachTo("http://cssgate.insttech.washington.edu/~viveret/pi/index.php");
+                } catch (ConnectException e) {
+                    e.printStackTrace();
+                    Toast.makeText(HomeActivity.this, "Could not connect to pi", Toast.LENGTH_LONG);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                    Toast.makeText(HomeActivity.this, "Bad url for pi", Toast.LENGTH_LONG);
+                }
+            }
+        }).start();
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onClick(final View view) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String msg = "";
+                        if (pilexa != null) {
+                            try {
+                                msg = pilexa.getConfigString("system.name");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            msg = "could not get system.name";
+                        }
+
+                        Snackbar.make(view, msg, Snackbar.LENGTH_LONG)
+                                .setAction("Action", null).show();
+                    }
+                }).start();
             }
         });
 
@@ -80,17 +120,21 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.manage_skills) {
+            Intent intent = new Intent(this, SkillActivity.class);
 
-        } else if (id == R.id.nav_slideshow) {
+            startActivity(intent);
 
-        } else if (id == R.id.nav_manage) {
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.create_skills) {
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.install_new_plugins) {
+
+        } else if (id == R.id.view_installed_plugins) {
+
+        } else if (id == R.id.wizard) {
+
+        } else if (id == R.id.manual) {
 
         }
 

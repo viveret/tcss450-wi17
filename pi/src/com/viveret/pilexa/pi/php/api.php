@@ -1,9 +1,10 @@
 <?php
 class PilexaApi {
+    CONST CONFIG_FILE = "pilexa-config.json";
     private $myConfig = null;
 
     function __construct() {
-        $this->myConfig = json_decode(file_get_contents("pilexa-config.json"), true);
+        $this->myConfig = json_decode(file_get_contents(self::CONFIG_FILE), true);
         if (is_null($this->myConfig)) {
             echo json_last_error_msg();
         }
@@ -17,8 +18,23 @@ class PilexaApi {
         return $cur;
     }
 
+    function setConfig($key, $val) {
+        $cur = $this->myConfig;
+        $crumbs = explode('.', $key);
+        for ($i = 0; $i < count($crumbs) - 1; $i++) {
+            $cur = $cur[$crumbs[$i]];
+        }
+        $cur[$crumbs[count($crumbs) - 1]] = $val;
+    }
+
     function getEntireConfig() {
         return $this->myConfig;
+    }
+
+    function flushConfig() {
+        $myfile = fopen(self::CONFIG_FILE, "w") or die("Unable to open file!");
+        fwrite($myfile, json_encode($this->myConfig));
+        fclose($myfile);
     }
 
     function doThing($params) {
@@ -34,10 +50,14 @@ class PilexaApi {
                     $ret['status'] = 1;
                 }
                 break;
+            case 'queryEntireConfig':
+                $ret['val'] = $this->getEntireConfig();
+                break;
             case 'setConfig':
+                $this->flushConfig();
                 break;
             default:
-                $ret['msg'] = 'Invalid op ' + $params['op'];
+                $ret['msg'] = 'Invalid op ' . $params['op'];
                 $ret['status'] = 1;
                 break;
         }

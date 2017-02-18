@@ -1,36 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
-        <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
-    </group>
+    <!--<group android:checkableBehavior="single">-->
+    <!--<item-->
+    <!--android:id="@+id/nav_camera"-->
+    <!--android:icon="@drawable/ic_menu_camera"-->
+    <!--android:title="Import" />-->
+    <!--<item-->
+    <!--android:id="@+id/nav_gallery"-->
+    <!--android:icon="@drawable/ic_menu_gallery"-->
+    <!--android:title="Gallery" />-->
+    <!--<item-->
+    <!--android:id="@+id/nav_slideshow"-->
+    <!--android:icon="@drawable/ic_menu_slideshow"-->
+    <!--android:title="Slideshow" />-->
+    <!--<item-->
+    <!--android:id="@+id/nav_manage"-->
+    <!--android:icon="@mipmap/ic_pilexa_raspberry"-->
+    <!--android:title="Tools" />-->
+    <!--</group>-->
 
-    <item android:title="Communicate">
+
+    <item android:title="Skills">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:id="@+id/manage_skills"
+                android:icon="@mipmap/ic_pilexa_raspberry"
+                android:title="Manage Skills" />
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:id="@+id/create_skills"
+                android:icon="@mipmap/ic_pilexa_raspberry"
+                android:title="Create Skills" />
         </menu>
     </item>
+    <item android:title="Plugins">
+        <menu>
+            <item
+                android:id="@+id/install_new_plugins"
+                android:icon="@mipmap/ic_pilexa_raspberry"
+                android:title="Install New Plugins" />
+            <item
+                android:id="@+id/view_installed_plugins"
+                android:icon="@mipmap/ic_pilexa_raspberry"
+                android:title="View Installed Plugins" />
+        </menu>
+    </item>
+    <item android:title="Configure Pi">
+        <menu>
+            <item
+                android:id="@+id/wizard"
+                android:icon="@mipmap/ic_pilexa_raspberry"
+                android:title="Wizard" />
+            <item
+                android:id="@+id/manual"
+                android:icon="@mipmap/ic_pilexa_raspberry"
+                android:title="Manual" />
+        </menu>
+    </item>
+
 
 </menu>

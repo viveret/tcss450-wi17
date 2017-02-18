@@ -56,6 +56,10 @@ task copyRuntimeLibs(type: Copy) {
     from configurations.runtime
 }
 
+task publish(type: Exec) {
+
+}
+
 //task runNice(type:Exec) {
 //    commandLine 'nice -20 gradle run'
 //}
