@@ -30,24 +30,16 @@ import java.util.List;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link SkillFragment.OnListFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link SkillFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * A fragment for displaying the information regarding the skills that the raspberry pi
+ * can perform. This fragment grabs the skills that are currently configured on the
+ * raspberry pi from the skill url, and populates the skill information accordingly by
+ * sending the skill class the JSON from the ip config url, which grabs the subsequent
+ * skill information.
+ *
  */
 public class SkillFragment extends Fragment {
-
-//    private static final String SKILL_URL
-//            = "http://cssgate.insttech.washington.edu/~viveret/pi/config.json";
-
-//    private static final String SKILL_URL
-//            = "http://cssgate.insttech.washington.edu/~dwood253/list.php?cmd=courses";
-
     private static final String SKILL_URL
             = "http://cssgate.insttech.washington.edu/~viveret/pi/pilexa-config.json";
-
 
     private RecyclerView mRecyclerView;
 
@@ -86,6 +78,15 @@ public class SkillFragment extends Fragment {
         }
     }
 
+    /**
+     * method which inflating fragment skill list. Uses recycler view for displaying the skills
+     * that are grabbed form the SKILL_URL, and subsequent urls for each skill parsed int he
+     * skill class.
+     * @param inflater used to inflate the view.
+     * @param container parent view that performs skill fragments UI.
+     * @param savedInstanceState used if fragment is being reconstructed, provides given state.
+     * @return returns the view to be displayed.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -144,7 +145,11 @@ public class SkillFragment extends Fragment {
     }
 
 
-
+    /**
+     * AsyncTask for grabbing skill information from the urls. Grabs first JSON from pi/config site
+     * and grabs skill information from "skill" JSON array. Then grabs each skills information from
+     * its manifest site.
+     */
     private class DownloadSkills extends AsyncTask<String, Void, List<String>> {
         String firstPartOfUrl = "http://cssgate.insttech.washington.edu/~viveret/pi/skills/";
         String lastPartOfUrl = "/manifest.json";
