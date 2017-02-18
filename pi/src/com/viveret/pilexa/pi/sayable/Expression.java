@@ -24,4 +24,9 @@ public class Expression extends Sayable {
             s.speak();
         }
     }
+
+    @Override
+    public String toString() {
+        return myParts.toString();
+    }
 }

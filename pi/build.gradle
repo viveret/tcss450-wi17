@@ -15,6 +15,8 @@ dependencies {
     compile group: 'edu.stanford.nlp', name: 'stanford-parser', version: '3.7.0'
     //compile group: 'edu.stanford.nlp', name: 'stanford-pos-tagger', version: '3.0.2'
 
+    compile group: 'com.google.cloud', name: 'google-cloud-speech', version: '0.8.1-alpha'
+
     compile group: 'edu.cmu.sphinx', name: 'sphinx4-core', version: '5prealpha-SNAPSHOT'
     compile group: 'edu.cmu.sphinx', name: 'sphinx4-data', version: '5prealpha-SNAPSHOT'
     
@@ -47,6 +49,15 @@ task run(type: JavaExec, dependsOn:build) {
     standardInput = System.in
     jvmArgs '-Xmx4096m', '-Xms1024m'
     maxHeapSize = '2048m'
+}
+
+task copyRuntimeLibs(type: Copy) {
+    into "$buildDir/dep"
+    from configurations.runtime
+}
+
+task publish(type: Exec) {
+
 }
 
 //task runNice(type:Exec) {

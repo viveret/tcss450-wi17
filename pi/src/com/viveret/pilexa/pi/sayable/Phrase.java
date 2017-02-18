@@ -30,4 +30,9 @@ public class Phrase extends Sayable {
         log.info(getTextToSpeech());
         sayOutLoud(getTextToSpeech());
     }
+
+    @Override
+    public String toString() {
+        return myTextToSpeech;
+    }
 }

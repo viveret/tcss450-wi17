@@ -47,6 +47,15 @@ public class Config {
         return (int) ((Long) cur.get(keyCrumbs[keyCrumbs.length - 1])).longValue();
     }
 
+    public boolean getBoolean(String key) {
+        JSONObject cur = myRoot;
+        String[] keyCrumbs = key.split("\\.");
+        for (int i = 0; i < keyCrumbs.length - 1; i++) {
+            cur = (JSONObject) cur.get(keyCrumbs[i]);
+        }
+        return ((Boolean) cur.get(keyCrumbs[keyCrumbs.length - 1])).booleanValue();
+    }
+
     public String getString(String key) {
         JSONObject cur = myRoot;
         String[] keyCrumbs = key.split("\\.");

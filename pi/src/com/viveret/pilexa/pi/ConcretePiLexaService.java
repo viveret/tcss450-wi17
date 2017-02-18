@@ -1,5 +1,6 @@
 package com.viveret.pilexa.pi;
 
+import com.viveret.pilexa.pi.inputmethods.InputMethodManager;
 import com.viveret.pilexa.pi.invocation.Invocation;
 import com.viveret.pilexa.pi.invocation.InvocationPattern;
 import com.viveret.pilexa.pi.sayable.Phrase;
@@ -8,9 +9,6 @@ import com.viveret.pilexa.pi.skill.Intent;
 import com.viveret.pilexa.pi.skill.Skill;
 import com.viveret.pilexa.pi.skill.SkillManager;
 import com.viveret.pilexa.pi.util.SimpleTuple;
-import edu.cmu.sphinx.api.Configuration;
-import edu.cmu.sphinx.api.LiveSpeechRecognizer;
-import edu.cmu.sphinx.api.SpeechResult;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
@@ -19,7 +17,6 @@ import edu.stanford.nlp.util.PropertiesUtils;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -33,7 +30,6 @@ public class ConcretePiLexaService implements PiLexaService {
     private static PiLexaService myInst = null;
     private Logger log;
     private StanfordCoreNLP pipeline;
-    private LiveSpeechRecognizer recognizer;
     private boolean isRunning = false;
 
     private ConcretePiLexaService() {
@@ -42,11 +38,6 @@ public class ConcretePiLexaService implements PiLexaService {
         Thread t = new Thread(
                 () -> {
                     initCoreNLP();
-                }
-        );
-        Thread t1 = new Thread(
-                () -> {
-                    initSphinx4();
                 }
         );
         Thread t2 = new Thread(
@@ -60,12 +51,10 @@ public class ConcretePiLexaService implements PiLexaService {
                 }
         );
         t.start();
-        t1.start();
         t2.start();
         t3.start();
         try {
             t.join();
-            t1.join();
             t2.join();
             t3.join();
         } catch (InterruptedException e) {
@@ -83,38 +72,22 @@ public class ConcretePiLexaService implements PiLexaService {
 
     @Override
     public void connect() {
+        InputMethodManager.inst().start(this);
         isRunning = true;
     }
 
     @Override
     public void run() {
         connect();
-        String inputStr;
         do {
-            inputStr = getUserInputFromVoice();
-            interpret(inputStr);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                break;
+            }
         } while (isRunning);
         disconnect();
-    }
-
-    public String getUserInputFromVoice() {
-        log.info("Getting user input through voice");
-        recognizer.startRecognition(true);
-
-        SpeechResult result;
-        while ((result = recognizer.getResult()) == null) {
-            new Phrase("Sorry, I couldn't understand what you said. Please try again.").speak();
-        }
-
-        // Pause recognition process.
-        recognizer.stopRecognition();
-
-        if (result == null) {
-            return null;
-        } else {
-            log.debug(result.getNbest(100));
-            return result.getHypothesis();
-        }
     }
 
     private void initCoreNLP() {
@@ -125,18 +98,6 @@ public class ConcretePiLexaService implements PiLexaService {
                         "ssplit.isOneSentence", "true",
                         "parse.model", "edu/stanford/nlp/models/srparser/englishSR.ser.gz",
                         "tokenize.language", "en"));
-    }
-
-    private void initSphinx4() {
-        Configuration config = new Configuration();
-        config.setAcousticModelPath("resource:/edu/cmu/sphinx/models/en-us/en-us");
-        config.setDictionaryPath("resource:/edu/cmu/sphinx/models/en-us/cmudict-en-us.dict");
-        config.setLanguageModelPath("resource:/edu/cmu/sphinx/models/en-us/en-us.lm.bin");
-        try {
-            recognizer = new LiveSpeechRecognizer(config);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     private void initPiLexa() {
@@ -155,10 +116,12 @@ public class ConcretePiLexaService implements PiLexaService {
         log.info("Connected to PiLexa Service.");
 
         SkillManager.inst().getSkills();
+        InputMethodManager.inst().getInputMethods();
     }
 
     @Override
     public void disconnect() {
+        InputMethodManager.inst().stop();
         log.info("Disconnected from PiLexa Service.");
         isRunning = false;
     }
@@ -169,7 +132,7 @@ public class ConcretePiLexaService implements PiLexaService {
     }
 
     @Override
-    public int interpret(String str) {
+    public String interpret(String str) {
         log.info("Interpreting \"" + str + "\"");
 
         Annotation document = new Annotation(str);
@@ -236,13 +199,17 @@ public class ConcretePiLexaService implements PiLexaService {
             }
 
             if (invocs.size() > 0) {
-                invocs.get(0).b.processInvocation(invocs.get(0).a).speak();
+                Sayable s = invocs.get(0).b.processInvocation(invocs.get(0).a);
+                s.speak();
+                return s.toString();
             } else {
-                new Phrase("Sorry, I did not understand that. Could you say that again?").speak();
+                Sayable s = new Phrase("Sorry, I did not understand that. Could you say that again?");
+                s.speak();
+                return s.toString();
             }
         }
 
-        return 0;
+        return "Unknown error";
     }
 
     @Override
