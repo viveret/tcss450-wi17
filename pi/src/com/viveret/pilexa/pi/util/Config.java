@@ -66,8 +66,14 @@ public class Config {
     }
 
     public List<String> getStringArray(String key) {
+        JSONObject cur = myRoot;
+        String[] keyCrumbs = key.split("\\.");
+        for (int i = 0; i < keyCrumbs.length - 1; i++) {
+            cur = (JSONObject) cur.get(keyCrumbs[i]);
+        }
+
         List<String> tmp = new ArrayList<>();
-        JSONArray ar = (JSONArray) myRoot.get(key);
+        JSONArray ar = (JSONArray) cur.get(keyCrumbs[keyCrumbs.length - 1]);
         for (int i = 0; i < ar.size(); i++) {
             tmp.add(ar.get(i).toString());
         }

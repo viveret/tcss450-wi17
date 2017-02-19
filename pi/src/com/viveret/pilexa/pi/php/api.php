@@ -12,15 +12,6 @@ class PilexaApi
         }
     }
 
-    public function getConfig($key)
-    {
-        $cur = $this->myConfig;
-        foreach (explode('.', $key) as $crumb) {
-            $cur = $cur[$crumb];
-        }
-        return $cur;
-    }
-
     public function setConfig($key, $val)
     {
         $cur = $this->myConfig;
@@ -29,18 +20,6 @@ class PilexaApi
             $cur = $cur[$crumbs[$i]];
         }
         $cur[$crumbs[count($crumbs) - 1]] = $val;
-    }
-
-    public function getEntireConfig()
-    {
-        return $this->myConfig;
-    }
-
-    function flushConfig()
-    {
-        $myfile = fopen(self::CONFIG_FILE, "w") or die("Unable to open file!");
-        fwrite($myfile, json_encode($this->myConfig));
-        fclose($myfile);
     }
 
     public function doThing($params)
@@ -75,6 +54,27 @@ class PilexaApi
         return $ret;
     }
 
+    public function getConfig($key)
+    {
+        $cur = $this->myConfig;
+        foreach (explode('.', $key) as $crumb) {
+            $cur = $cur[$crumb];
+        }
+        return $cur;
+    }
+
+    public function getEntireConfig()
+    {
+        return $this->myConfig;
+    }
+
+    function flushConfig()
+    {
+        $myfile = fopen(self::CONFIG_FILE, "w") or die("Unable to open file!");
+        fwrite($myfile, json_encode($this->myConfig));
+        fclose($myfile);
+    }
+
     public function interpret($val) {
         $ret = array("msg" => "OK", "status" => 0);
 
@@ -87,16 +87,19 @@ class PilexaApi
             $ret["msg"] = "socket_create() failed: reason: " . socket_strerror(socket_last_error()) . "\n";
             $ret["status"] = 1;
         } else {
+            socket_set_timeout($socket, 1);
             $result = socket_connect($socket, $address, $this->getConfig("server.port"));
             if ($result === false) {
                 $ret['msg'] = "socket_connect() failed.\nReason: ($result) " . socket_strerror(socket_last_error($socket)) . "\n";
                 $ret['status'] = 1;
             } else {
+                $val .= "\n";
                 socket_write($socket, $val, strlen($val));
+                $ret['msg'] = '';
                 $out = '';
-                while ($out .= socket_read($socket, 2048));
+                while ($out = socket_read($socket, 2048, PHP_NORMAL_READ))
+                    $ret['msg'] .= $out;
                 socket_close($socket);
-                $ret['msg'] = $out;
             }
         }
 
