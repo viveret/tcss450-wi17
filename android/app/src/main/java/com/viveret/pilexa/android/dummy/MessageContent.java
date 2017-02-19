@@ -23,7 +23,7 @@ public class MessageContent {
      */
     public static final Map<String, Message> ITEM_MAP = new HashMap<String, Message>();
 
-    private static final int COUNT = 25;
+    private static final int COUNT = 0;
 
     static {
         // Add some sample items.

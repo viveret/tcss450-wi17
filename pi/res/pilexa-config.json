@@ -9,6 +9,11 @@
   "input-methods": [
     "com.viveret.pilexa.pi.inputmethods.ServerPiLexaProxy"
   ],
+  "_input-methods-available": [
+    "com.viveret.pilexa.pi.inputmethods.ServerPiLexaProxy",
+    "com.viveret.pilexa.pi.inputmethods.GoogleSpeechPiLexaProxy",
+    "com.viveret.pilexa.pi.inputmethods.TextInterfacePiLexaProxy"
+  ],
   "server": {
     "hostname": "localhost",
     "port": 11823,
@@ -31,7 +36,7 @@
       "parse"
     ],
     "_ignore_annotators": [
-      "ner"
+      "ner", "natlog", "sentiment"
     ]
   }
 }

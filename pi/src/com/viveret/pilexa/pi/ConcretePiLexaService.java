@@ -92,7 +92,7 @@ public class ConcretePiLexaService implements PiLexaService {
     }
 
     private void initCoreNLP() {
-        // build pipeline, removed: natlog,sentiment
+        // build pipeline
         pipeline = new StanfordCoreNLP(
                 PropertiesUtils.asProperties(
                         "annotators", String.join(",", Config.inst().getStringArray("corenlp.annotators")),

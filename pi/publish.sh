@@ -37,12 +37,21 @@ send "${password}\r"
 expect eof
 EOC
 
+echo -e "\n### Publishing helper scripts...\n"
+${expect} << EOC
+set timeout -1
+${cmd} $(echo *.sh) ${username}@${endpoint}/
+expect "password:"
+send "${password}\r"
+expect eof
+EOC
+
 echo -e "\n### Publishing libraries...\n"
 gradle copyRuntimeLibs
 ${expect} << EOC
 set timeout -1
 ${cmd} build/dep/ ${username}@${endpoint}/lib
-expect "Password:"
+expect "password:"
 send "${password}\r"
 expect eof
 EOC
