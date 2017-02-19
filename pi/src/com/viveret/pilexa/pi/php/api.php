@@ -95,11 +95,13 @@ class PilexaApi
             } else {
                 $val .= "\n";
                 socket_write($socket, $val, strlen($val));
-                $ret['msg'] = '';
+                $tmp = '';
                 $out = '';
-                while ($out = socket_read($socket, 2048, PHP_NORMAL_READ))
-                    $ret['msg'] .= $out;
+                while ($out = socket_read($socket, 2048)) {
+                    $tmp .= $out;
+                }
                 socket_close($socket);
+                $ret = json_decode($tmp);
             }
         }
 

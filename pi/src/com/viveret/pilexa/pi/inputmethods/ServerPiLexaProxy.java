@@ -6,9 +6,10 @@ import com.viveret.pilexa.pi.PiLexaService;
 import com.viveret.pilexa.pi.util.Config;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
@@ -27,54 +28,21 @@ public class ServerPiLexaProxy extends AbstractPiLexaServiceProxy implements Inp
     public void run() {
         do {
             try {
-                getLog().info("v");
                 final Socket clientSocket = mySocket.accept();
-                getLog().info("w");
                 final Thread t = new Thread(() -> {
                     getLog().info("Client " + clientSocket.getInetAddress().getCanonicalHostName() + " connected");
-                    getLog().info("a");
                     try {
-                        getLog().info("b");
-                        //BufferedReader bf = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-                        InputStream is = clientSocket.getInputStream();
-                        getLog().info("c");
-                        PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
-                        getLog().info("d");
-                        String in;
-                        getLog().info("e");
-                        getLog().info("Pre read");
-
-                        byte[] buf = new byte[1000];
-                        int sz;
-                        in = "";
-                        while ((sz = is.read(buf)) > 0) {
-                            getLog().info(in += new String(buf));
-                            if (in.contains("\n"))
-                                break;
-                        }
-                        is.close();
-
-                        /*while ((*///in = bf.readLine();/*) != null) {*/
-                        if (in == null) {
-                            throw new IOException("No input");
-                        }
-                        getLog().info("f");
+                        BufferedReader bf = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                        String in = bf.readLine();
                         String responseBack = inst.interpret(in);
-                        getLog().info("g");
+
                         JSONObject response = new JSONObject();
-                        getLog().info("h");
                         response.put("msg", responseBack);
                         response.put("status", 0);
 
-                        getLog().info("i");
-                        out.write(response.toString());
-                        getLog().info("j");
-                        out.write("\n");
-                        getLog().info("k");
-                        out.flush();
-                        getLog().info("l");
-                        //}
-                        getLog().info("m");
+                        OutputStream os = clientSocket.getOutputStream();
+                        os.write(response.toString().getBytes());
+                        os.write("\n".getBytes());
                     } catch (IOException e) {
                         getLog().error("Get input", e);
                     } finally {
@@ -86,16 +54,11 @@ public class ServerPiLexaProxy extends AbstractPiLexaServiceProxy implements Inp
                                 inst.getLog().error("Socket close", e);
                             }
                         }
-                        getLog().info("n");
                         clients.remove(clientSocket);
                     }
-                    getLog().info("o");
                 });
-                getLog().info("p");
                 clients.put(clientSocket, t);
-                getLog().info("q");
                 t.start();
-                getLog().info("r");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -139,6 +102,7 @@ public class ServerPiLexaProxy extends AbstractPiLexaServiceProxy implements Inp
 
     @Override
     public void shutdown() {
+        stop();
     }
 
     @Override

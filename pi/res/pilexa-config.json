@@ -28,7 +28,9 @@
       "ssplit",
       "pos",
       "lemma",
-      "parse",
+      "parse"
+    ],
+    "_ignore_annotators": [
       "ner"
     ]
   }

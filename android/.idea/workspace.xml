@@ -10,15 +10,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="24e52a65-b06d-42ad-a785-4adf85ecf69d" name="Default" comment="More stuffs">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../pi/res/pilexa-config.json" afterPath="$PROJECT_DIR$/../pi/res/pilexa-config.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../pi/src/com/viveret/pilexa/pi/ConcretePiLexaService.java" afterPath="$PROJECT_DIR$/../pi/src/com/viveret/pilexa/pi/ConcretePiLexaService.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../pi/src/com/viveret/pilexa/pi/inputmethods/ServerPiLexaProxy.java" afterPath="$PROJECT_DIR$/../pi/src/com/viveret/pilexa/pi/inputmethods/ServerPiLexaProxy.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../pi/src/com/viveret/pilexa/pi/php/api.php" afterPath="$PROJECT_DIR$/../pi/src/com/viveret/pilexa/pi/php/api.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../pi/src/com/viveret/pilexa/pi/php/index.php" afterPath="$PROJECT_DIR$/../pi/src/com/viveret/pilexa/pi/php/index.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../pi/src/com/viveret/pilexa/pi/skill/SkillManager.java" afterPath="$PROJECT_DIR$/../pi/src/com/viveret/pilexa/pi/skill/SkillManager.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../pi/src/com/viveret/pilexa/pi/util/Config.java" afterPath="$PROJECT_DIR$/../pi/src/com/viveret/pilexa/pi/util/Config.java" />
     </list>
     <ignored path="PiLexa.iws" />
     <ignored path=".idea/workspace.xml" />
