@@ -21,7 +21,7 @@ chmod -R 755 build/resources/main/*
 ${cmd} build/resources/main/ ${endpoint}/
 
 echo -e "\n### Publishing helper scripts...\n"
-${cmd} $(echo *.sh) ${endpoint}/
+${cmd} $(echo *.sh) $(echo *.md) ${endpoint}/
 
 echo -e "\n### Publishing libraries...\n"
 gradle copyRuntimeLibs
@@ -30,10 +30,9 @@ ${cmd} build/dep/ ${endpoint}/lib
 if [[ $* == *--zip* ]] ;
 then
     echo -e "\n### Zipping distributables...\n"
-    mv ${endpoint} ${endpoint}-tmp
-    mkdir -p ${endpoint}
-    zip ${endpoint}/pi.zip ${endpoint}-tmp
-    tar -zcvf ${endpoint}/pi.tgz ${endpoint}-tmp
+    mkdir -p ${endpoint}-zip
+    zip -r ${endpoint}-zip/pi.zip ${endpoint}
+    tar -zcvf ${endpoint}-zip/pi.tgz ${endpoint}
 fi
 
 if  [[ $* == *--cssgate* ]] ;

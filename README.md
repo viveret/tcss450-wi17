@@ -2,11 +2,29 @@ Using Google Speech for Voice to Text, and Stanford-CoreNLP for language process
 
 ## Features Implemented
 ### 2/18/17
-* 
+#### Android:
+* Navigation drawer
+* Settings -> able to change host address
+* Can chat with pi
+* PiLexa proxy interface to interact with pi through web api
+
+#### Pi:
+* PHP / Web interface (no current direct access through sockets)
+* Speech recognition through Google Speech
+* Natural Language Processing through Stanford CoreNLP
+* Text to speech using MarryTTS
+* Plugin based system for input methods (Google speech, Sphinx4, command line, socket / http )
+* Plugin based system for skills
+* Can easily add new skills + interact with pi
+* PiLexa uses AI to direct what the user says to a skill
+* Settings to run PiLexa on cssgate or on a machine with a speaker / microphone
+* Flexible and extendible configuration service.
 
 ## User Stories Implemented
 ### 2/18/17
-* 
+* Settings user story was touched on, not yet complete (can set host address, configuration file for pi).
+* Timer user story touched on, not yet complete (can query for current time and date).
+* These can be finished by next week
 
 ## How to build / run
 1. Follow instructions [here](pi/README.md) to setup the pi / server.
