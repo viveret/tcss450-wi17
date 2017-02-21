@@ -51,6 +51,10 @@ task run(type: JavaExec, dependsOn:build) {
     maxHeapSize = '2048m'
 }
 
+task runMac(type:Exec, dependsOn: build) {
+    commandLine './run.sh'
+}
+
 task copyRuntimeLibs(type: Copy) {
     into "$buildDir/dep"
     from configurations.runtime

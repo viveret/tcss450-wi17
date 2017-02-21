@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.viveret.pilexa.android.pilexa.Skill;
 
 /**
- * A fragment representing a list of Items.
+ * A fragment representing a list of Skills.
  * <p/>
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
@@ -64,18 +64,11 @@ public class SkillDetailFragment extends Fragment {
         skillLongDescTextView = (TextView) view.findViewById(R.id.skill_long_desc);
         return view;
     }
-//
-//        // Set the adapter
-//        if (view instanceof RecyclerView) {
-//            Context context = view.getContext();
-//            RecyclerView recyclerView = (RecyclerView) view;
-//            if (mColumnCount <= 1) {
-//                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-//            } else {
-//                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-//            }
-//            recyclerView.setAdapter(new MyManageSkillFragmentRecyclerViewAdapter(Skill.ITEMS, mListener));
-//        }
+
+    /**
+     * Updates the skill details with the new skill parameter passed in
+     * @param skill the new skill to use for updating the view.
+     */
     public void updateView(Skill skill) {
         if (skill != null) {
             skillNameTextView.setText(skill.getSkillName());
