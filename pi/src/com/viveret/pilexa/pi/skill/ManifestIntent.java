@@ -29,7 +29,7 @@ public class ManifestIntent implements Intent {
         String className = parent.getPackageName() + "." + root.get("className");
 
         Class<?> clazz = Class.forName(className);
-        Constructor<?> ctor = null;
+        Constructor<?> ctor;
         try {
             ctor = clazz.getConstructor();
         } catch (NoSuchMethodException e) {

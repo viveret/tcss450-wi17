@@ -1,7 +1,17 @@
 #!/bin/bash
 
-cmd="/usr/bin/rsync -Pvaztu --partial-dir=build/rsync-tmp "
 endpoint="build/dist"
+cmd="/usr/bin/rsync -Pvaztu"
+
+if  [[ $* == *--lib* ]] ;
+then
+    echo -e "Managing libs\n"
+else
+    cmd="${cmd} --exclude '${endpoint}/lib/'"
+fi
+
+echo Cmd: ${cmd}
+
 cssgate="cssgate.insttech.washington.edu:~"
 endpoint_cssgate="public_html/pi"
 
@@ -23,9 +33,12 @@ ${cmd} build/resources/main/ ${endpoint}/
 echo -e "\n### Publishing helper scripts...\n"
 ${cmd} $(echo *.sh) $(echo *.md) ${endpoint}/
 
-echo -e "\n### Publishing libraries...\n"
-gradle copyRuntimeLibs
-${cmd} build/dep/ ${endpoint}/lib
+if  [[ $* == *--lib* ]] ;
+then
+    echo -e "\n### Publishing libraries...\n"
+    gradle copyRuntimeLibs
+    ${cmd} build/dep/ ${endpoint}/lib
+fi
 
 if [[ $* == *--zip* ]] ;
 then
@@ -51,7 +64,8 @@ then
     #${expect} << EOC
     #set timeout -1
     #spawn
-    ${cmd} ${endpoint_local}/ ${endpoint}
+    echo "${cmd} --delete ${endpoint_local}/ ${endpoint}"
+    ${cmd} --delete ${endpoint_local}/ ${endpoint}
     #${expect_post}
     #EOC
 fi

@@ -1,5 +1,6 @@
 package com.viveret.pilexa.pi;
 
+import com.viveret.pilexa.pi.util.ConfigTransactionLayer;
 import org.apache.log4j.Logger;
 
 /**
@@ -13,6 +14,8 @@ public interface PiLexaService extends Runnable {
     boolean isConnected();
 
     String interpret(String str);
+
+    ConfigTransactionLayer getConfig();
 
     Logger getLog();
 }

@@ -1,50 +1,31 @@
 package com.viveret.pilexa.pi.skill;
 
+import com.viveret.pilexa.pi.util.ConfigFile;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.net.URL;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by viveret on 2/5/17.
  */
-public class ManifestSkill implements Skill {
-    private String myDisplayName, myShortDesc, myDesc, myPublisher, myVersionStr, myIconUrl, myClassPath;
-    private int myVersionNumber;
+public class ManifestSkill extends ConfigFile implements Skill {
+    private String myClassPath;
 
     private List<Intent> myIntents = new ArrayList<>();
 
-    public ManifestSkill(final String classPath) {
+    public ManifestSkill(final String classPath) throws FileNotFoundException {
+        super("skills/" + String.join("/", classPath.split("\\.")) + "/manifest");
         myClassPath = classPath;
-        ClassLoader classLoader = getClass().getClassLoader();
-        String finalUrl = "skills/" + String.join("/", classPath.split("\\.")) + "/manifest.json";
-        URL tmpUrl = classLoader.getResource(finalUrl);
-        String tmpFile = tmpUrl.getFile();
-        File file = new File(tmpFile);
-
-        JSONParser parser = new JSONParser();
-        try {
-            JSONObject root = (JSONObject) parser.parse(new FileReader(file));
-            getSkillInfo(root);
-            getJsonIntents(root);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+        getJsonIntents();
     }
 
-    private void getJsonIntents(JSONObject root) {
+    private void getJsonIntents() {
         final Logger log = Logger.getRootLogger();
-        JSONArray intents = (JSONArray) root.get("intents");
+        JSONArray intents = (JSONArray) getRoot().get("intents");
         for (int i = 0; i < intents.size(); i++) {
             try {
                 myIntents.add(new ManifestIntent((JSONObject) intents.get(i), this));
@@ -54,35 +35,24 @@ public class ManifestSkill implements Skill {
         }
     }
 
-    private void getSkillInfo(JSONObject root) {
-        myDisplayName = (String) root.get("name");
-        myShortDesc = (String) root.get("shortDesc");
-        myDesc = (String) root.get("longDesc");
-        myPublisher = (String) root.get("publisher");
-        myVersionStr = (String) root.get("versionStr");
-        myVersionNumber = (int) ((Long) root.get("version")).longValue();
-        myVersionStr = (String) root.get("iconUrl");
-        myIconUrl = (String) root.get("iconUrl");
-    }
-
     @Override
     public String getDisplayName() {
-        return myDisplayName;
+        return (String) getRoot().get("name");
     }
 
     @Override
     public String getShortDescription() {
-        return myShortDesc;
+        return (String) getRoot().get("shortDesc");
     }
 
     @Override
     public String getDescription() {
-        return myDesc;
+        return (String) getRoot().get("longDesc");
     }
 
     @Override
     public String getPublisher() {
-        return myPublisher;
+        return (String) getRoot().get("publisher");
     }
 
     @Override
@@ -92,17 +62,17 @@ public class ManifestSkill implements Skill {
 
     @Override
     public String getVersionString() {
-        return myVersionStr;
+        return (String) getRoot().get("versionStr");
     }
 
     @Override
     public int getVersionNumber() {
-        return myVersionNumber;
+        return (int) ((Long) getRoot().get("version")).longValue();
     }
 
     @Override
     public String getIconUrl() {
-        return myIconUrl;
+        return (String) getRoot().get("iconUrl");
     }
 
     @Override

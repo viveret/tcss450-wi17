@@ -3,6 +3,7 @@ package com.viveret.pilexa.pi.skill;
 import com.viveret.pilexa.pi.invocation.PooledInvocationPattern;
 import com.viveret.pilexa.pi.util.Config;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +34,11 @@ public class SkillManager {
         List<String> skills = Config.inst().getStringArray("skills");
 
         for (String s : skills) {
-            registerSkill(new ManifestSkill(s));
+            try {
+                registerSkill(new ManifestSkill(s));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
 
         PooledInvocationPattern.runPool();

@@ -1,5 +1,6 @@
 package com.viveret.pilexa.pi;
 
+import com.viveret.pilexa.pi.util.ConfigTransactionLayer;
 import org.apache.log4j.Logger;
 
 /**
@@ -26,6 +27,11 @@ public abstract class AbstractPiLexaServiceProxy implements PiLexaService {
     @Override
     public String interpret(String str) {
         return inst.interpret(str);
+    }
+
+    @Override
+    public ConfigTransactionLayer getConfig() {
+        return inst.getConfig();
     }
 
     @Override

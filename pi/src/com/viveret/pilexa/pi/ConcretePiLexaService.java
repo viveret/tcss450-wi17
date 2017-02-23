@@ -9,6 +9,7 @@ import com.viveret.pilexa.pi.skill.Intent;
 import com.viveret.pilexa.pi.skill.Skill;
 import com.viveret.pilexa.pi.skill.SkillManager;
 import com.viveret.pilexa.pi.util.Config;
+import com.viveret.pilexa.pi.util.ConfigTransactionLayer;
 import com.viveret.pilexa.pi.util.SimpleTuple;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.pipeline.Annotation;
@@ -200,6 +201,11 @@ public class ConcretePiLexaService implements PiLexaService {
         }
 
         return "Unknown error";
+    }
+
+    @Override
+    public ConfigTransactionLayer getConfig() {
+        return Config.inst();
     }
 
     @Override

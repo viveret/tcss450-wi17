@@ -28,27 +28,60 @@ class PilexaApi
         switch ($params['op']) {
             case 'canConnect':
                 break;
-            case 'queryConfig':
-                if (isset($params['key'])) {
-                    $ret['val'] = $this->getConfig($params['key']);
-                } else {
-                    $ret['msg'] = 'Missing key';
-                    $ret['status'] = 1;
-                }
-                break;
-            case 'queryEntireConfig':
-                $ret['val'] = $this->getEntireConfig();
-                break;
-            case 'setConfig':
-                $this->flushConfig();
-                break;
-            case 'interpret':
-                $ret = $this->interpret($params['val']);
-                break;
+//            case 'queryConfig':
+//                if (isset($params['key'])) {
+//                    $ret['val'] = $this->getConfig($params['key']);
+//                } else {
+//                    $ret['msg'] = 'Missing key';
+//                    $ret['status'] = 1;
+//                }
+//                break;
+//            case 'queryEntireConfig':
+//                $ret['val'] = $this->getEntireConfig();
+//                break;
+//            case 'setConfig':
+//                $this->flushConfig();
+//                break;
+//            case 'interpret':
+//                $ret = $this->interpret($params['val']);
+//                break;
             default:
-                $ret['msg'] = 'Invalid op ' . $params['op'];
-                $ret['status'] = 1;
+                $ret = $this->sendToPilexa($params);
                 break;
+        }
+
+        return $ret;
+    }
+
+    public function sendToPilexa($theJson)
+    {
+        $ret = array("msg" => "OK", "status" => 0);
+
+        /* Get the IP address for the target host. */
+        $address = gethostbyname('localhost');
+
+        /* Create a TCP/IP socket. */
+        $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+        if ($socket === false) {
+            $ret["msg"] = "socket_create() failed: reason: " . socket_strerror(socket_last_error()) . "\n";
+            $ret["status"] = 1;
+        } else {
+            socket_set_timeout($socket, 1);
+            $result = socket_connect($socket, $address, $this->getConfig("server.port"));
+            if ($result === false) {
+                $ret['msg'] = "socket_connect() failed.\nReason: ($result) " . socket_strerror(socket_last_error($socket)) . "\n";
+                $ret['status'] = 1;
+            } else {
+                $val = json_encode($theJson) . "\n";
+                socket_write($socket, $val, strlen($val));
+                $tmp = '';
+                $out = '';
+                while ($out = socket_read($socket, 2048)) {
+                    $tmp .= $out;
+                }
+                socket_close($socket);
+                $ret = json_decode($tmp);
+            }
         }
 
         return $ret;
@@ -73,39 +106,6 @@ class PilexaApi
         $myfile = fopen(self::CONFIG_FILE, "w") or die("Unable to open file!");
         fwrite($myfile, json_encode($this->myConfig));
         fclose($myfile);
-    }
-
-    public function interpret($val) {
-        $ret = array("msg" => "OK", "status" => 0);
-
-        /* Get the IP address for the target host. */
-        $address = gethostbyname('localhost');
-
-        /* Create a TCP/IP socket. */
-        $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-        if ($socket === false) {
-            $ret["msg"] = "socket_create() failed: reason: " . socket_strerror(socket_last_error()) . "\n";
-            $ret["status"] = 1;
-        } else {
-            socket_set_timeout($socket, 1);
-            $result = socket_connect($socket, $address, $this->getConfig("server.port"));
-            if ($result === false) {
-                $ret['msg'] = "socket_connect() failed.\nReason: ($result) " . socket_strerror(socket_last_error($socket)) . "\n";
-                $ret['status'] = 1;
-            } else {
-                $val .= "\n";
-                socket_write($socket, $val, strlen($val));
-                $tmp = '';
-                $out = '';
-                while ($out = socket_read($socket, 2048)) {
-                    $tmp .= $out;
-                }
-                socket_close($socket);
-                $ret = json_decode($tmp);
-            }
-        }
-
-        return $ret;
     }
 }
 ?>
