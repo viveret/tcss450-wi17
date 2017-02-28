@@ -8,6 +8,8 @@ import com.viveret.pilexa.pi.sayable.Sayable;
 import com.viveret.pilexa.pi.skill.Intent;
 import com.viveret.pilexa.pi.skill.Skill;
 import com.viveret.pilexa.pi.skill.SkillManager;
+import com.viveret.pilexa.pi.util.Config;
+import com.viveret.pilexa.pi.util.ConfigTransactionLayer;
 import com.viveret.pilexa.pi.util.SimpleTuple;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.pipeline.Annotation;
@@ -94,24 +96,13 @@ public class ConcretePiLexaService implements PiLexaService {
         // build pipeline
         pipeline = new StanfordCoreNLP(
                 PropertiesUtils.asProperties(
-                        "annotators", "tokenize,ssplit,pos,lemma,ner,parse,natlog,sentiment",
+                        "annotators", String.join(",", Config.inst().getStringArray("corenlp.annotators")),
                         "ssplit.isOneSentence", "true",
                         "parse.model", "edu/stanford/nlp/models/srparser/englishSR.ser.gz",
                         "tokenize.language", "en"));
     }
 
     private void initPiLexa() {
-//        try {
-//            final String os = System.getProperty("os.name");
-//
-//            if (os.contains("Windows")) {
-//                Runtime.getRuntime().exec("");
-//            } else {
-//                Runtime.getRuntime().exec("renice ");
-//            }
-//        } catch (final Exception e) {
-//            //  Handle any exceptions.
-//        }
         log = Logger.getRootLogger();// Logger.getLogger(getClass().getName());
         log.info("Connected to PiLexa Service.");
 
@@ -210,6 +201,11 @@ public class ConcretePiLexaService implements PiLexaService {
         }
 
         return "Unknown error";
+    }
+
+    @Override
+    public ConfigTransactionLayer getConfig() {
+        return Config.inst();
     }
 
     @Override

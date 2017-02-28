@@ -13,6 +13,8 @@ import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by viveret on 2/15/17.
@@ -20,6 +22,7 @@ import java.net.URL;
 
 public class PiLexaProxyConnection {
     private static final String LOGTAG = "PiLexaProxy";
+    private final Map<String, Object> myConfigCache = new HashMap<>();
 
     private URL myUrl;
 
@@ -51,6 +54,9 @@ public class PiLexaProxyConnection {
             args.put("op", "setConfig");
             args.put("key", key);
             args.put("val", val);
+
+            myConfigCache.put(key, val);
+
             j = new JSONObject(getStringFromRequest(args));
 
             if (j.has("status") && j.getInt("status") == 0) {
@@ -63,20 +69,25 @@ public class PiLexaProxyConnection {
     }
 
     public String getConfigString(String key) throws Exception {
-        try {
-            JSONObject args = new JSONObject();
-            args.put("op", "queryConfig");
-            args.put("key", key);
-            JSONObject j = new JSONObject(getStringFromRequest(args));
+        if (myConfigCache.containsKey(key)) {
+            return (String) myConfigCache.get(key);
+        } else {
+            try {
+                JSONObject args = new JSONObject();
+                args.put("op", "queryConfig");
+                args.put("key", key);
+                JSONObject j = new JSONObject(getStringFromRequest(args));
 
-            if (j.has("status") && j.getInt("status") == 0) {
-                return j.getString("val");
-            } else {
-                throw new Exception(j.getString("msg"));
+                if (j.has("status") && j.getInt("status") == 0) {
+                    myConfigCache.put(key, j.getString("val"));
+                    return j.getString("val");
+                } else {
+                    throw new Exception(j.getString("msg"));
+                }
+            } catch (JSONException e) {
+                Log.e(LOGTAG, Log.getStackTraceString(e));
+                return null;
             }
-        } catch (JSONException e) {
-            Log.e(LOGTAG, Log.getStackTraceString(e));
-            return null;
         }
     }
 
@@ -159,7 +170,8 @@ public class PiLexaProxyConnection {
             JSONObject j = new JSONObject(getStringFromRequest(args));
 
             if (j.has("status") && j.getInt("status") == 0) {
-                return j.getString("val");
+                Log.i(LOGTAG, "Message received: " + j.getString("msg"));
+                return j.getString("msg");
             } else {
                 throw new Exception(j.getString("msg"));
             }

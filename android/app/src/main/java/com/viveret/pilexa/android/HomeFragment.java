@@ -41,6 +41,7 @@ public class HomeFragment extends Fragment {
     private static final String LOGTAG = "HomeFragment";
 
     private PiLexaProxyConnection.PiLexaProxyConnectionHolder myPiLexaHolder;
+    private MyMessageRecyclerViewAdapter myViewAdapter;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -79,7 +80,8 @@ public class HomeFragment extends Fragment {
         LinearLayoutManager lm = new LinearLayoutManager(view.getContext());
         lm.setReverseLayout(true);
         recyclerView.setLayoutManager(lm);
-        recyclerView.setAdapter(new MyMessageRecyclerViewAdapter(MessageContent.ITEMS));
+        myViewAdapter = new MyMessageRecyclerViewAdapter(MessageContent.ITEMS);
+        recyclerView.setAdapter(myViewAdapter);
 
         final EditText et = (EditText) view.findViewById(R.id.inputMsg);
         if (et != null) {
@@ -88,6 +90,7 @@ public class HomeFragment extends Fragment {
                 public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                     if (actionId == EditorInfo.IME_ACTION_SEND) {
                         sendFromUserMessage(et.getText().toString());
+                        et.setText("");
                         return true;
                     }
                     return false;
@@ -99,7 +102,8 @@ public class HomeFragment extends Fragment {
     }
 
     private void sendFromUserMessage(String text) {
-        MessageContent.ITEMS.add(new Message("12", "1" + text, "2" + text, true));
+        MessageContent.ITEMS.add(0, new Message("You", text, text, true));
+        myViewAdapter.notifyDataSetChanged();
         new SendMessageTask().execute(new String[]{text});
 
     }
@@ -116,7 +120,7 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
-    public void onDetach() {
+    public void onDetac1Xh() {
         super.onDetach();
         myPiLexaHolder = null;
     }
@@ -139,7 +143,15 @@ public class HomeFragment extends Fragment {
         @Override
         protected void onPostExecute(String result) {
             Log.d(LOGTAG, result);
-            MessageContent.ITEMS.add(new Message("cpu", "4" + result, "5" + result, false));
+            String name = "cpu";
+            try {
+                name = myPiLexaHolder.getPilexa().getConfigString("system.name");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            MessageContent.ITEMS.add(0, new Message(name, result, result, false));
+            myViewAdapter.notifyDataSetChanged();
         }
     }
 }

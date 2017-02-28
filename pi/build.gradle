@@ -61,35 +61,5 @@ task copyRuntimeLibs(type: Copy) {
 }
 
 task publish(type: Exec) {
-
+    commandLine './publish.sh'
 }
-
-//task runNice(type:Exec) {
-//    commandLine 'nice -20 gradle run'
-//}
-
-/*jar { 
-    from {
-        configurations.compile.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-        configurations.runtime.collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-    }
-  manifest {
-    attributes(    
-        'Built-By': System.getProperty('user.name'),
-        'Built-Date': new Date(),
-        'Built-JDK': System.getProperty('java.version'),
-        "Main-Class": 'com.viveret.pilexa.pi.Main'
-      )
-  }
-}*/
-
-/*buildscript {
-    dependencies {
-        classpath fileTree(dir: '../../build/libs', include: '*.jar', excludes: ['*javadoc.jar', '*sources.jar'])
-    }
-}
-*/

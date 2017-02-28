@@ -20,7 +20,7 @@ public class QueryDateIntent extends JsonFromFileIntent {
     public Sayable processInvocation(Invocation i) {
         Object tmp = null;
         try {
-            tmp = getJson(getClass().getPackage().getName());
+            tmp = getJson(getClass().getPackage().getName().replace('.', '/'));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

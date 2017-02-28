@@ -7,11 +7,16 @@
     "com.viveret.pilexa.pi.defaultskills.debugskill"
   ],
   "input-methods": [
-    "com.viveret.pilexa.pi.inputmethods.ServerPiLexaProxy"
+    "com.viveret.pilexa.pi.inputmethods.DaemonProxy"
+  ],
+  "_input-methods-available": [
+    "com.viveret.pilexa.pi.inputmethods.DaemonProxy",
+    "com.viveret.pilexa.pi.inputmethods.GoogleSpeechPiLexaProxy",
+    "com.viveret.pilexa.pi.inputmethods.TextInterfacePiLexaProxy"
   ],
   "server": {
     "hostname": "localhost",
-    "port": 8182,
+    "port": 11823,
     "acceptTimeout": 1000,
     "processPriority": 1
   },
@@ -21,5 +26,17 @@
     "headless": true,
     "voiceless": true,
     "name": "PiLexa CSS Gate"
+  },
+  "corenlp": {
+    "annotators": [
+      "tokenize",
+      "ssplit",
+      "pos",
+      "lemma",
+      "parse"
+    ],
+    "_ignore_annotators": [
+      "ner", "natlog", "sentiment"
+    ]
   }
 }
