@@ -4,12 +4,10 @@
     "com.viveret.pilexa.pi.defaultskills.repeatbacktomeskill",
     "com.viveret.pilexa.pi.defaultskills.jokeskill",
     "com.viveret.pilexa.pi.defaultskills.salutationskill",
-    "com.viveret.pilexa.pi.defaultskills.debugskill",
-    "com.viveret.pilexa.pi.defaultskills.weatherskill"
-
+    "com.viveret.pilexa.pi.defaultskills.debugskill"
   ],
   "input-methods": [
-    "com.viveret.pilexa.pi.inputmethods.TextInterfacePiLexaProxy"
+    "com.viveret.pilexa.pi.inputmethods.DaemonProxy"
   ],
   "_input-methods-available": [
     "com.viveret.pilexa.pi.inputmethods.DaemonProxy",
@@ -38,7 +36,6 @@
     ],
     "_annotators-available": [
       "ner", "natlog", "sentiment"
-
     ]
   }
 }

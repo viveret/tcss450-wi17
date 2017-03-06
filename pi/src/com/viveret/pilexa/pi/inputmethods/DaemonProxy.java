@@ -126,6 +126,9 @@ public class DaemonProxy extends AbstractPiLexaServiceProxy implements InputSour
                     msg = "key 'op' is required, no operation specified.";
                 } else {
                     switch (jin.getString("op")) {
+                        case "ping": {
+
+                        } break;
                         case "interpret":
                             if (jin.has("msg")) {
                                 msg = inst.interpret(jin.getString("msg"));
