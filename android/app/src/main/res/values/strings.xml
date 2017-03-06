@@ -65,7 +65,7 @@
         <item>3</item>
     </string-array>
 
-    <string-array name="multi_select_list_preference_default_value"/>
+    <string-array name="multi_select_list_preference_default_value" />
 
     <string name="pref_title_system_sync_settings">System sync settings</string>
 
@@ -84,4 +84,5 @@
     <string name="hint_send_msg">Send message...</string>
     <string name="default_port">11823</string>
     <string name="hint_default_port">Port (empty for default)</string>
+    <string name="syncing_data_in_progress">Syncing data...</string>
 </resources>

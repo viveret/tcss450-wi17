@@ -138,11 +138,11 @@ public class HomeActivity extends AppCompatActivity
                 try {
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(HomeActivity.this);
                     String host = prefs.getString("keystring", getString(R.string.pref_default_host));
-                    pilexa = PiLexaProxyConnection.attachTo(host);
-                } catch (ConnectException e) {
+                    pilexa = PiLexaProxyConnection.attachTo(host, 11823);
+                } /*catch (ConnectException e) {
                     e.printStackTrace();
                     Toast.makeText(HomeActivity.this, "Could not connect to pi", Toast.LENGTH_LONG);
-                } catch (MalformedURLException e) {
+                }*/ catch (MalformedURLException e) {
                     e.printStackTrace();
                     Toast.makeText(HomeActivity.this, "Bad url for pi", Toast.LENGTH_LONG);
                 }

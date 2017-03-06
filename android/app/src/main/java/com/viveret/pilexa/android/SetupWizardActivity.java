@@ -6,12 +6,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.viveret.pilexa.android.pilexa.PiLexaProxyConnection;
 import com.viveret.pilexa.android.setup.FindPilexaServiceFragment;
 
 public class SetupWizardActivity extends Activity implements FindPilexaServiceFragment.OnPilexaServiceSelected {
     private int myStepAt;
 
     private Button prevBtn, nextBtn;
+    private PiLexaProxyConnection myPilexa;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +63,9 @@ public class SetupWizardActivity extends Activity implements FindPilexaServiceFr
     }
 
     @Override
-    public void onPilexaServiceSelected(String address, int port) {
-        Toast.makeText(this, "Selected " + address, Toast.LENGTH_LONG);
+    public void onPilexaServiceSelected(PiLexaProxyConnection conn) {
+        Toast.makeText(this, "Selected " + conn.toString(), Toast.LENGTH_LONG);
+        myPilexa = conn;
+        nextBtn.callOnClick();
     }
 }

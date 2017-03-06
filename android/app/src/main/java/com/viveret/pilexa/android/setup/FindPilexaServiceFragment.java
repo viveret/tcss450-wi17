@@ -3,7 +3,6 @@ package com.viveret.pilexa.android.setup;
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import com.viveret.pilexa.android.R;
 import com.viveret.pilexa.android.pilexa.PiLexaFinder;
+import com.viveret.pilexa.android.pilexa.PiLexaProxyConnection;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -29,7 +29,7 @@ import java.util.List;
 public class FindPilexaServiceFragment extends Fragment implements PiLexaFinder.OnPilexaServiceFound {
     private OnPilexaServiceSelected mListener;
     private PiLexaFinder myFinder;
-    private List<String> myAddresses;
+    private List<PiLexaProxyConnection> myConnections;
     private RecyclerView.Adapter myAdapter;
 
     /**
@@ -56,7 +56,7 @@ public class FindPilexaServiceFragment extends Fragment implements PiLexaFinder.
             Context context = listView.getContext();
             RecyclerView recyclerView = (RecyclerView) listView;
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            myAdapter = new MyPiLexaConnRecyclerViewAdapter(myAddresses, mListener);
+            myAdapter = new MyPiLexaConnRecyclerViewAdapter(myConnections, mListener);
             recyclerView.setAdapter(myAdapter);
             myFinder.startSearch();
         }
@@ -71,7 +71,7 @@ public class FindPilexaServiceFragment extends Fragment implements PiLexaFinder.
         }
 
         String localAddress = findLocalAddress();
-        myAddresses = new ArrayList<>();
+        myConnections = new ArrayList<>();
         myFinder = new PiLexaFinder(Integer.parseInt(portStr), localAddress, getActivity(), this);
     }
 
@@ -117,8 +117,8 @@ public class FindPilexaServiceFragment extends Fragment implements PiLexaFinder.
     }
 
     @Override
-    public void onPilexaServiceFound(String address, int port) {
-        myAddresses.add(address);
+    public void onPilexaServiceFound(PiLexaProxyConnection connection) {
+        myConnections.add(connection);
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -128,6 +128,6 @@ public class FindPilexaServiceFragment extends Fragment implements PiLexaFinder.
     }
 
     public interface OnPilexaServiceSelected {
-        void onPilexaServiceSelected(String address, int port);
+        void onPilexaServiceSelected(PiLexaProxyConnection connection);
     }
 }
