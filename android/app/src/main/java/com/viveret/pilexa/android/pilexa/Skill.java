@@ -39,8 +39,11 @@ public class Skill implements Serializable {
                 String name = newSkillObject.get(NAME).toString();
                 String shortDesc = newSkillObject.get(SHORT_DESC).toString();
                 String longDesc = newSkillObject.get(LONG_DESC).toString();
-                Skill newSkill = new Skill(name, shortDesc, longDesc);
-                skillList.add(newSkill);
+                if(!(name.compareTo("Debug") == 0)){
+                    Skill newSkill = new Skill(name, shortDesc, longDesc);
+                    skillList.add(newSkill);
+                }
+
             } catch (JSONException e) {
                 resultOfParse = "Failed to parse skill details, reason: " + e;
                 e.printStackTrace();

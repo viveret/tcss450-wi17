@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -16,20 +15,10 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.viveret.pilexa.android.dummy.Message;
 import com.viveret.pilexa.android.dummy.MessageContent;
 import com.viveret.pilexa.android.pilexa.PiLexaProxyConnection;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 
 /**
@@ -120,7 +109,7 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
-    public void onDetac1Xh() {
+    public void onDetach() {
         super.onDetach();
         myPiLexaHolder = null;
     }

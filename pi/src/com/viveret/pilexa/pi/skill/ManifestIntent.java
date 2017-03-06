@@ -1,5 +1,7 @@
 package com.viveret.pilexa.pi.skill;
 
+import com.viveret.pilexa.pi.ConcretePiLexaService;
+import com.viveret.pilexa.pi.PiLexaService;
 import com.viveret.pilexa.pi.invocation.Invocation;
 import com.viveret.pilexa.pi.invocation.InvocationPattern;
 import com.viveret.pilexa.pi.invocation.InvocationProcessor;
@@ -54,6 +56,10 @@ public class ManifestIntent implements Intent {
             String patt = (String) invocations.get(i);
             myPatterns.add(new PooledInvocationPattern(patt));
         }
+    }
+
+    public PiLexaService getConnectedPilexaService() {
+        return ConcretePiLexaService.inst();
     }
 
     @Override

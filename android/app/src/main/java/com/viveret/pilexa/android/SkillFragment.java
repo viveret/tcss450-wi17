@@ -3,7 +3,6 @@ package com.viveret.pilexa.android;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.viveret.pilexa.android.pilexa.Skill;
 
@@ -42,6 +40,17 @@ public class SkillFragment extends Fragment {
             = "http://cssgate.insttech.washington.edu/~viveret/pi/pilexa-config.json";
 
     private RecyclerView mRecyclerView;
+    private List<Skill> mySkillInfoList;
+
+    public List<Skill> getMySkillInfoList() {
+        return mySkillInfoList;
+    }
+
+    public void setMySkillInfoList(List<Skill> mySkillInfoList) {
+        this.mySkillInfoList = mySkillInfoList;
+    }
+
+    private MySkillRecyclerViewAdapter skillAdapter;
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -78,6 +87,29 @@ public class SkillFragment extends Fragment {
         }
     }
 
+//    /**
+//     * method which inflating fragment skill list. Uses recycler view for displaying the skills
+//     * that are grabbed form the SKILL_URL, and subsequent urls for each skill parsed int he
+//     * skill class.
+//     * @param inflater used to inflate the view.
+//     * @param container parent view that performs skill fragments UI.
+//     * @param savedInstanceState used if fragment is being reconstructed, provides given state.
+//     * @return returns the view to be displayed.
+//     */
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//                             Bundle savedInstanceState) {
+//        View view = inflater.inflate(R.layout.fragment_skill_list, container, false);
+//
+//        // Set the adapter
+//        Context context = view.getContext();
+//        mRecyclerView = (RecyclerView) view.findViewById(R.id.list);
+//        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+//        DownloadSkills task = new DownloadSkills();
+//        task.execute(new String[]{SKILL_URL});
+//        return view;
+//    }
+
     /**
      * method which inflating fragment skill list. Uses recycler view for displaying the skills
      * that are grabbed form the SKILL_URL, and subsequent urls for each skill parsed int he
@@ -105,10 +137,10 @@ public class SkillFragment extends Fragment {
             task.execute(new String[]{SKILL_URL});
         }
 
-        FloatingActionButton floatingActionButton = (FloatingActionButton)
-                getActivity().findViewById(R.id.fab);
-        floatingActionButton.show();
-
+//        FloatingActionButton floatingActionButton = (FloatingActionButton)
+//                getActivity().findViewById(R.id.fab);
+//        floatingActionButton.show();
+//
         return view;
     }
 
@@ -239,15 +271,20 @@ public class SkillFragment extends Fragment {
             List<Skill> skillList = new ArrayList<Skill>();
             result = Skill.parseSkillJSON(skillDetailList, skillList);
             // Something wrong with the JSON returned.
-            if (result != null) {
-                Toast.makeText(getActivity().getApplicationContext(), result, Toast.LENGTH_LONG)
-                        .show();
-                return;
-            }
+//            if (result != null) {
+//                Toast.makeText(getActivity().getApplicationContext(), result, Toast.LENGTH_LONG)
+//                        .show();
+//                return;
+//            }
 
             // Everything is good, show the list of courses.
             if (!skillList.isEmpty()) {
                 mRecyclerView.setAdapter(new MySkillRecyclerViewAdapter(skillList, mListener));
+            } else {
+                System.out.println("skillList empty!");
+            }
+            for(Skill skl: skillList) {
+                System.out.println(skl.getSkillName() + ": " + skl.getLongDescription());
             }
         }
     }
