@@ -7,7 +7,7 @@
     "com.viveret.pilexa.pi.defaultskills.debugskill"
   ],
   "input-methods": [
-    "com.viveret.pilexa.pi.inputmethods.DaemonProxy"
+    "com.viveret.pilexa.pi.inputmethods.GoogleSpeechPiLexaProxy"
   ],
   "_input-methods-available": [
     "com.viveret.pilexa.pi.inputmethods.DaemonProxy",
@@ -24,7 +24,7 @@
     "numThreadsPerCore": 2,
     "voice": "default",
     "headless": true,
-    "voiceless": true,
+    "voiceless": false,
     "name": "PiLexa CSS Gate"
   },
   "corenlp": {
