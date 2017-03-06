@@ -4,6 +4,9 @@ import com.viveret.pilexa.pi.AbstractPiLexaServiceProxy;
 import com.viveret.pilexa.pi.InputSource;
 import com.viveret.pilexa.pi.PiLexaService;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Scanner;
 
 /**

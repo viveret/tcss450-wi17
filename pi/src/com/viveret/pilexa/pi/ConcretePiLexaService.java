@@ -11,6 +11,7 @@ import com.viveret.pilexa.pi.skill.SkillManager;
 import com.viveret.pilexa.pi.util.Config;
 import com.viveret.pilexa.pi.util.ConfigTransactionLayer;
 import com.viveret.pilexa.pi.util.SimpleTuple;
+import com.viveret.pilexa.pi.util.ToPhoneIntent;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.pipeline.Annotation;
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
@@ -211,5 +212,10 @@ public class ConcretePiLexaService implements PiLexaService {
     @Override
     public Logger getLog() {
         return log;
+    }
+
+    @Override
+    public Sayable DispatchIntent(ToPhoneIntent i) {
+        return null;
     }
 }

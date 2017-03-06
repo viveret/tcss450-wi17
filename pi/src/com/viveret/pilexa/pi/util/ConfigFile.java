@@ -39,7 +39,7 @@ public class ConfigFile implements ConfigTransactionLayer {
         }
 
         if (fin == null) {
-            fin = new File(location + ".json");
+            fin = new File("res/" + location + ".json");
         }
 
         if (fin != null) {

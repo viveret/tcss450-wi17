@@ -67,7 +67,7 @@ public class InputMethodManager {
 
     private void loadInputs() {
         ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("pilexa-config.json").getFile());
+        File file = new File(classLoader.getResource("res/pilexa-config.json").getFile());
 
         JSONParser parser = new JSONParser();
         try {

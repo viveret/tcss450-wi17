@@ -50,15 +50,16 @@ task run(type: JavaExec, dependsOn:build) {
     jvmArgs '-Xmx4096m', '-Xms1024m'
     maxHeapSize = '2048m'
 }
-
-task runMac(type:Exec, dependsOn: build) {
-    commandLine './run.sh'
-}
-
 task copyRuntimeLibs(type: Copy) {
     into "$buildDir/dep"
     from configurations.runtime
 }
+
+task runMac(type:Exec, dependsOn: [build,copyRuntimeLibs]) {
+    commandLine './run.sh'
+}
+
+
 
 task publish(type: Exec) {
     commandLine './publish.sh'

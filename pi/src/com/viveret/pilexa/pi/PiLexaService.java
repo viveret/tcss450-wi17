@@ -1,6 +1,8 @@
 package com.viveret.pilexa.pi;
 
+import com.viveret.pilexa.pi.sayable.Sayable;
 import com.viveret.pilexa.pi.util.ConfigTransactionLayer;
+import com.viveret.pilexa.pi.util.ToPhoneIntent;
 import org.apache.log4j.Logger;
 
 /**
@@ -18,4 +20,6 @@ public interface PiLexaService extends Runnable {
     ConfigTransactionLayer getConfig();
 
     Logger getLog();
+
+    Sayable DispatchIntent(ToPhoneIntent i);
 }

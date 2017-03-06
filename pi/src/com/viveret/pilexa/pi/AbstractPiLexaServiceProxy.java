@@ -1,6 +1,8 @@
 package com.viveret.pilexa.pi;
 
+import com.viveret.pilexa.pi.sayable.Sayable;
 import com.viveret.pilexa.pi.util.ConfigTransactionLayer;
+import com.viveret.pilexa.pi.util.ToPhoneIntent;
 import org.apache.log4j.Logger;
 
 /**
@@ -37,5 +39,10 @@ public abstract class AbstractPiLexaServiceProxy implements PiLexaService {
     @Override
     public Logger getLog() {
         return inst.getLog();
+    }
+
+    @Override
+    public Sayable DispatchIntent(ToPhoneIntent i) {
+        return inst.DispatchIntent(i);
     }
 }
