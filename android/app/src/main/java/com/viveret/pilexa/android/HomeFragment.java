@@ -120,7 +120,7 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
-    public void onDetac1Xh() {
+    public void onDetach() {
         super.onDetach();
         myPiLexaHolder = null;
     }
