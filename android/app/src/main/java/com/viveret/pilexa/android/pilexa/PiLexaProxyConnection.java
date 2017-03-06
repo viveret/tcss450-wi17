@@ -7,11 +7,14 @@ import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.Socket;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,32 +23,56 @@ import java.util.Map;
  * Created by viveret on 2/15/17.
  */
 
-public class PiLexaProxyConnection {
+public class PiLexaProxyConnection implements Serializable {
     private static final String LOGTAG = "PiLexaProxy";
-    private final Map<String, Object> myConfigCache = new HashMap<>();
+    private static final int DEFAULT_TIMEOUT = 1000;
 
-    private URL myUrl;
 
-    private PiLexaProxyConnection(String theHost) throws MalformedURLException {
-        myUrl = new URL(theHost);
+    private transient final Map<String, Object> myConfigCache = new HashMap<>();
+    private transient int myTimeout = DEFAULT_TIMEOUT;
+    private final URL myUrl;
+    private final String myHost;
+    private final int myPort;
+
+    private PiLexaProxyConnection(URL theHost) throws MalformedURLException {
+        myUrl = theHost;
+        myHost = myUrl.toExternalForm();
+        myPort = myUrl.getPort();
     }
 
-    public static PiLexaProxyConnection attachTo(String host) throws ConnectException, MalformedURLException {
-        PiLexaProxyConnection ret = new PiLexaProxyConnection(host);
+    public PiLexaProxyConnection(String host, int port) throws MalformedURLException  {
+        myUrl = null;
+        myHost = host;
+        myPort = port;
+    }
+
+    public static PiLexaProxyConnection attachTo(URL url) throws MalformedURLException {
+        PiLexaProxyConnection ret = new PiLexaProxyConnection(url);
         if (ret.canConnect()) {
             return ret;
         } else {
-            throw new ConnectException("Could not connect");
+            return null;
+        }
+    }
+
+    public static PiLexaProxyConnection attachTo(String host, int port) throws MalformedURLException  {
+        PiLexaProxyConnection ret = new PiLexaProxyConnection(host, port);
+        if (ret.canConnect()) {
+            return ret;
+        } else {
+            return null;
         }
     }
 
     public String getHost() {
-        return myUrl.getHost();
+        return myHost;
     }
 
     public int getPort() {
-        return myUrl.getPort();
+        return myPort;
     }
+
+    public boolean isHttp() { return myUrl != null; }
 
     public void setConfig(String key, String val) throws Exception {
         JSONObject j = null;
@@ -57,7 +84,7 @@ public class PiLexaProxyConnection {
 
             myConfigCache.put(key, val);
 
-            j = new JSONObject(getStringFromRequest(args));
+            j = sendRequestHttp(args);
 
             if (j.has("status") && j.getInt("status") == 0) {
             } else {
@@ -76,7 +103,7 @@ public class PiLexaProxyConnection {
                 JSONObject args = new JSONObject();
                 args.put("op", "queryConfig");
                 args.put("key", key);
-                JSONObject j = new JSONObject(getStringFromRequest(args));
+                JSONObject j = sendRequest(args);
 
                 if (j.has("status") && j.getInt("status") == 0) {
                     myConfigCache.put(key, j.getString("val"));
@@ -86,7 +113,7 @@ public class PiLexaProxyConnection {
                 }
             } catch (JSONException e) {
                 Log.e(LOGTAG, Log.getStackTraceString(e));
-                return null;
+                return "[ERROR]";
             }
         }
     }
@@ -95,7 +122,7 @@ public class PiLexaProxyConnection {
         try {
             JSONObject args = new JSONObject();
             args.put("op", "queryEntireConfig");
-            JSONObject j = new JSONObject(getStringFromRequest(args));
+            JSONObject j = sendRequest(args);
 
             if (j.has("status") && j.getInt("status") == 0) {
                 return j.getJSONObject("val");
@@ -111,17 +138,31 @@ public class PiLexaProxyConnection {
     public boolean canConnect() {
         try {
             JSONObject args = new JSONObject();
-            args.put("op", "canConnect");
-            JSONObject j = new JSONObject(getStringFromRequest(args));
+            args.put("op", "ping");
+            JSONObject j = sendRequest(args);
 
-            return j.has("status") && j.getInt("status") == 0;
-        } catch (Exception e) {
+            boolean ret = j != null && j.has("status") && j.getInt("status") == 0;
+            if (ret) {
+                Log.i(LOGTAG, "Connected to " + myHost + ":" + myPort);
+            } else {
+                Log.e(LOGTAG, "Could not connect to " + myHost + ":" + myPort);
+            }
+            return ret;
+        } catch (JSONException e) {
             Log.e(LOGTAG, Log.getStackTraceString(e));
             return false;
         }
     }
 
-    public String getStringFromRequest(JSONObject params) {
+    public JSONObject sendRequest(JSONObject params) {
+        if (isHttp()) {
+            return sendRequestHttp(params);
+        } else {
+            return sendRequestPilexaProtocol(params);
+        }
+    }
+
+    private JSONObject sendRequestHttp(JSONObject params) {
         try {
             String content = params.toString();
             URL tmpUrl = new URL(myUrl.toExternalForm());
@@ -129,8 +170,8 @@ public class PiLexaProxyConnection {
             conn.setRequestMethod("POST");
             conn.setDoOutput(true);
             conn.setDoInput(true);
-            conn.setReadTimeout(10000 /*milliseconds*/);
-            conn.setConnectTimeout(15000 /* milliseconds */);
+            conn.setReadTimeout(myTimeout);
+            conn.setConnectTimeout(myTimeout);
             conn.setUseCaches(false);
             conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
             conn.setRequestProperty("Accept", "application/json");
@@ -151,12 +192,36 @@ public class PiLexaProxyConnection {
                 }
 
                 os.close();
-                return sb.toString();
+                return new JSONObject(sb.toString());
             } else {
                 os.close();
-                return "{\"msg\"=\"error code " + code + "\", \"status\"=" + code + "}";
+                return new JSONObject("{\"msg\"=\"error code " + code + "\", \"status\"=" + code + "}");
             }
         } catch (Exception e) {
+            Log.e(LOGTAG, Log.getStackTraceString(e));
+            return null;
+        }
+    }
+
+    private JSONObject sendRequestPilexaProtocol(JSONObject params) {
+        try {
+            Socket socket = new Socket(getHost(), getPort());
+            socket.setSoTimeout(myTimeout);
+            OutputStream os = new BufferedOutputStream(socket.getOutputStream());
+            os.write((params.toString() + "\n").getBytes());
+            os.flush();
+
+            BufferedReader buffer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            JSONObject ret = new JSONObject(buffer.readLine());
+
+            return ret;
+        } catch (ConnectException e) {
+            Log.e(LOGTAG, "Error connecting to " + getHost() + ": " + e.getMessage());
+            return null;
+        } catch (IOException e) {
+            Log.e(LOGTAG, Log.getStackTraceString(e));
+            return null;
+        } catch (JSONException e) {
             Log.e(LOGTAG, Log.getStackTraceString(e));
             return null;
         }
@@ -167,7 +232,7 @@ public class PiLexaProxyConnection {
             JSONObject args = new JSONObject();
             args.put("op", "interpret");
             args.put("val", msg);
-            JSONObject j = new JSONObject(getStringFromRequest(args));
+            JSONObject j = sendRequest(args);
 
             if (j.has("status") && j.getInt("status") == 0) {
                 Log.i(LOGTAG, "Message received: " + j.getString("msg"));
@@ -180,7 +245,6 @@ public class PiLexaProxyConnection {
             return null;
         }
     }
-
 
     public interface PiLexaProxyConnectionHolder {
         PiLexaProxyConnection getPilexa();

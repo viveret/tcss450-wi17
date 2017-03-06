@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.viveret.pilexa.android.R;
+import com.viveret.pilexa.android.pilexa.PiLexaProxyConnection;
 
 import java.util.List;
 
@@ -18,10 +19,10 @@ import static com.viveret.pilexa.android.setup.FindPilexaServiceFragment.OnPilex
  */
 public class MyPiLexaConnRecyclerViewAdapter extends RecyclerView.Adapter<MyPiLexaConnRecyclerViewAdapter.ViewHolder> {
 
-    private final List<String> mValues;
+    private final List<PiLexaProxyConnection> mValues;
     private final OnPilexaServiceSelected mListener;
 
-    public MyPiLexaConnRecyclerViewAdapter(List<String> items, OnPilexaServiceSelected listener) {
+    public MyPiLexaConnRecyclerViewAdapter(List<PiLexaProxyConnection> items, OnPilexaServiceSelected listener) {
         mValues = items;
         mListener = listener;
     }
@@ -37,16 +38,16 @@ public class MyPiLexaConnRecyclerViewAdapter extends RecyclerView.Adapter<MyPiLe
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
         // holder.mIdView.setText(mValues.get(position));
-        holder.mContentView.setText(mValues.get(position));
+        try {
+            holder.mContentView.setText(mValues.get(position).getConfigString("system.name"));
+        } catch (Exception e) {
+            holder.mContentView.setText(e.getMessage());
+        }
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onPilexaServiceSelected(holder.mItem, 0);
-                }
+                mListener.onPilexaServiceSelected(holder.mItem);
             }
         });
     }
@@ -60,7 +61,7 @@ public class MyPiLexaConnRecyclerViewAdapter extends RecyclerView.Adapter<MyPiLe
         public final View mView;
         // public final TextView mIdView;
         public final TextView mContentView;
-        public String mItem;
+        public PiLexaProxyConnection mItem;
 
         public ViewHolder(View view) {
             super(view);

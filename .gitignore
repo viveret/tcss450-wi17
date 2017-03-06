@@ -9,3 +9,5 @@ build
 captures
 .externalNativeBuild
 gitignore-*
+gradle.xml
+misc.xml

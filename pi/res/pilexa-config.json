@@ -26,7 +26,9 @@
     "voice": "default",
     "headless": true,
     "voiceless": true,
-    "name": "PiLexa CSS Gate"
+    "name": "PiLexa TCSS 450",
+    "location": "cyborg dreams",
+    "_initiallyConfigured": false
   },
   "corenlp": {
     "annotators": [
