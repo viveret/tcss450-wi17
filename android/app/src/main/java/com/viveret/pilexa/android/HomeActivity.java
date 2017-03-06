@@ -18,12 +18,15 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.viveret.pilexa.android.pilexa.PiLexaProxyConnection;
+import com.viveret.pilexa.android.pilexa.Skill;
 
 import java.net.ConnectException;
 import java.net.MalformedURLException;
 
 public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, PiLexaProxyConnection.PiLexaProxyConnectionHolder {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        PiLexaProxyConnection.PiLexaProxyConnectionHolder,
+        SkillFragment.OnListFragmentInteractionListener {
 
     private PiLexaProxyConnection pilexa;
 
@@ -159,5 +162,10 @@ public class HomeActivity extends AppCompatActivity
     @Override
     public PiLexaProxyConnection getPilexa() {
         return pilexa;
+    }
+
+    @Override
+    public void onListFragmentInteraction(Skill item) {
+
     }
 }
