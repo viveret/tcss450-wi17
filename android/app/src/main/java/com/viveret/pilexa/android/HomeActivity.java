@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.viveret.pilexa.android.pilexa.PiLexaProxyConnection;
 import com.viveret.pilexa.android.pilexa.Skill;
 import com.viveret.pilexa.android.pilexa.UserAccount;
+import com.viveret.pilexa.android.util.AppHelper;
 
 import java.net.ConnectException;
 import java.net.MalformedURLException;
@@ -96,11 +97,19 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            Intent i = new Intent(this, SettingsActivity.class);
-            startActivity(i);
-            return true;
+        switch (item.getItemId()) {
+            case R.id.action_settings: {
+                Intent i = new Intent(this, SettingsActivity.class);
+                startActivity(i);
+                return true;
+            }
+            case R.id.action_logout: {
+                new AppHelper(PreferenceManager.getDefaultSharedPreferences(this)).logout();
+                Intent i = new Intent(this, MainActivity.class);
+                startActivity(i);
+                finish();
+                return true;
+            }
         }
 
         return super.onOptionsItemSelected(item);

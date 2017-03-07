@@ -8,6 +8,7 @@ import com.viveret.pilexa.pi.sayable.Sayable;
 import com.viveret.pilexa.pi.skill.Intent;
 import com.viveret.pilexa.pi.skill.Skill;
 import com.viveret.pilexa.pi.skill.SkillManager;
+import com.viveret.pilexa.pi.user.UserManager;
 import com.viveret.pilexa.pi.util.Config;
 import com.viveret.pilexa.pi.util.ConfigTransactionLayer;
 import com.viveret.pilexa.pi.util.SimpleTuple;
@@ -43,19 +44,13 @@ public class ConcretePiLexaService implements PiLexaService {
         boolean multiThreaded = false;
 
         Thread t = new Thread(
-                () -> {
-                    initCoreNLP();
-                }
+                this::initCoreNLP
         );
         Thread t2 = new Thread(
-                () -> {
-                    initPiLexa();
-                }
+                this::initPiLexa
         );
         Thread t3 = new Thread(
-                () -> {
-                    Sayable.init();
-                }
+                Sayable::init
         );
 
         try {
@@ -127,6 +122,7 @@ public class ConcretePiLexaService implements PiLexaService {
 
         SkillManager.inst().getSkills();
         InputMethodManager.inst().getInputMethods();
+        UserManager.inst();
     }
 
     @Override

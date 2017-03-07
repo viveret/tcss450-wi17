@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.viveret.pilexa.android.pilexa.PiLexaProxyConnection;
 import com.viveret.pilexa.android.pilexa.UserAccount;
 import com.viveret.pilexa.android.pilexa.UserAccountFactory;
+import com.viveret.pilexa.android.util.AppHelper;
 
 
 /**
@@ -39,22 +40,77 @@ public class LoginOrCreateAcctFragment extends Fragment {
         final EditText usernameET = (EditText) view.findViewById(R.id.username);
         final EditText passwordET = (EditText) view.findViewById(R.id.password);
 
-        Button submitBtn = (Button) view.findViewById(R.id.submitBtn);
-        submitBtn.setOnClickListener(new View.OnClickListener() {
+        Button loginBtn = (Button) view.findViewById(R.id.loginBtn);
+        loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserAccountFactory factory = new UserAccountFactory(myConnection.getPilexa());
-                try {
-                    UserAccount account = factory.loginWithUsernameAndPassword(usernameET.getText().toString(),
-                                                                                passwordET.getText().toString());
-                    if (account != null) {
-                        mListener.onUserLogin(account);
-                    } else {
-                        Toast.makeText(getActivity(), "Account was null", Toast.LENGTH_LONG);
+                Thread t = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        UserAccountFactory factory = new UserAccountFactory(myConnection.getPilexa());
+                        try {
+                            UserAccount account = factory.loginWithUsernameAndPassword(
+                                    usernameET.getText().toString(),
+                                    passwordET.getText().toString(),
+                                    AppHelper.getMacAddress(getActivity()));
+                            if (account != null) {
+                                mListener.onUserLogin(account);
+                            } else {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getActivity(), "Account was null", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+                        } catch (final Exception e) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
                     }
-                } catch (Exception e) {
-                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG);
-                }
+                });
+                t.start();
+            }
+        });
+
+        Button registerBtn = (Button) view.findViewById(R.id.registerBtn);
+        registerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Thread t = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        UserAccountFactory factory = new UserAccountFactory(myConnection.getPilexa());
+                        try {
+                            UserAccount account = factory.registerWithUsernameAndPassword(
+                                    usernameET.getText().toString(),
+                                    passwordET.getText().toString(),
+                                    AppHelper.getMacAddress(getActivity()));
+                            if (account != null) {
+                                mListener.onUserLogin(account);
+                            } else {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getActivity(), "Account was null", Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                            }
+                        } catch (final Exception e) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            });
+                        }
+                    }
+                });
+                t.start();
             }
         });
 

@@ -96,4 +96,7 @@
     <string name="submit">Submit</string>
     <string name="PREF_USER_ID">userId</string>
     <string name="done_message">Done!</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="action_logout">Logout</string>
 </resources>

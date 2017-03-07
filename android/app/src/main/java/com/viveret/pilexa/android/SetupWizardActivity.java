@@ -66,6 +66,7 @@ public class SetupWizardActivity extends Activity implements FindPilexaServiceFr
                 break;
             case 2:
                 f = new LoginOrCreateAcctFragment();
+                break;
             case 3:
                 f = new DoneFragment();
                 Thread t = new Thread(new Runnable() {
@@ -83,7 +84,7 @@ public class SetupWizardActivity extends Activity implements FindPilexaServiceFr
                 });
                 t.start();
             default:
-                Toast.makeText(this, "Invalid step at " + myStepAt, Toast.LENGTH_LONG);
+                Toast.makeText(this, "Invalid step at " + myStepAt, Toast.LENGTH_LONG).show();
                 break;
         }
 
@@ -97,7 +98,7 @@ public class SetupWizardActivity extends Activity implements FindPilexaServiceFr
 
     @Override
     public void onPilexaServiceSelected(PiLexaProxyConnection conn) {
-        Toast.makeText(this, "Selected " + conn.toString(), Toast.LENGTH_LONG);
+        Toast.makeText(this, "Selected " + conn.toString(), Toast.LENGTH_LONG).show();
         myPilexa = conn;
         AppHelper app = new AppHelper(PreferenceManager.getDefaultSharedPreferences(this));
         app.saveConnection(conn);
@@ -123,6 +124,7 @@ public class SetupWizardActivity extends Activity implements FindPilexaServiceFr
 
     @Override
     public void onUserLogin(UserAccount user) {
+        Toast.makeText(this, user.getUsername(), Toast.LENGTH_LONG).show();
         nextStep();
     }
 }

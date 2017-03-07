@@ -87,8 +87,25 @@ public class UserAccountFactory {
             return null;
         }
 
-        JSONObject res = myConnection.sendRequest(params);
+        return getAccountFromRes(myConnection.sendRequest(params));
+    }
 
+    public UserAccount registerWithUsernameAndPassword(String username, String password, String macAddress) throws Exception {
+        JSONObject params = new JSONObject();
+        try {
+            params.put("op", "createAccount");
+            params.put("username", username);
+            params.put("password", password);
+            params.put("mac", macAddress);
+        } catch (JSONException e) {
+            Log.e(LOGTAG, Log.getStackTraceString(e));
+            return null;
+        }
+
+        return getAccountFromRes(myConnection.sendRequest(params));
+    }
+
+    private UserAccount getAccountFromRes(JSONObject res) throws Exception {
         try {
             if (res != null ) {
                 if (res.has("status") && res.getInt("status") == 0) {

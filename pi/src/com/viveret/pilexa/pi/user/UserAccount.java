@@ -6,6 +6,9 @@ import org.json.JSONObject;
 
 import java.io.FileNotFoundException;
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,9 +17,12 @@ import java.util.List;
  */
 public class UserAccount extends ConfigFile {
     private List<UserDevice> myDevices = null;
+    private int myId;
 
-    public UserAccount(int userId) throws FileNotFoundException {
+    public UserAccount(int userId) {
         super("users/" + userId + "/config");
+        myId = userId;
+        getRoot().put("id", userId);
     }
 
     public List<UserDevice> getDevices() {
@@ -43,11 +49,38 @@ public class UserAccount extends ConfigFile {
     }
 
     public int getId() {
-        return getInt("id");
+        return myId;
     }
 
     public String getLanguage() {
         return getString("lang");
+    }
+
+    public void setUsername(String username) {
+        set("username", username);
+    }
+
+    public void updatePassword(String password) {
+        // Need to hash password
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] hash = md.digest(password.getBytes("UTF-8"));
+            StringBuilder hashStr = new StringBuilder(hash.length * 2);
+            for (byte b : hash) {
+                hashStr.append(String.format("%02X", b));
+            }
+
+            set("password", hashStr.toString());
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return;
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setMac(String mac) {
+        set("mac", mac);
     }
 
     public static class UserDevice {
