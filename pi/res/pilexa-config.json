@@ -9,7 +9,7 @@
 
   ],
   "input-methods": [
-    "com.viveret.pilexa.pi.inputmethods.TextInterfacePiLexaProxy"
+    "com.viveret.pilexa.pi.inputmethods.DaemonProxy"
   ],
   "_input-methods-available": [
     "com.viveret.pilexa.pi.inputmethods.DaemonProxy",
@@ -40,7 +40,6 @@
     ],
     "_annotators-available": [
       "ner", "natlog", "sentiment"
-
     ]
   }
 }

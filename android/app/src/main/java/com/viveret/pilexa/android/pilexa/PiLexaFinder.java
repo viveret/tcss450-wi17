@@ -3,7 +3,6 @@ package com.viveret.pilexa.android.pilexa;
 import android.content.Context;
 import android.util.Log;
 
-import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,15 +14,15 @@ import java.util.Map;
  */
 public class PiLexaFinder {
     private static final String LOGTAG = "Pilexa service finder";
-    private static final int NUM_THREADS = 2;
+    private static final int NUM_THREADS = 4;
 
     private int myPort;
     private String myLocalAddress, myPrefix;
     private Map<Thread, PingServerTask> myThreadPool = new HashMap<>(NUM_THREADS);
     private Context context;
-    private OnPilexaServiceFound myListener;
+    private OnPilexaServiceFinderListener myListener;
 
-    public PiLexaFinder(int port, String localAddress, Context c, OnPilexaServiceFound listener) {
+    public PiLexaFinder(int port, String localAddress, Context c, OnPilexaServiceFinderListener listener) {
         myPort = port;
         myLocalAddress = localAddress;
         myPrefix = myLocalAddress.substring(0, myLocalAddress.lastIndexOf('.') + 1);
@@ -59,13 +58,14 @@ public class PiLexaFinder {
 
     public void stopSearch() {
         for (Map.Entry<Thread, PingServerTask> e : myThreadPool.entrySet()) {
-            e.getKey().interrupt();
+            e.getValue().myPorts.clear();
         }
         myThreadPool.clear();;
     }
 
-    public interface OnPilexaServiceFound {
+    public interface OnPilexaServiceFinderListener {
         void onPilexaServiceFound(PiLexaProxyConnection conn);
+        void onPilexaFinderDoneSearching();
     }
 
     private class PingServerTask implements Runnable {
@@ -80,7 +80,6 @@ public class PiLexaFinder {
             while (myPorts.size() > 0) {
                 int newPort = myPorts.get(0);
                 myPorts.remove(0);
-                Log.d(LOGTAG, "Ports: " + myPorts.toString());
                 PiLexaProxyConnection testConn = null;
                 try {
                     testConn = PiLexaProxyConnection.attachTo(myPrefix + newPort, myPort);

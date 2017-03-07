@@ -37,6 +37,10 @@ public class ConcretePiLexaService implements PiLexaService {
 
     private ConcretePiLexaService() {
         BasicConfigurator.configure();
+    }
+
+    private void init() {
+        boolean multiThreaded = false;
 
         Thread t = new Thread(
                 () -> {
@@ -53,13 +57,26 @@ public class ConcretePiLexaService implements PiLexaService {
                     Sayable.init();
                 }
         );
-        t.start();
-        t2.start();
-        t3.start();
+
         try {
-            t.join();
-            t2.join();
-            t3.join();
+            if (multiThreaded) {
+                t.start();
+                t2.start();
+                t3.start();
+
+                t.join();
+                t2.join();
+                t3.join();
+            } else {
+                t.start();
+                t.join();
+
+                t2.start();
+                t2.join();
+
+                t3.start();
+                t3.join();
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
             return;
@@ -69,6 +86,7 @@ public class ConcretePiLexaService implements PiLexaService {
     public static PiLexaService inst() {
         if (myInst == null) {
             myInst = new ConcretePiLexaService();
+            ((ConcretePiLexaService) myInst).init();
         }
         return myInst;
     }

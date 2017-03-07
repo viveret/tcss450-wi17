@@ -65,7 +65,7 @@
         <item>3</item>
     </string-array>
 
-    <string-array name="multi_select_list_preference_default_value" />
+    <string-array name="multi_select_list_preference_default_value"/>
 
     <string name="pref_title_system_sync_settings">System sync settings</string>
 
@@ -85,4 +85,10 @@
     <string name="default_port">11823</string>
     <string name="hint_default_port">Port (empty for default)</string>
     <string name="syncing_data_in_progress">Syncing data...</string>
+    <string name="welcome_title">Welcome to the PiLexa app!</string>
+    <string name="welcome_description">This will guide you through configuring your pilexa. Make sure your pilexa is plugging in and online before continuing.\n\nYou may select easy mode, which will help you configure your pilexa, or manual, where you can specify things manually.</string>
+    <string name="manual">Manual</string>
+    <string name="easy">Easy</string>
+    <string name="find_pilexa_title">Select a pilexa service on your local network:</string>
+    <string name="searching">Searching...</string>
 </resources>

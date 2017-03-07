@@ -27,7 +27,6 @@ public class PiLexaProxyConnection implements Serializable {
     private static final String LOGTAG = "PiLexaProxy";
     private static final int DEFAULT_TIMEOUT = 1000;
 
-
     private transient final Map<String, Object> myConfigCache = new HashMap<>();
     private transient int myTimeout = DEFAULT_TIMEOUT;
     private final URL myUrl;
@@ -58,6 +57,11 @@ public class PiLexaProxyConnection implements Serializable {
     public static PiLexaProxyConnection attachTo(String host, int port) throws MalformedURLException  {
         PiLexaProxyConnection ret = new PiLexaProxyConnection(host, port);
         if (ret.canConnect()) {
+            try {
+                ret.getConfigString("system.name");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             return ret;
         } else {
             return null;
@@ -141,13 +145,7 @@ public class PiLexaProxyConnection implements Serializable {
             args.put("op", "ping");
             JSONObject j = sendRequest(args);
 
-            boolean ret = j != null && j.has("status") && j.getInt("status") == 0;
-            if (ret) {
-                Log.i(LOGTAG, "Connected to " + myHost + ":" + myPort);
-            } else {
-                Log.e(LOGTAG, "Could not connect to " + myHost + ":" + myPort);
-            }
-            return ret;
+            return j != null && j.has("status") && j.getInt("status") == 0;
         } catch (JSONException e) {
             Log.e(LOGTAG, Log.getStackTraceString(e));
             return false;
@@ -199,7 +197,14 @@ public class PiLexaProxyConnection implements Serializable {
             }
         } catch (Exception e) {
             Log.e(LOGTAG, Log.getStackTraceString(e));
-            return null;
+            JSONObject ret = new JSONObject();
+            try {
+                ret.put("msg", e.getMessage());
+                ret.put("status", -1);
+            } catch (JSONException e1) {
+                Log.e(LOGTAG, Log.getStackTraceString(e1));
+            }
+            return ret;
         }
     }
 
@@ -217,13 +222,34 @@ public class PiLexaProxyConnection implements Serializable {
             return ret;
         } catch (ConnectException e) {
             Log.e(LOGTAG, "Error connecting to " + getHost() + ": " + e.getMessage());
-            return null;
+            JSONObject ret = new JSONObject();
+            try {
+                ret.put("msg", e.getMessage());
+                ret.put("status", -1);
+            } catch (JSONException e1) {
+                Log.e(LOGTAG, Log.getStackTraceString(e1));
+            }
+            return ret;
         } catch (IOException e) {
             Log.e(LOGTAG, Log.getStackTraceString(e));
-            return null;
+            JSONObject ret = new JSONObject();
+            try {
+                ret.put("msg", e.getMessage());
+                ret.put("status", -1);
+            } catch (JSONException e1) {
+                Log.e(LOGTAG, Log.getStackTraceString(e1));
+            }
+            return ret;
         } catch (JSONException e) {
             Log.e(LOGTAG, Log.getStackTraceString(e));
-            return null;
+            JSONObject ret = new JSONObject();
+            try {
+                ret.put("msg", e.getMessage());
+                ret.put("status", -1);
+            } catch (JSONException e1) {
+                Log.e(LOGTAG, Log.getStackTraceString(e1));
+            }
+            return ret;
         }
     }
 
