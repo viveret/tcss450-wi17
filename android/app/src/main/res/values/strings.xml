@@ -82,4 +82,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="hint_send_msg">Send message...</string>
+    <string name="default_port">11823</string>
+    <string name="hint_default_port">Port (empty for default)</string>
+    <string name="syncing_data_in_progress">Syncing data...</string>
 </resources>
