@@ -3,6 +3,8 @@ package com.viveret.pilexa.pi.inputmethods;
 import com.viveret.pilexa.pi.AbstractPiLexaServiceProxy;
 import com.viveret.pilexa.pi.InputSource;
 import com.viveret.pilexa.pi.PiLexaService;
+import com.viveret.pilexa.pi.user.UserAccount;
+import com.viveret.pilexa.pi.user.UserManager;
 import com.viveret.pilexa.pi.util.Config;
 import org.json.JSONObject;
 
@@ -127,7 +129,6 @@ public class DaemonProxy extends AbstractPiLexaServiceProxy implements InputSour
                 } else {
                     switch (jin.getString("op")) {
                         case "ping": {
-
                         } break;
                         case "interpret":
                             if (jin.has("msg")) {
@@ -164,6 +165,35 @@ public class DaemonProxy extends AbstractPiLexaServiceProxy implements InputSour
                                 }
                             } else {
                                 msg = "Missing key";
+                                status = 1;
+                            }
+                            break;
+                        case "login":
+                            if (jin.has("username") && jin.has("password")) {
+                                // Basic authentication
+                                msg = "Not implemented";
+                                status = 1;
+                            }
+                            break;
+                        case "createAccount":
+                            if (jin.has("mac")) {
+                                if (jin.has("username") && jin.has("password")) {
+                                    UserAccount user = UserManager.inst().createNewUser(
+                                            jin.getString("username"),
+                                            jin.getString("password"),
+                                            jin.getString("mac"));
+                                    if (user != null) {
+                                        jout.put("user", user.getRoot());
+                                    } else {
+                                        msg = "User was null";
+                                        status = 1;
+                                    }
+                                } else {
+                                    msg = "Missing username and/or password";
+                                    status = 1;
+                                }
+                            } else {
+                                msg = "Missing mac address";
                                 status = 1;
                             }
                             break;

@@ -4,7 +4,9 @@
     "com.viveret.pilexa.pi.defaultskills.repeatbacktomeskill",
     "com.viveret.pilexa.pi.defaultskills.jokeskill",
     "com.viveret.pilexa.pi.defaultskills.salutationskill",
-    "com.viveret.pilexa.pi.defaultskills.debugskill"
+    "com.viveret.pilexa.pi.defaultskills.debugskill",
+    "com.viveret.pilexa.pi.defaultskills.weatherskill"
+
   ],
   "input-methods": [
     "com.viveret.pilexa.pi.inputmethods.DaemonProxy"
@@ -24,7 +26,9 @@
     "voice": "default",
     "headless": true,
     "voiceless": true,
-    "name": "PiLexa CSS Gate"
+    "name": "PiLexa TCSS 450",
+    "location": "cyborg dreams",
+    "_initiallyConfigured": false
   },
   "corenlp": {
     "annotators": [

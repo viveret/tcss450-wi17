@@ -1,6 +1,11 @@
 package com.viveret.pilexa.android.util;
 
+import android.content.Context;
 import android.content.SharedPreferences;
+
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
+import com.viveret.pilexa.android.pilexa.PiLexaProxyConnection;
 
 /**
  * Created by viveret on 3/5/17.
@@ -14,14 +19,26 @@ public class AppHelper {
     }
 
     public boolean hasSavedConnection() {
-        return mSharedPreferences.getBoolean(KEY_HAS_SAVED_CONNECTION, false);
+        return mSharedPreferences.getString("pilexaHost", null) != null;
     }
 
-    public boolean setHasSavedConnection(boolean val) {
+    public void logout() {
         SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putBoolean(KEY_HAS_SAVED_CONNECTION, val);
+        editor.remove("pilexaHost");
+        editor.remove("pilexaPort");
+        editor.commit();
+    }
 
-        // Commit changes to SharedPreferences.
-        return editor.commit();
+    public void saveConnection(PiLexaProxyConnection conn) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putString("pilexaHost", conn.getHost());
+        editor.putInt("pilexaPort", conn.getPort());
+        editor.commit();
+    }
+
+    public static String getMacAddress(Context c) {
+        WifiManager manager = (WifiManager) c.getSystemService(Context.WIFI_SERVICE);
+        WifiInfo info = manager.getConnectionInfo();
+        return info.getMacAddress();
     }
 }

@@ -1,5 +1,6 @@
 package com.viveret.pilexa.pi.inputmethods;
 
+import com.viveret.pilexa.pi.ConcretePiLexaService;
 import com.viveret.pilexa.pi.InputSource;
 import com.viveret.pilexa.pi.PiLexaService;
 import org.json.simple.JSONArray;
@@ -66,21 +67,11 @@ public class InputMethodManager {
     }
 
     private void loadInputs() {
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("res/pilexa-config.json").getFile());
-
-        JSONParser parser = new JSONParser();
         try {
-            JSONObject root = (JSONObject) parser.parse(new FileReader(file));
-            JSONArray skills = (JSONArray) root.get("input-methods");
-
+            List<String> skills = ConcretePiLexaService.inst().getConfig().getStringArray("input-methods");
             for (int i = 0; i < skills.size(); i++) {
-                addInputSourceFromClass((String) skills.get(i));
+                addInputSourceFromClass(skills.get(i));
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
-            e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

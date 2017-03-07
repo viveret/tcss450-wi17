@@ -8,6 +8,7 @@ import com.viveret.pilexa.pi.sayable.Sayable;
 import com.viveret.pilexa.pi.skill.Intent;
 import com.viveret.pilexa.pi.skill.Skill;
 import com.viveret.pilexa.pi.skill.SkillManager;
+import com.viveret.pilexa.pi.user.UserManager;
 import com.viveret.pilexa.pi.util.Config;
 import com.viveret.pilexa.pi.util.ConfigTransactionLayer;
 import com.viveret.pilexa.pi.util.SimpleTuple;
@@ -37,29 +38,40 @@ public class ConcretePiLexaService implements PiLexaService {
 
     private ConcretePiLexaService() {
         BasicConfigurator.configure();
+    }
+
+    private void init() {
+        boolean multiThreaded = false;
 
         Thread t = new Thread(
-                () -> {
-                    initCoreNLP();
-                }
+                this::initCoreNLP
         );
         Thread t2 = new Thread(
-                () -> {
-                    initPiLexa();
-                }
+                this::initPiLexa
         );
         Thread t3 = new Thread(
-                () -> {
-                    Sayable.init();
-                }
+                Sayable::init
         );
-        t.start();
-        t2.start();
-        t3.start();
+
         try {
-            t.join();
-            t2.join();
-            t3.join();
+            if (multiThreaded) {
+                t.start();
+                t2.start();
+                t3.start();
+
+                t.join();
+                t2.join();
+                t3.join();
+            } else {
+                t.start();
+                t.join();
+
+                t2.start();
+                t2.join();
+
+                t3.start();
+                t3.join();
+            }
         } catch (InterruptedException e) {
             e.printStackTrace();
             return;
@@ -69,6 +81,7 @@ public class ConcretePiLexaService implements PiLexaService {
     public static PiLexaService inst() {
         if (myInst == null) {
             myInst = new ConcretePiLexaService();
+            ((ConcretePiLexaService) myInst).init();
         }
         return myInst;
     }
@@ -109,6 +122,7 @@ public class ConcretePiLexaService implements PiLexaService {
 
         SkillManager.inst().getSkills();
         InputMethodManager.inst().getInputMethods();
+        UserManager.inst();
     }
 
     @Override

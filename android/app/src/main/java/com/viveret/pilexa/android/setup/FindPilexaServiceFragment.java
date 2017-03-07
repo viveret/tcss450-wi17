@@ -23,14 +23,15 @@ import java.util.List;
 /**
  * A fragment representing a list of Items.
  * <p/>
- * Activities containing this fragment MUST implement the {@link PiLexaFinder.OnPilexaServiceFound}
+ * Activities containing this fragment MUST implement the {@link PiLexaFinder.OnPilexaServiceFinderListener}
  * interface.
  */
-public class FindPilexaServiceFragment extends Fragment implements PiLexaFinder.OnPilexaServiceFound {
+public class FindPilexaServiceFragment extends Fragment implements PiLexaFinder.OnPilexaServiceFinderListener {
     private OnPilexaServiceSelected mListener;
     private PiLexaFinder myFinder;
     private List<PiLexaProxyConnection> myConnections;
     private RecyclerView.Adapter myAdapter;
+    private View myWhileSearchingView;
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -48,6 +49,8 @@ public class FindPilexaServiceFragment extends Fragment implements PiLexaFinder.
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pilexaconn_list, container, false);
+        myWhileSearchingView = view.findViewById(R.id.whileSearching);
+
         createPilexaFinder(view);
 
         // Set the adapter
@@ -114,6 +117,7 @@ public class FindPilexaServiceFragment extends Fragment implements PiLexaFinder.
     public void onDetach() {
         super.onDetach();
         mListener = null;
+        myFinder.stopSearch();
     }
 
     @Override
@@ -125,6 +129,11 @@ public class FindPilexaServiceFragment extends Fragment implements PiLexaFinder.
                 myAdapter.notifyDataSetChanged();
             }
         });
+    }
+
+    @Override
+    public void onPilexaFinderDoneSearching() {
+        myWhileSearchingView.setVisibility(View.INVISIBLE  );
     }
 
     public interface OnPilexaServiceSelected {
