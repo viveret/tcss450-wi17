@@ -65,7 +65,7 @@
         <item>3</item>
     </string-array>
 
-    <string-array name="multi_select_list_preference_default_value"/>
+    <string-array name="multi_select_list_preference_default_value" />
 
     <string name="pref_title_system_sync_settings">System sync settings</string>
 
@@ -91,4 +91,9 @@
     <string name="easy">Easy</string>
     <string name="find_pilexa_title">Select a pilexa service on your local network:</string>
     <string name="searching">Searching...</string>
+    <string name="prompt_username">Username:</string>
+    <string name="prompt_password">Password:</string>
+    <string name="submit">Submit</string>
+    <string name="PREF_USER_ID">userId</string>
+    <string name="done_message">Done!</string>
 </resources>

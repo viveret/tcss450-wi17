@@ -1,4 +1,4 @@
-package com.viveret.pilexa.android.util;
+package com.viveret.pilexa.android.pilexa;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -70,6 +70,10 @@ public class UserAccount implements Serializable {
 
     public boolean hasAuthToken() {
         return getUserAuthenticationToken() != null;
+    }
+
+    public void addDevice(UserDevice userDevice) {
+        myDevices.add(userDevice);
     }
 
 

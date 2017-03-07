@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.viveret.pilexa.android.pilexa.PiLexaProxyConnection;
 import com.viveret.pilexa.android.pilexa.Skill;
+import com.viveret.pilexa.android.pilexa.UserAccount;
 
 import java.net.ConnectException;
 import java.net.MalformedURLException;
@@ -140,8 +141,9 @@ public class HomeActivity extends AppCompatActivity
             public void run() {
                 try {
                     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(HomeActivity.this);
-                    String host = prefs.getString("keystring", getString(R.string.pref_default_host));
-                    pilexa = PiLexaProxyConnection.attachTo(host, 11823);
+                    String host = prefs.getString("pilexaHost", null);
+                    int port = prefs.getInt("pilexaPort", -1);
+                    pilexa = PiLexaProxyConnection.attachTo(host, port);
                 } /*catch (ConnectException e) {
                     e.printStackTrace();
                     Toast.makeText(HomeActivity.this, "Could not connect to pi", Toast.LENGTH_LONG);

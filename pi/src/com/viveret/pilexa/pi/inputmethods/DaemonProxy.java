@@ -127,7 +127,6 @@ public class DaemonProxy extends AbstractPiLexaServiceProxy implements InputSour
                 } else {
                     switch (jin.getString("op")) {
                         case "ping": {
-
                         } break;
                         case "interpret":
                             if (jin.has("msg")) {
@@ -167,6 +166,11 @@ public class DaemonProxy extends AbstractPiLexaServiceProxy implements InputSour
                                 status = 1;
                             }
                             break;
+                        case "login":
+                            if (jin.has("username") && jin.has("password")) {
+                                // Basic authentication
+
+                            }
                         default:
                             msg = "Invalid operation";
                             status = 1;

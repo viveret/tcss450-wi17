@@ -2,17 +2,24 @@ package com.viveret.pilexa.android;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.viveret.pilexa.android.pilexa.PiLexaProxyConnection;
+import com.viveret.pilexa.android.pilexa.UserAccount;
+import com.viveret.pilexa.android.setup.DoneFragment;
 import com.viveret.pilexa.android.setup.FindPilexaServiceFragment;
 import com.viveret.pilexa.android.setup.WelcomeToTheWizardFragment;
+import com.viveret.pilexa.android.util.AppHelper;
 
 public class SetupWizardActivity extends Activity implements FindPilexaServiceFragment.OnPilexaServiceSelected,
-        WelcomeToTheWizardFragment.OnWelcomeInteractionListener {
+        WelcomeToTheWizardFragment.OnWelcomeInteractionListener, PiLexaProxyConnection.PiLexaProxyConnectionHolder,
+        LoginOrCreateAcctFragment.OnLoginOrCreateAcctListener {
 
     private int myStepAt;
     private boolean myIsManual = false;
@@ -52,11 +59,29 @@ public class SetupWizardActivity extends Activity implements FindPilexaServiceFr
                 break;
             case 1:
                 if (myIsManual) {
-
+                    // f = new PilexaConnectionConfigureFragment();
                 } else {
                     f = new FindPilexaServiceFragment();
                 }
                 break;
+            case 2:
+                f = new LoginOrCreateAcctFragment();
+            case 3:
+                f = new DoneFragment();
+                Thread t = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        Intent i = new Intent(SetupWizardActivity.this, HomeActivity.class);
+                        startActivity(i);
+                        finish();
+                    }
+                });
+                t.start();
             default:
                 Toast.makeText(this, "Invalid step at " + myStepAt, Toast.LENGTH_LONG);
                 break;
@@ -74,6 +99,8 @@ public class SetupWizardActivity extends Activity implements FindPilexaServiceFr
     public void onPilexaServiceSelected(PiLexaProxyConnection conn) {
         Toast.makeText(this, "Selected " + conn.toString(), Toast.LENGTH_LONG);
         myPilexa = conn;
+        AppHelper app = new AppHelper(PreferenceManager.getDefaultSharedPreferences(this));
+        app.saveConnection(conn);
         nextStep();
     }
 
@@ -86,6 +113,16 @@ public class SetupWizardActivity extends Activity implements FindPilexaServiceFr
     @Override
     public void onEasyWizardSelected() {
         myIsManual = false;
+        nextStep();
+    }
+
+    @Override
+    public PiLexaProxyConnection getPilexa() {
+        return myPilexa;
+    }
+
+    @Override
+    public void onUserLogin(UserAccount user) {
         nextStep();
     }
 }
