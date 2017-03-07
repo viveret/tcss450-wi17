@@ -5,8 +5,9 @@
     "com.viveret.pilexa.pi.defaultskills.jokeskill",
     "com.viveret.pilexa.pi.defaultskills.salutationskill",
     "com.viveret.pilexa.pi.defaultskills.debugskill",
-    "com.viveret.pilexa.pi.defaultskills.weatherskill"
-
+    "com.viveret.pilexa.pi.defaultskills.weatherskill",
+    "com.viveret.pilexa.pi.defaultskills.quoteskill",
+    "com.viveret.pilexa.pi.defaultskills.coinskill"
   ],
   "input-methods": [
     "com.viveret.pilexa.pi.inputmethods.TextInterfacePiLexaProxy"

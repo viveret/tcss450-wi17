@@ -168,4 +168,8 @@ public class HomeActivity extends AppCompatActivity
     public void onListFragmentInteraction(Skill item) {
 
     }
+
+    public void handleSkill(String str) {
+
+    }
 }

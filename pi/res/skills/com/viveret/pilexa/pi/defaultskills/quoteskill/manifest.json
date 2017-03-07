@@ -1,0 +1,21 @@
+{
+  "name": "Quote",
+  "shortDesc": "Tells you a random quote.",
+  "longDesc": "Tells you a random quote by using the forismatic api.",
+  "publisher": "PiLexa",
+  "versionString": "0.0.0.0",
+  "version": 0,
+  "iconUrl": "",
+
+  "intents": [
+    {
+      "className": "MainIntent",
+      "name": "Tell me a quote.",
+      "desc": "Tells you a quote.",
+      "invocations": [
+        "tell me a quote",
+        "sound smart"
+      ]
+    }
+  ]
+}

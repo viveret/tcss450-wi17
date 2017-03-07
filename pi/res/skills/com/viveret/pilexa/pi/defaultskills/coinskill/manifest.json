@@ -1,0 +1,20 @@
+{
+  "name": "CoinFlip",
+  "shortDesc": "Flips a coin.",
+  "longDesc": "Flips a coin and tells you weather its heads or tails.",
+  "publisher": "PiLexa",
+  "versionString": "0.0.0.0",
+  "version": 0,
+  "iconUrl": "",
+
+  "intents": [
+    {
+      "className": "MainIntent",
+      "name": "Flip a coin",
+      "desc": "Flips a coin",
+      "invocations": [
+        "flip a coin"
+      ]
+    }
+  ]
+}
