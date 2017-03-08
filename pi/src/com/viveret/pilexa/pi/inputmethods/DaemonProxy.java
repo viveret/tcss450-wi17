@@ -1,7 +1,7 @@
 package com.viveret.pilexa.pi.inputmethods;
 
 import com.viveret.pilexa.pi.AbstractPiLexaServiceProxy;
-import com.viveret.pilexa.pi.EventPoll;
+import com.viveret.pilexa.pi.event.EventPoll;
 import com.viveret.pilexa.pi.InputSource;
 import com.viveret.pilexa.pi.PiLexaService;
 import com.viveret.pilexa.pi.user.UserAccount;
@@ -10,7 +10,6 @@ import com.viveret.pilexa.pi.util.Config;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -208,6 +207,7 @@ public class DaemonProxy extends AbstractPiLexaServiceProxy implements InputSour
                                 evs.put(queue.pollLast());
                             }
                             jout.put("events", evs);
+                            break;
                         default:
                             msg = "Invalid operation";
                             status = 1;

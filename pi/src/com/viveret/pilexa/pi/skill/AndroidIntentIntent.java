@@ -1,7 +1,7 @@
 package com.viveret.pilexa.pi.skill;
 
-import com.viveret.pilexa.pi.AndroidIntentEvent;
-import com.viveret.pilexa.pi.EventPoll;
+import com.viveret.pilexa.pi.event.AndroidIntentEvent;
+import com.viveret.pilexa.pi.event.EventPoll;
 import com.viveret.pilexa.pi.invocation.Invocation;
 import com.viveret.pilexa.pi.invocation.InvocationProcessor;
 import com.viveret.pilexa.pi.sayable.Phrase;

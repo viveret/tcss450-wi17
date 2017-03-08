@@ -12,6 +12,8 @@ public interface Invocation {
 
     String getType(String key);
 
+    boolean hasValue(String key);
+
     double getConfidence();
 
     InvocationPattern getPattern();

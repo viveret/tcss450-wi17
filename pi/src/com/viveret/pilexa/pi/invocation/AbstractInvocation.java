@@ -36,6 +36,11 @@ public class AbstractInvocation implements Invocation {
     }
 
     @Override
+    public boolean hasValue(String key) {
+        return myTokens.containsKey(key);
+    }
+
+    @Override
     public double getConfidence() {
         return myConfidence;
     }

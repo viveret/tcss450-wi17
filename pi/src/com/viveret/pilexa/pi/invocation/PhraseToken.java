@@ -59,7 +59,10 @@ public class PhraseToken {
                             tmpRes = new MatchResult(1, !pos.equals("."), exts);
                             break;
                         case "int":
-                            tmpRes = new MatchResult(1, "NUMBER".equals(ne), exts);
+                            tmpRes = new MatchResult(1, "NUMBER".equals(ne) || "DURATION".equals(ne), exts);
+                            break;
+                        case "duration":
+                            tmpRes = new MatchResult(1, "DURATION".equals(ne), exts);
                             break;
                         case "date":
                             tmpRes = new MatchResult(1, "DATE".equals(ne), exts);

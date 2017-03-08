@@ -1,5 +1,6 @@
-package com.viveret.pilexa.pi;
+package com.viveret.pilexa.pi.event;
 
+import com.viveret.pilexa.pi.event.Event;
 import org.json.JSONObject;
 
 /**
