@@ -10,8 +10,6 @@ import com.viveret.pilexa.android.pilexa.PiLexaProxyConnection;
 
 import java.util.List;
 
-import static com.viveret.pilexa.android.setup.FindPilexaServiceFragment.OnPilexaServiceSelected;
-
 /**
  * {@link RecyclerView.Adapter} that can display a {@link String} and makes a call to the
  * specified {@link OnPilexaServiceSelected}.

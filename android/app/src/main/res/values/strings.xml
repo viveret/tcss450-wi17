@@ -99,4 +99,7 @@
     <string name="login">Login</string>
     <string name="register">Register</string>
     <string name="action_logout">Logout</string>
+    <string name="prompt_host">Host address:</string>
+    <string name="prompt_port">Port:</string>
+    <string name="port_hint">(leave empty for default)</string>
 </resources>

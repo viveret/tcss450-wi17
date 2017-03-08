@@ -136,7 +136,4 @@ public class FindPilexaServiceFragment extends Fragment implements PiLexaFinder.
         myWhileSearchingView.setVisibility(View.INVISIBLE  );
     }
 
-    public interface OnPilexaServiceSelected {
-        void onPilexaServiceSelected(PiLexaProxyConnection connection);
-    }
 }

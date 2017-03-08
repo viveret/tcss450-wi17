@@ -12,15 +12,20 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.viveret.pilexa.android.pilexa.EventPollProcessor;
 import com.viveret.pilexa.android.pilexa.PiLexaProxyConnection;
 import com.viveret.pilexa.android.pilexa.Skill;
 import com.viveret.pilexa.android.pilexa.UserAccount;
 import com.viveret.pilexa.android.util.AppHelper;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.net.ConnectException;
 import java.net.MalformedURLException;
@@ -31,6 +36,8 @@ public class HomeActivity extends AppCompatActivity
         SkillFragment.OnListFragmentInteractionListener {
 
     private PiLexaProxyConnection pilexa;
+
+    private Thread myPollPilexaThread = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,6 +160,41 @@ public class HomeActivity extends AppCompatActivity
                     String host = prefs.getString("pilexaHost", null);
                     int port = prefs.getInt("pilexaPort", -1);
                     pilexa = PiLexaProxyConnection.attachTo(host, port);
+
+                    myPollPilexaThread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            while (pilexa != null && pilexa.canConnect()) {
+                                try {
+                                    Thread.sleep(2000);
+                                } catch (InterruptedException e) {
+                                    break;
+                                }
+                                try {
+                                    pilexa.processPollEvents(new EventPollProcessor() {
+                                        @Override
+                                        public void process(JSONObject ev) {
+                                            if (ev.has("type")) {
+                                                try {
+                                                    switch (ev.getString("type")) {
+                                                        case "androidIntent":
+                                                            //Intent.makeMainSelectorActivity();
+                                                            Intent i = new Intent(ev.getString("name"));
+                                                            startActivity(i);
+                                                            break;
+                                                    }
+                                                } catch (JSONException e) {
+                                                    Log.e("Event poll", Log.getStackTraceString(e));
+                                                }
+                                            }
+                                        }
+                                    });
+                                } catch (Exception e) {
+                                    Log.e("Event poll", Log.getStackTraceString(e));
+                                }
+                            }
+                        }
+                    });
                 } /*catch (ConnectException e) {
                     e.printStackTrace();
                     Toast.makeText(HomeActivity.this, "Could not connect to pi", Toast.LENGTH_LONG);

@@ -139,6 +139,22 @@ public class PiLexaProxyConnection implements Serializable {
         }
     }
 
+    public void processPollEvents(EventPollProcessor processor) throws Exception {
+        try {
+            JSONObject args = new JSONObject();
+            args.put("op", "pollForEvents");
+            JSONObject j = sendRequest(args);
+
+            if (j.has("status") && j.getInt("status") == 0) {
+                processor.addEvents(j.getJSONArray("events"));
+            } else {
+                throw new Exception(j.getString("msg"));
+            }
+        } catch (JSONException e) {
+            Log.e(LOGTAG, Log.getStackTraceString(e));
+        }
+    }
+
     public boolean canConnect() {
         try {
             JSONObject args = new JSONObject();

@@ -15,6 +15,14 @@
       "invocations": [
         "tell me a joke"
       ]
+    },
+    {
+      "className": "TestIntent",
+      "name": "Test test",
+      "desc": "Test.",
+      "invocations": [
+        "do android intent"
+      ]
     }
   ]
 }
