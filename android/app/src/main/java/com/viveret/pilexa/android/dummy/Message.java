@@ -1,24 +1,29 @@
 package com.viveret.pilexa.android.dummy;
 
 /**
- * A dummy item representing a piece of content.
+ * A dummy item representing a piece of body.
  */
 public class Message {
-    public final String id;
-    public final String content;
-    public final String details;
-
+    public long id;
+    public final String body;
     public final boolean isFromUser;
 
-    public Message(String id, String content, String details, boolean isFromUser) {
+    public Message(long id, String body, boolean isFromUser) {
         this.id = id;
-        this.content = content;
-        this.details = details;
+        this.body = body;
         this.isFromUser = isFromUser;
     }
 
     @Override
     public String toString() {
-        return content;
+        return body;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

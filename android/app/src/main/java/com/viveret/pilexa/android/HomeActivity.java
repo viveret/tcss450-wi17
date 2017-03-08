@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.AlarmClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -19,16 +18,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import com.viveret.pilexa.android.pilexa.EventPollProcessor;
-import com.viveret.pilexa.android.pilexa.PiLexaProxyConnection;
-import com.viveret.pilexa.android.pilexa.Skill;
-import com.viveret.pilexa.android.pilexa.UserAccount;
+import com.viveret.pilexa.android.pilexa.*;
 import com.viveret.pilexa.android.util.AppHelper;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.net.ConnectException;
 import java.net.MalformedURLException;
 
 public class HomeActivity extends AppCompatActivity
@@ -140,7 +132,9 @@ public class HomeActivity extends AppCompatActivity
         } else if (id == R.id.view_installed_plugins) {
 
         } else if (id == R.id.wizard) {
-
+            Intent i = new Intent(this, SetupWizardActivity.class);
+            startActivity(i);
+            finish();
         } else if (id == R.id.manual) {
 
         }
@@ -165,42 +159,16 @@ public class HomeActivity extends AppCompatActivity
                     myPollPilexaThread = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            while (pilexa != null && pilexa.canConnect()) {
+                            while (HomeActivity.this != null && pilexa != null && pilexa.canConnect()) {
+                                try {
+                                    pilexa.processPollEvents(new DefaultEventPollProcessor(HomeActivity.this));
+                                } catch (Exception e) {
+                                    Log.e("Event poll", Log.getStackTraceString(e));
+                                }
                                 try {
                                     Thread.sleep(2000);
                                 } catch (InterruptedException e) {
                                     break;
-                                }
-                                try {
-                                    pilexa.processPollEvents(new EventPollProcessor() {
-                                        @Override
-                                        public void process(JSONObject ev) {
-                                            if (ev.has("type")) {
-                                                try {
-                                                    switch (ev.getString("type")) {
-                                                        case "androidIntent":
-                                                            //Intent.makeMainSelectorActivity();
-                                                            Intent i = new Intent(ev.getString("name"));
-                                                            startActivity(i);
-                                                            break;
-                                                        case "setTimer":
-                                                            Intent intent = new Intent(AlarmClock.ACTION_SET_TIMER)
-                                                                    .putExtra(AlarmClock.EXTRA_MESSAGE, ev.getString("timerMsg"))
-                                                                    .putExtra(AlarmClock.EXTRA_LENGTH, ev.getInt("length"))
-                                                                    .putExtra(AlarmClock.EXTRA_SKIP_UI, true);
-                                                            if (intent.resolveActivity(getPackageManager()) != null) {
-                                                                startActivity(intent);
-                                                            }
-                                                            break;
-                                                    }
-                                                } catch (JSONException e) {
-                                                    Log.e("Event poll", Log.getStackTraceString(e));
-                                                }
-                                            }
-                                        }
-                                    });
-                                } catch (Exception e) {
-                                    Log.e("Event poll", Log.getStackTraceString(e));
                                 }
                             }
                         }

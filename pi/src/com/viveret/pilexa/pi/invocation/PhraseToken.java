@@ -61,6 +61,9 @@ public class PhraseToken {
                         case "int":
                             tmpRes = new MatchResult(1, "NUMBER".equals(ne) || "DURATION".equals(ne), exts);
                             break;
+                        case "phone_number":
+                            tmpRes = new MatchResult(1, "NUMBER".equals(ne) && text.length() >= 7, exts);
+                            break;
                         case "duration":
                             tmpRes = new MatchResult(1, "DURATION".equals(ne), exts);
                             break;

@@ -5,7 +5,8 @@
     "com.viveret.pilexa.pi.defaultskills.jokeskill",
     "com.viveret.pilexa.pi.defaultskills.salutationskill",
     "com.viveret.pilexa.pi.defaultskills.debugskill",
-    "com.viveret.pilexa.pi.defaultskills.weatherskill"
+    "com.viveret.pilexa.pi.defaultskills.weatherskill",
+    "com.viveret.pilexa.pi.defaultskills.androidskill"
 
   ],
   "input-methods": [

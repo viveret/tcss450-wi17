@@ -40,6 +40,14 @@
       "invocations": [
         "set a timer for %time:duration%"
       ]
+    },
+    {
+      "className": "SetCalendarIntent",
+      "name": "Add Event to Calendar",
+      "desc": "Add an event to your calendar",
+      "invocations": [
+        "Remind me %event:string% %time:int%"
+      ]
     }
   ]
 }

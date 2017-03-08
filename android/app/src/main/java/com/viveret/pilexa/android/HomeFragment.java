@@ -17,8 +17,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.viveret.pilexa.android.dummy.Message;
-import com.viveret.pilexa.android.dummy.MessageContent;
 import com.viveret.pilexa.android.pilexa.PiLexaProxyConnection;
+import com.viveret.pilexa.android.util.MessageCache;
+
+import java.util.List;
 
 
 /**
@@ -31,6 +33,8 @@ public class HomeFragment extends Fragment {
 
     private PiLexaProxyConnection.PiLexaProxyConnectionHolder myPiLexaHolder;
     private MyMessageRecyclerViewAdapter myViewAdapter;
+    private List<Message> myMessages;
+    private MessageCache messageCache;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -69,7 +73,7 @@ public class HomeFragment extends Fragment {
         LinearLayoutManager lm = new LinearLayoutManager(view.getContext());
         lm.setReverseLayout(true);
         recyclerView.setLayoutManager(lm);
-        myViewAdapter = new MyMessageRecyclerViewAdapter(MessageContent.ITEMS);
+        myViewAdapter = new MyMessageRecyclerViewAdapter(myMessages);
         recyclerView.setAdapter(myViewAdapter);
 
         final EditText et = (EditText) view.findViewById(R.id.inputMsg);
@@ -91,7 +95,9 @@ public class HomeFragment extends Fragment {
     }
 
     private void sendFromUserMessage(String text) {
-        MessageContent.ITEMS.add(0, new Message("You", text, text, true));
+        Message newMsg = new Message(-1, text, true);
+        myMessages.add(0, newMsg);
+        messageCache.insert(newMsg);
         myViewAdapter.notifyDataSetChanged();
         new SendMessageTask().execute(new String[]{text});
 
@@ -102,6 +108,8 @@ public class HomeFragment extends Fragment {
         super.onAttach(context);
         if (context instanceof PiLexaProxyConnection.PiLexaProxyConnectionHolder) {
             myPiLexaHolder = (PiLexaProxyConnection.PiLexaProxyConnectionHolder) context;
+            messageCache = new MessageCache(getActivity());
+            myMessages = messageCache.getMessages();
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement PiLexaProxyConnectionHolder");
@@ -112,6 +120,8 @@ public class HomeFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         myPiLexaHolder = null;
+        messageCache = null;
+        myMessages = null;
     }
 
 
@@ -139,7 +149,9 @@ public class HomeFragment extends Fragment {
                 e.printStackTrace();
             }
 
-            MessageContent.ITEMS.add(0, new Message(name, result, result, false));
+            Message newMsg = new Message(-1, result, false);
+            myMessages.add(0, newMsg);
+            messageCache.insert(newMsg);
             myViewAdapter.notifyDataSetChanged();
         }
     }
