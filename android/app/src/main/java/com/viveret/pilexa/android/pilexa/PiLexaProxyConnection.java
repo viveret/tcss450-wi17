@@ -147,6 +147,7 @@ public class PiLexaProxyConnection implements Serializable {
 
             if (j.has("status") && j.getInt("status") == 0) {
                 processor.addEvents(j.getJSONArray("events"));
+                processor.start();
             } else {
                 throw new Exception(j.getString("msg"));
             }

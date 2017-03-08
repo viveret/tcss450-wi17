@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.AlarmClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -182,6 +183,15 @@ public class HomeActivity extends AppCompatActivity
                                                             Intent i = new Intent(ev.getString("name"));
                                                             startActivity(i);
                                                             break;
+                                                        case "setTimer":
+                                                            Intent intent = new Intent(AlarmClock.ACTION_SET_TIMER)
+                                                                    .putExtra(AlarmClock.EXTRA_MESSAGE, ev.getString("timerMsg"))
+                                                                    .putExtra(AlarmClock.EXTRA_LENGTH, ev.getInt("length"))
+                                                                    .putExtra(AlarmClock.EXTRA_SKIP_UI, true);
+                                                            if (intent.resolveActivity(getPackageManager()) != null) {
+                                                                startActivity(intent);
+                                                            }
+                                                            break;
                                                     }
                                                 } catch (JSONException e) {
                                                     Log.e("Event poll", Log.getStackTraceString(e));
@@ -195,6 +205,7 @@ public class HomeActivity extends AppCompatActivity
                             }
                         }
                     });
+                    myPollPilexaThread.start();
                 } /*catch (ConnectException e) {
                     e.printStackTrace();
                     Toast.makeText(HomeActivity.this, "Could not connect to pi", Toast.LENGTH_LONG);

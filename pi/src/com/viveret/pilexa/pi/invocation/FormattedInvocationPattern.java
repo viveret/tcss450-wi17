@@ -135,7 +135,7 @@ public class FormattedInvocationPattern implements InvocationPattern {
 
                     MatchResult matches = patt.searchForMatch(word);
                     if (!nextIsTrue || isAtEnd) {
-                        if (matches.meetsCriteria()) {
+                        if (matches != null && matches.meetsCriteria()) {
                             if (wordsIncluded == null) {
                                 wordsIncluded = new ArrayList<>();
                             }
@@ -146,7 +146,7 @@ public class FormattedInvocationPattern implements InvocationPattern {
                         j++;
                     }
 
-                    if ((!matches.meetsCriteria() || isAtEnd || nextIsTrue)) {
+                    if ((matches == null || !matches.meetsCriteria() || isAtEnd || nextIsTrue)) {
                         if (wordsIncluded != null) {
                             args.put(patt.getLabel(),
                                     new InvocationToken(patt.getContent()[(Integer) matches.getExt("which")],

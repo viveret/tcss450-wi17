@@ -32,6 +32,14 @@
         "when is %date:date|string%",
         "what day is %date:date|string% on"
       ]
+    },
+    {
+      "className": "SetTimerIntent",
+      "name": "Set a timer",
+      "desc": "Sets a timer",
+      "invocations": [
+        "set a timer for %time:duration%"
+      ]
     }
   ]
 }

@@ -37,7 +37,8 @@
       "ssplit",
       "pos",
       "lemma",
-      "parse"
+      "parse",
+      "ner"
     ],
     "_annotators-available": [
       "ner", "natlog", "sentiment"

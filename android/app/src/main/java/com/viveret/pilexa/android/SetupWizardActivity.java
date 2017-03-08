@@ -11,6 +11,7 @@ import com.viveret.pilexa.android.pilexa.PiLexaProxyConnection;
 import com.viveret.pilexa.android.pilexa.UserAccount;
 import com.viveret.pilexa.android.setup.DoneFragment;
 import com.viveret.pilexa.android.setup.FindPilexaServiceFragment;
+import com.viveret.pilexa.android.setup.ManualPilexaConnectionFragment;
 import com.viveret.pilexa.android.setup.OnPilexaServiceSelected;
 import com.viveret.pilexa.android.setup.WelcomeToTheWizardFragment;
 import com.viveret.pilexa.android.util.AppHelper;
@@ -57,7 +58,7 @@ public class SetupWizardActivity extends Activity implements OnPilexaServiceSele
                 break;
             case 1:
                 if (myIsManual) {
-                    // f = new PilexaConnectionConfigureFragment();
+                    f = new ManualPilexaConnectionFragment();
                 } else {
                     f = new FindPilexaServiceFragment();
                 }

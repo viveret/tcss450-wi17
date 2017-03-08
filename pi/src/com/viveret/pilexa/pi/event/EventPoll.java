@@ -1,10 +1,9 @@
-package com.viveret.pilexa.pi;
+package com.viveret.pilexa.pi.event;
 
 import org.json.JSONObject;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.LinkedList;
 
 /**
  * Created by viveret on 3/7/17.

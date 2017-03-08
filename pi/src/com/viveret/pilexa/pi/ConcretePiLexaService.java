@@ -187,7 +187,11 @@ public class ConcretePiLexaService implements PiLexaService {
                         Math.abs(invc.getConfidence() - invocs.get(i + 1).a.getConfidence()) < CONFUSE_THRESHOLD) {
                     Invocation next = invocs.get(i + 1).a;
                     StringBuilder sbLog = new StringBuilder();
-                    sbLog.append("Confused between invocations: ");
+                    sbLog.append("Confused between invocations (");
+                    sbLog.append(invc.getConfidence());
+                    sbLog.append(", ");
+                    sbLog.append(next.getConfidence());
+                    sbLog.append("): ");
                     sbLog.append(invc.getPattern());
                     sbLog.append(" and ");
                     sbLog.append(next.getPattern());

@@ -11,3 +11,4 @@ captures
 gitignore-*
 gradle.xml
 misc.xml
+runConfigurations.xml
