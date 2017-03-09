@@ -1,4 +1,4 @@
-package com.viveret.pilexa.android.dummy;
+package com.viveret.pilexa.android.util;
 
 /**
  * A dummy item representing a piece of body.

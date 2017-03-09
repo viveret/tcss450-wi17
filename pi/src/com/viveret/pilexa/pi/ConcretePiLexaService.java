@@ -41,7 +41,7 @@ public class ConcretePiLexaService implements PiLexaService {
     }
 
     private void init() {
-        boolean multiThreaded = false;
+        boolean multiThreaded = true;
 
         Thread t = new Thread(
                 this::initCoreNLP

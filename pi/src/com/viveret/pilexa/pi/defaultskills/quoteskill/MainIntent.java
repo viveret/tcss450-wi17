@@ -1,12 +1,10 @@
 package com.viveret.pilexa.pi.defaultskills.quoteskill;
 
-import com.google.api.client.http.HttpResponse;
 import com.viveret.pilexa.pi.invocation.Invocation;
 import com.viveret.pilexa.pi.sayable.Phrase;
 import com.viveret.pilexa.pi.sayable.Sayable;
 import com.viveret.pilexa.pi.skill.JsonQueryIntent;
-import org.codehaus.jackson.JsonNode;
-import org.json.simple.JSONObject;
+import org.json.JSONObject;
 
 /**
  * Created by Daniel on 3/6/17.

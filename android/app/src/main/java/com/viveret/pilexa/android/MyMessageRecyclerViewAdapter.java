@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.viveret.pilexa.android.dummy.Message;
+import com.viveret.pilexa.android.util.Message;
 
 import java.util.List;
 

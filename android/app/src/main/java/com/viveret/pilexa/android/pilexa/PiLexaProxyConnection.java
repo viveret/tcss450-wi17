@@ -25,7 +25,7 @@ import java.util.Map;
 
 public class PiLexaProxyConnection implements Serializable {
     private static final String LOGTAG = "PiLexaProxy";
-    private static final int DEFAULT_TIMEOUT = 5000;
+    private static final int DEFAULT_TIMEOUT = 20000; // 20 seconds
 
     private transient final Map<String, Object> myConfigCache = new HashMap<>();
     private transient int myTimeout = DEFAULT_TIMEOUT;

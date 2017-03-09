@@ -1,22 +1,18 @@
 package com.viveret.pilexa.android;
 
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.viveret.pilexa.android.pilexa.*;
@@ -32,28 +28,43 @@ public class HomeActivity extends AppCompatActivity
     private PiLexaProxyConnection pilexa;
     private Thread myPollPilexaThread = null;
     private Fragment myCurrentFragment = null;
+    private ActionBarDrawerToggle mDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+        mDrawerToggle = new ActionBarDrawerToggle(
+                this, drawer, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(mDrawerToggle);
+        mDrawerToggle.syncState();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         HomeFragment frag = new HomeFragment();
         myCurrentFragment = frag;
-        getSupportFragmentManager().beginTransaction()
+        getFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, frag)
                 .commit();
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -61,6 +72,12 @@ public class HomeActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+        } else if (!(myCurrentFragment instanceof HomeFragment)) {
+            HomeFragment frag = new HomeFragment();
+            myCurrentFragment = frag;
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, frag)
+                    .commit();
         } else {
             super.onBackPressed();
         }
@@ -74,6 +91,12 @@ public class HomeActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        // Pass the event to ActionBarDrawerToggle, if it returns
+        // true, then it has handled the app icon touch event
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
         switch (item.getItemId()) {
             case R.id.action_settings: {
                 Intent i = new Intent(this, SettingsActivity.class);
@@ -112,8 +135,8 @@ public class HomeActivity extends AppCompatActivity
         if (id == R.id.manage_skills) {
             SkillFragment frag = new SkillFragment();
             myCurrentFragment = frag;
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, frag)
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, frag)
                     .commit();
         } else if (id == R.id.create_skills) {
 

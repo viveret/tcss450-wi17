@@ -9,28 +9,30 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_pilexa_raspberry"
-            android:label="@string/app_name"
-            android:supportsRtl="true"
-            android:theme="@style/AppTheme">
+        android:icon="@drawable/ic_pilexa_raspberry"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
                 android:name=".HomeActivity"
-                android:label="@string/app_name"
-                android:theme="@style/AppTheme.NoActionBar">
+                android:label="@string/app_name">
         </activity>
         <activity
                 android:name=".SettingsActivity"
                 android:label="@string/title_activity_settings"/>
-        <activity android:name=".SetupWizardActivity">
+        <activity
+                android:name=".SetupWizardActivity"
+                android:label="PiLexa - Setup Wizard">
         </activity>
-        <activity android:name=".LoginOrRegisterActivity">
+        <activity
+                android:name=".LoginOrRegisterActivity"
+                android:label="PiLexa - Login">
         </activity>
     </application>
 

@@ -89,12 +89,12 @@ public class SetupWizardActivity extends Activity implements OnPilexaServiceSele
 
     @Override
     public void onPilexaServiceSelected(final PiLexaProxyConnection conn) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(SetupWizardActivity.this, "Selected " + conn.toString(), Toast.LENGTH_LONG).show();
-            }
-        });
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                Toast.makeText(SetupWizardActivity.this, "Selected " + conn.toString(), Toast.LENGTH_LONG).show();
+//            }
+//        });
         myPilexa = conn;
         AppHelper app = new AppHelper(PreferenceManager.getDefaultSharedPreferences(this));
         app.saveConnection(conn);

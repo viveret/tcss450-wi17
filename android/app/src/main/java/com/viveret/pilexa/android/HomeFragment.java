@@ -4,7 +4,7 @@ package com.viveret.pilexa.android;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,7 +16,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.viveret.pilexa.android.dummy.Message;
+import com.viveret.pilexa.android.util.Message;
 import com.viveret.pilexa.android.pilexa.PiLexaProxyConnection;
 import com.viveret.pilexa.android.util.MessageCache;
 
