@@ -6,19 +6,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
-
 import com.viveret.pilexa.android.pilexa.PiLexaProxyConnection;
 import com.viveret.pilexa.android.pilexa.UserAccount;
-import com.viveret.pilexa.android.setup.DoneFragment;
-import com.viveret.pilexa.android.setup.FindPilexaServiceFragment;
-import com.viveret.pilexa.android.setup.ManualPilexaConnectionFragment;
-import com.viveret.pilexa.android.setup.OnPilexaServiceSelected;
-import com.viveret.pilexa.android.setup.WelcomeToTheWizardFragment;
+import com.viveret.pilexa.android.setup.*;
 import com.viveret.pilexa.android.util.AppHelper;
 
 public class SetupWizardActivity extends Activity implements OnPilexaServiceSelected,
-        WelcomeToTheWizardFragment.OnWelcomeInteractionListener, PiLexaProxyConnection.PiLexaProxyConnectionHolder,
-        LoginOrCreateAcctFragment.OnLoginOrCreateAcctListener {
+        WelcomeToTheWizardFragment.OnWelcomeInteractionListener, PiLexaProxyConnection.PiLexaProxyConnectionHolder {
 
     private int myStepAt;
     private boolean myIsManual = false;
@@ -64,9 +58,6 @@ public class SetupWizardActivity extends Activity implements OnPilexaServiceSele
                 }
                 break;
             case 2:
-                f = new LoginOrCreateAcctFragment();
-                break;
-            case 3:
                 f = new DoneFragment();
                 Thread t = new Thread(new Runnable() {
                     @Override
@@ -76,12 +67,13 @@ public class SetupWizardActivity extends Activity implements OnPilexaServiceSele
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        Intent i = new Intent(SetupWizardActivity.this, HomeActivity.class);
+                        Intent i = new Intent(SetupWizardActivity.this, MainActivity.class);
                         startActivity(i);
                         finish();
                     }
                 });
                 t.start();
+                break;
             default:
                 Toast.makeText(this, "Invalid step at " + myStepAt, Toast.LENGTH_LONG).show();
                 break;
@@ -96,8 +88,13 @@ public class SetupWizardActivity extends Activity implements OnPilexaServiceSele
     }
 
     @Override
-    public void onPilexaServiceSelected(PiLexaProxyConnection conn) {
-        Toast.makeText(this, "Selected " + conn.toString(), Toast.LENGTH_LONG).show();
+    public void onPilexaServiceSelected(final PiLexaProxyConnection conn) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(SetupWizardActivity.this, "Selected " + conn.toString(), Toast.LENGTH_LONG).show();
+            }
+        });
         myPilexa = conn;
         AppHelper app = new AppHelper(PreferenceManager.getDefaultSharedPreferences(this));
         app.saveConnection(conn);
@@ -119,11 +116,5 @@ public class SetupWizardActivity extends Activity implements OnPilexaServiceSele
     @Override
     public PiLexaProxyConnection getPilexa() {
         return myPilexa;
-    }
-
-    @Override
-    public void onUserLogin(UserAccount user) {
-        Toast.makeText(this, user.getUsername(), Toast.LENGTH_LONG).show();
-        nextStep();
     }
 }

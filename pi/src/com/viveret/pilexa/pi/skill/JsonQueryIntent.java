@@ -1,9 +1,9 @@
 package com.viveret.pilexa.pi.skill;
 
 import com.viveret.pilexa.pi.sayable.Phrase;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -22,15 +22,16 @@ public abstract class JsonQueryIntent extends JsonIntent {
             conn.setRequestProperty("Accept", "application/json;");
 
             conn.connect();
-
-            JSONParser parser = new JSONParser();
-            return parser.parse(new InputStreamReader(conn.getInputStream()));
+            StringBuilder jsonStr = new StringBuilder();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String ln;
+            while ((ln = reader.readLine()) != null) {
+                jsonStr.append(ln);
+            }
+            return new JSONObject(jsonStr.toString());
         } catch (IOException e) {
             e.printStackTrace();
             return new Phrase("Sorry, I could not connect.");
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return new Phrase("Sorry, I couldn't read from my sources.");
         } catch (Exception e) {
             e.printStackTrace();
             return new Phrase("Sorry, something went wrong.");

@@ -4,8 +4,7 @@ import com.viveret.pilexa.pi.util.ConfigFile;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.FileNotFoundException;
-import java.io.Serializable;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -23,6 +22,17 @@ public class UserAccount extends ConfigFile {
         super("users/" + userId + "/config");
         myId = userId;
         getRoot().put("id", userId);
+        if (!getRoot().has("name")) {
+            getRoot().put("name", "[no name]");
+        }
+        if (!getRoot().has("lang")) {
+            getRoot().put("lang", "en");
+        }
+        try {
+            save();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public List<UserDevice> getDevices() {
@@ -33,8 +43,6 @@ public class UserAccount extends ConfigFile {
                 for (int i = 0; i < devices.length(); i++) {
                     myDevices.add(new UserDevice(devices.getJSONObject(i)));
                 }
-            } else {
-                return null;
             }
         }
         return myDevices;
@@ -83,6 +91,18 @@ public class UserAccount extends ConfigFile {
         set("mac", mac);
     }
 
+    public void addDevice(UserDevice device) {
+        myDevices.add(device);
+        JSONArray ar;
+        if (getRoot().has("devices")) {
+            ar = getRoot().getJSONArray("devices");
+        } else {
+            ar = new JSONArray();
+            getRoot().put("devices", ar);
+        }
+        ar.put(device.toJson());
+    }
+
     public static class UserDevice {
         private final String myMacAddress;
         private String myName;
@@ -90,6 +110,11 @@ public class UserAccount extends ConfigFile {
         public UserDevice(JSONObject json) {
             this.myMacAddress = json.getString("mac-address");
             this.myName = json.getString("name");
+        }
+
+        public UserDevice(String mac, String name) {
+            myMacAddress = mac;
+            myName = name;
         }
 
         public String getMacAddress() {
@@ -102,6 +127,13 @@ public class UserAccount extends ConfigFile {
 
         public void setName(String theName) {
             this.myName = theName;
+        }
+
+        public JSONObject toJson() {
+            JSONObject ret = new JSONObject();
+            ret.put("mac-address", myMacAddress);
+            ret.put("name", myName);
+            return ret;
         }
     }
 }

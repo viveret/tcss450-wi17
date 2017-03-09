@@ -4,7 +4,7 @@ import com.viveret.pilexa.pi.invocation.Invocation;
 import com.viveret.pilexa.pi.sayable.Phrase;
 import com.viveret.pilexa.pi.sayable.Sayable;
 import com.viveret.pilexa.pi.skill.JsonQueryIntent;
-import org.json.simple.JSONObject;
+import org.json.JSONObject;
 
 /**
  * Created by viveret on 2/5/17.

@@ -10,7 +10,8 @@
 
   ],
   "input-methods": [
-    "com.viveret.pilexa.pi.inputmethods.DaemonProxy"
+    "com.viveret.pilexa.pi.inputmethods.DaemonProxy",
+    "com.viveret.pilexa.pi.inputmethods.GoogleSpeechPiLexaProxy"
   ],
   "_input-methods-available": [
     "com.viveret.pilexa.pi.inputmethods.DaemonProxy",

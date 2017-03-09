@@ -1,13 +1,12 @@
 package com.viveret.pilexa.pi.invocation;
 
+import com.viveret.pilexa.pi.util.Math;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.viveret.pilexa.pi.util.Math;
 
 /**
  * Created by viveret on 1/26/17.

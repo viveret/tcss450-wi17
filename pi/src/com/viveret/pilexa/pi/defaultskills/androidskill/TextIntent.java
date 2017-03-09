@@ -1,7 +1,6 @@
 package com.viveret.pilexa.pi.defaultskills.androidskill;
 
 import com.viveret.pilexa.pi.event.EventPoll;
-import com.viveret.pilexa.pi.event.SearchEvent;
 import com.viveret.pilexa.pi.event.TextEvent;
 import com.viveret.pilexa.pi.invocation.Invocation;
 import com.viveret.pilexa.pi.invocation.InvocationProcessor;

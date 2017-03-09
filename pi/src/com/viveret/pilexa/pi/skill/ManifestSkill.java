@@ -2,8 +2,7 @@ package com.viveret.pilexa.pi.skill;
 
 import com.viveret.pilexa.pi.util.ConfigFile;
 import org.apache.log4j.Logger;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import org.json.JSONArray;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -26,9 +25,9 @@ public class ManifestSkill extends ConfigFile implements Skill {
     private void getJsonIntents() {
         final Logger log = Logger.getRootLogger();
         JSONArray intents = (JSONArray) getRoot().get("intents");
-        for (int i = 0; i < intents.size(); i++) {
+        for (int i = 0; i < intents.length(); i++) {
             try {
-                myIntents.add(new ManifestIntent((JSONObject) intents.get(i), this));
+                myIntents.add(new ManifestIntent(intents.getJSONObject(i), this));
             } catch (ClassNotFoundException e) {
                 log.error("Skill not found: " + intents.get(i).toString());
             }

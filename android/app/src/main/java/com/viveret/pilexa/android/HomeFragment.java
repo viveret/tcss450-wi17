@@ -124,6 +124,12 @@ public class HomeFragment extends Fragment {
         myMessages = null;
     }
 
+    public void clearMessages() {
+        myMessages.clear();
+        messageCache.clearMessages();
+        myViewAdapter.notifyDataSetChanged();
+    }
+
 
     private class SendMessageTask extends AsyncTask<String, Void, String> {
         @Override

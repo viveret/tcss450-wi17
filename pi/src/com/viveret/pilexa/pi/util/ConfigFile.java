@@ -1,13 +1,10 @@
 package com.viveret.pilexa.pi.util;
 
 import org.apache.log4j.Logger;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.*;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -28,9 +25,17 @@ public class ConfigFile implements ConfigTransactionLayer {
 
         if (fin != null && fin.exists()) {
             try {
-                JSONParser parser = new JSONParser();
-                myRoot = (JSONObject) parser.parse(new FileReader(fin));
-            } catch (IOException | ParseException e) {
+                /*URI uri = new URI("file://" + location);
+                JSONTokener tokener = new JSONTokener(uri.toURL().openStream());*/
+                StringBuilder jsonStr = new StringBuilder();
+                BufferedReader reader = new BufferedReader(new FileReader(fin));
+                String ln;
+                while ((ln = reader.readLine()) != null) {
+                    jsonStr.append(ln);
+                }
+
+                myRoot = new JSONObject(jsonStr.toString());
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
@@ -46,7 +51,7 @@ public class ConfigFile implements ConfigTransactionLayer {
 
     @Override
     public int getInt(String key) {
-        return (int) ((Long) get(key)).longValue();
+        return (int) get(key);
     }
 
     @Override
@@ -55,7 +60,7 @@ public class ConfigFile implements ConfigTransactionLayer {
         if (ret == null) {
             return theDefault;
         } else {
-            return (int) ((Long) ret).longValue();
+            return (int) ret;
         }
     }
 

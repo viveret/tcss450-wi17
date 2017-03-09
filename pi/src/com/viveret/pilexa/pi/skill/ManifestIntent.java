@@ -7,8 +7,8 @@ import com.viveret.pilexa.pi.invocation.InvocationPattern;
 import com.viveret.pilexa.pi.invocation.InvocationProcessor;
 import com.viveret.pilexa.pi.invocation.PooledInvocationPattern;
 import com.viveret.pilexa.pi.sayable.Sayable;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -48,11 +48,11 @@ public class ManifestIntent implements Intent {
             throw new ClassNotFoundException(e.toString());
         }
 
-        myName = (String) root.get("name");
-        myDesc = (String) root.get("desc");
+        myName = root.getString("name");
+        myDesc = root.getString("desc");
 
-        JSONArray invocations = (JSONArray) root.get("invocations");
-        for (int i = 0; i < invocations.size(); i++) {
+        JSONArray invocations = root.getJSONArray("invocations");
+        for (int i = 0; i < invocations.length(); i++) {
             String patt = (String) invocations.get(i);
             myPatterns.add(new PooledInvocationPattern(patt));
         }

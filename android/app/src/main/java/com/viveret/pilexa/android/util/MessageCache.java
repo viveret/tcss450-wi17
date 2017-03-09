@@ -57,7 +57,7 @@ public class MessageCache extends SQLiteOpenHelper {
 
     public void clearMessages() {
         SQLiteDatabase db = getWritableDatabase();
-        db.delete(TABLE_NAME, "true", new String[]{});
+        db.delete(TABLE_NAME, "1=1", new String[]{});
     }
 
     public List<Message> getMessages() {

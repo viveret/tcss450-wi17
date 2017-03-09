@@ -1,9 +1,9 @@
 package com.viveret.pilexa.pi.inputmethods;
 
 import com.viveret.pilexa.pi.AbstractPiLexaServiceProxy;
-import com.viveret.pilexa.pi.event.EventPoll;
 import com.viveret.pilexa.pi.InputSource;
 import com.viveret.pilexa.pi.PiLexaService;
+import com.viveret.pilexa.pi.event.EventPoll;
 import com.viveret.pilexa.pi.user.UserAccount;
 import com.viveret.pilexa.pi.user.UserManager;
 import com.viveret.pilexa.pi.util.Config;
@@ -34,9 +34,9 @@ public class DaemonProxy extends AbstractPiLexaServiceProxy implements InputSour
     public void run() {
         do {
             try {
-                getLog().info("Waiting for client to connect...");
+                // getLog().info("Waiting for client to connect...");
                 DaemonEntryPoint client = new DaemonEntryPoint(mySocket.accept());
-                inst.getLog().info("Client " + client.mySocket.getInetAddress().getCanonicalHostName() + " connected");
+                // inst.getLog().info("Client " + client.mySocket.getInetAddress().getCanonicalHostName() + " connected");
                 clients.add(client);
                 client.start();
             } catch (IOException e) {
@@ -126,62 +126,57 @@ public class DaemonProxy extends AbstractPiLexaServiceProxy implements InputSour
                 String msg = "OK";
                 int status = 0;
 
-                if (!jin.has("op")) {
-                    status = 1;
-                    msg = "key 'op' is required, no operation specified.";
-                } else {
-                    switch (jin.getString("op")) {
-                        case "ping": {
-                        } break;
-                        case "interpret":
-                            if (jin.has("msg")) {
-                                msg = inst.interpret(jin.getString("msg"));
-                            } else {
-                                msg = "Missing msg";
-                                status = 1;
+                try {
+                    if (!jin.has("op")) {
+                        status = 1;
+                        msg = "key 'op' is required, no operation specified.";
+                    } else {
+                        switch (jin.getString("op")) {
+                            case "ping": {
                             }
                             break;
-                        case "queryConfig":
-                            if (jin.has("key")) {
-                                Object theVal = getConfig().get(jin.getString("key"));
-                                if (theVal != null) {
-                                    jout.put("val", theVal);
+                            case "interpret":
+                                if (jin.has("msg")) {
+                                    msg = inst.interpret(jin.getString("msg"));
                                 } else {
-                                    msg = "Invalid key";
+                                    msg = "Missing msg";
                                     status = 1;
                                 }
-                            } else {
-                                msg = "Missing key";
-                                status = 1;
-                            }
-                            break;
-                        case "queryEntireConfig":
-                            jout.put("val", getConfig().getRoot());
-                            break;
-                        case "setConfig":
-                            if (jin.has("key")) {
-                                if (jin.has("val")) {
-                                    jout.put("val", getConfig().getRoot());
+                                break;
+                            case "queryConfig":
+                                if (jin.has("key")) {
+                                    Object theVal = getConfig().get(jin.getString("key"));
+                                    if (theVal != null) {
+                                        jout.put("val", theVal);
+                                    } else {
+                                        msg = "Invalid key";
+                                        status = 1;
+                                    }
                                 } else {
-                                    msg = "Missing value";
+                                    msg = "Missing key";
                                     status = 1;
                                 }
-                            } else {
-                                msg = "Missing key";
-                                status = 1;
-                            }
-                            break;
-                        case "login":
-                            if (jin.has("username") && jin.has("password")) {
-                                // Basic authentication
-                                msg = "Not implemented";
-                                status = 1;
-                            }
-                            break;
-                        case "createAccount":
-                            if (jin.has("mac")) {
+                                break;
+                            case "queryEntireConfig":
+                                jout.put("val", getConfig().getRoot());
+                                break;
+                            case "setConfig":
+                                if (jin.has("key")) {
+                                    if (jin.has("val")) {
+                                        jout.put("val", getConfig().getRoot());
+                                    } else {
+                                        msg = "Missing value";
+                                        status = 1;
+                                    }
+                                } else {
+                                    msg = "Missing key";
+                                    status = 1;
+                                }
+                                break;
+                            case "login":
                                 if (jin.has("username") && jin.has("password")) {
-                                    UserAccount user = UserManager.inst().createNewUser(
+                                    // Basic authentication
+                                    UserAccount user = UserManager.inst().loginUsernamePasswordMac(
                                             jin.getString("username"),
                                             jin.getString("password"),
                                             jin.getString("mac"));
@@ -192,27 +187,49 @@ public class DaemonProxy extends AbstractPiLexaServiceProxy implements InputSour
                                         status = 1;
                                     }
                                 } else {
-                                    msg = "Missing username and/or password";
+                                    msg = "Missing username or password.";
                                     status = 1;
                                 }
-                            } else {
-                                msg = "Missing mac address";
+                                break;
+                            case "createAccount":
+                                if (jin.has("mac")) {
+                                    if (jin.has("username") && jin.has("password")) {
+                                        UserAccount user = UserManager.inst().createNewUser(
+                                                jin.getString("username"),
+                                                jin.getString("password"),
+                                                jin.getString("mac"));
+                                        if (user != null) {
+                                            jout.put("user", user.getRoot());
+                                        } else {
+                                            msg = "User was null";
+                                            status = 1;
+                                        }
+                                    } else {
+                                        msg = "Missing username and/or password";
+                                        status = 1;
+                                    }
+                                } else {
+                                    msg = "Missing mac address";
+                                    status = 1;
+                                }
+                                break;
+                            case "pollForEvents":
+                                Deque<JSONObject> queue = EventPoll.inst().getQueue();
+                                JSONArray evs = new JSONArray();
+                                while (!queue.isEmpty()) {
+                                    evs.put(queue.pollLast());
+                                }
+                                jout.put("events", evs);
+                                break;
+                            default:
+                                msg = "Invalid operation";
                                 status = 1;
-                            }
-                            break;
-                        case "pollForEvents":
-                            Deque<JSONObject> queue = EventPoll.inst().getQueue();
-                            JSONArray evs = new JSONArray();
-                            while (!queue.isEmpty()) {
-                                evs.put(queue.pollLast());
-                            }
-                            jout.put("events", evs);
-                            break;
-                        default:
-                            msg = "Invalid operation";
-                            status = 1;
-                            break;
+                                break;
+                        }
                     }
+                } catch (Exception e) {
+                    msg = e.getMessage();
+                    status = -1;
                 }
 
                 jout.put("msg", msg);

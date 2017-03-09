@@ -1,5 +1,6 @@
 package com.viveret.pilexa.android;
 
+import android.support.v4.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -29,8 +30,8 @@ public class HomeActivity extends AppCompatActivity
         SkillFragment.OnListFragmentInteractionListener {
 
     private PiLexaProxyConnection pilexa;
-
     private Thread myPollPilexaThread = null;
+    private Fragment myCurrentFragment = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,31 +39,6 @@ public class HomeActivity extends AppCompatActivity
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View view) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        String msg = "";
-                        if (pilexa != null) {
-                            try {
-                                msg = pilexa.getConfigString("system.name");
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        } else {
-                            msg = "could not get system.name";
-                        }
-
-                        Snackbar.make(view, msg, Snackbar.LENGTH_LONG)
-                                .setAction("Action", null).show();
-                    }
-                }).start();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -74,6 +50,7 @@ public class HomeActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         HomeFragment frag = new HomeFragment();
+        myCurrentFragment = frag;
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, frag)
                 .commit();
@@ -110,6 +87,18 @@ public class HomeActivity extends AppCompatActivity
                 finish();
                 return true;
             }
+            case R.id.action_forget_conn: {
+                new AppHelper(PreferenceManager.getDefaultSharedPreferences(this)).forgetConnection();
+                Intent i = new Intent(this, MainActivity.class);
+                startActivity(i);
+                finish();
+                return true;
+            }
+            case R.id.action_clear_msgs: {
+                if (myCurrentFragment instanceof HomeFragment) {
+                    ((HomeFragment) myCurrentFragment).clearMessages();
+                }
+            }
         }
 
         return super.onOptionsItemSelected(item);
@@ -122,6 +111,7 @@ public class HomeActivity extends AppCompatActivity
 
         if (id == R.id.manage_skills) {
             SkillFragment frag = new SkillFragment();
+            myCurrentFragment = frag;
             getSupportFragmentManager().beginTransaction()
                     .add(R.id.fragment_container, frag)
                     .commit();
@@ -151,11 +141,7 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void run() {
                 try {
-                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(HomeActivity.this);
-                    String host = prefs.getString("pilexaHost", null);
-                    int port = prefs.getInt("pilexaPort", -1);
-                    pilexa = PiLexaProxyConnection.attachTo(host, port);
-
+                    pilexa = new AppHelper(PreferenceManager.getDefaultSharedPreferences(HomeActivity.this)).makeConnection();
                     myPollPilexaThread = new Thread(new Runnable() {
                         @Override
                         public void run() {
