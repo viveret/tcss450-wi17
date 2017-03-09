@@ -3,7 +3,6 @@ package com.viveret.pilexa.pi.user;
 import com.viveret.pilexa.pi.util.FileUtil;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,7 +65,7 @@ public class UserManager {
         UserAccount ret = new UserAccount(myMaxId);
         ret.setUsername(username);
         ret.updatePassword(password);
-        ret.setMac(mac);
+        ret.addDevice(new UserAccount.UserDevice(mac, "[default]"));
         try {
             ret.save();
         } catch (IOException e) {
@@ -74,5 +73,20 @@ public class UserManager {
         }
 
         return ret;
+    }
+
+    public UserAccount loginUsernamePasswordMac(String username, String password, String mac) {
+        for (Map.Entry<Integer, String> e : myUsers.entrySet()) {
+            if (e.getValue().equals(username)) {
+                UserAccount acct = new UserAccount(e.getKey());
+                for (UserAccount.UserDevice d : acct.getDevices()) {
+                    if (d.getMacAddress().equals(mac)) {
+                        return acct;
+                    }
+                }
+                throw new IllegalArgumentException("Mac not found: " + mac);
+            }
+        }
+        throw new IllegalArgumentException("User not found: " + username);
     }
 }

@@ -5,23 +5,22 @@ import org.json.JSONObject;
 /**
  * Created by viveret on 3/7/17.
  */
-public class AndroidIntentEvent extends Event {
-    private final String myAndroidIntent;
+public class MusicEvent extends Event {
+    private final String myQuery;
 
-    public AndroidIntentEvent(String myAndroidIntent) {
-        this.myAndroidIntent = myAndroidIntent;
+    public MusicEvent(String theQuery) {
+        this.myQuery = theQuery;
     }
-
 
     @Override
     public String getType() {
-        return "androidIntent";
+        return "music";
     }
 
     @Override
     public JSONObject toJson() {
         JSONObject ret = super.toJson();
-        ret.put("name", myAndroidIntent);
+        ret.put("query", myQuery);
         return ret;
     }
 }

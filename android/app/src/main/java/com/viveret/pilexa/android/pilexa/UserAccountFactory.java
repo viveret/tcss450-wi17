@@ -127,7 +127,7 @@ public class UserAccountFactory {
         String name = user.getString("name");
         String username = user.getString("username");
         String language = user.getString("lang");
-        String authToken = user.getString("authToken");
+        String authToken = "";//user.getString("authToken");
         UserAccount acct = new UserAccount(userId, name, username, language, authToken);
 
         JSONArray ar = user.getJSONArray("devices");

@@ -1,13 +1,9 @@
 package com.viveret.pilexa.pi.skill;
 
 import com.viveret.pilexa.pi.sayable.Phrase;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.json.JSONObject;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * Created by viveret on 2/4/17.
@@ -24,19 +20,18 @@ public abstract class JsonFromFileIntent extends JsonIntent {
             throw new FileNotFoundException(finalUrl);
         }
         File file = new File(resFile);
-        JSONParser parser = new JSONParser();
-
         try {
-            FileReader reader = new FileReader(file);
-            Object ret = parser.parse(reader);
+            StringBuilder jsonStr = new StringBuilder();
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String ln;
+            while ((ln = reader.readLine()) != null) {
+                jsonStr.append(ln);
+            }
             reader.close();
-            return ret;
+            return new JSONObject(jsonStr.toString());
         } catch (IOException e) {
             e.printStackTrace();
             return new Phrase("Sorry, I couldn't read from my sources.");
-        } catch (ParseException e) {
-            e.printStackTrace();
-            return new Phrase("Sorry, I couldn't read my writing sources.");
         }
     }
 }

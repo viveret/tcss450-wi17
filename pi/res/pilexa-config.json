@@ -8,9 +8,11 @@
     "com.viveret.pilexa.pi.defaultskills.weatherskill",
     "com.viveret.pilexa.pi.defaultskills.quoteskill",
     "com.viveret.pilexa.pi.defaultskills.coinskill"
+    "com.viveret.pilexa.pi.defaultskills.androidskill"
   ],
   "input-methods": [
-    "com.viveret.pilexa.pi.inputmethods.DaemonProxy"
+    "com.viveret.pilexa.pi.inputmethods.DaemonProxy",
+    "com.viveret.pilexa.pi.inputmethods.GoogleSpeechPiLexaProxy"
   ],
   "_input-methods-available": [
     "com.viveret.pilexa.pi.inputmethods.DaemonProxy",

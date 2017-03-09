@@ -3,14 +3,7 @@ package com.viveret.pilexa.pi.inputmethods;
 import com.viveret.pilexa.pi.ConcretePiLexaService;
 import com.viveret.pilexa.pi.InputSource;
 import com.viveret.pilexa.pi.PiLexaService;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;

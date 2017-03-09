@@ -1,7 +1,6 @@
 package com.viveret.pilexa.pi.util;
 
 import java.io.File;
-import java.net.URL;
 
 /**
  * Created by viveret on 3/7/17.

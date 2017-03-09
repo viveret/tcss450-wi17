@@ -13,9 +13,15 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        AppHelper appHelper = new AppHelper(PreferenceManager.getDefaultSharedPreferences(this));
+
         Intent i;
-        if (new AppHelper(PreferenceManager.getDefaultSharedPreferences(this)).hasSavedConnection()) {
-            i = new Intent(this, HomeActivity.class);
+        if (appHelper.hasSavedConnection()) {
+            if (appHelper.hasSavedUser()) {
+                i = new Intent(this, HomeActivity.class);
+            } else {
+                i = new Intent(this, LoginOrRegisterActivity.class);
+            }
         } else {
             i = new Intent(this, SetupWizardActivity.class);
         }

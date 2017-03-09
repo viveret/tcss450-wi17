@@ -6,6 +6,7 @@ local.properties
 .idea/copywrite
 .DS_Store
 build
+out
 captures
 .externalNativeBuild
 gitignore-*

@@ -125,7 +125,7 @@ public class FormattedInvocationPattern implements InvocationPattern {
                     break;
                 case ARGUMENT:
                     matchStreak = -1;
-                    boolean isAtEnd = (j + 1 == words.size());
+                    boolean isAtEnd = (j + 1 == words.size()) || !patt.searchForMatch(words.get(j + 1)).meetsCriteria();
                     boolean nextIsTrue = false;
                     if (!isAtEnd && i + 1 < myTokens.size()) {
                         MatchResult r2 = myTokens.get(i + 1).searchForMatch(words.get(j));

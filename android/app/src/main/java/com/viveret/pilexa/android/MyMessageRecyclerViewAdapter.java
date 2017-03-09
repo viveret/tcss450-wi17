@@ -56,8 +56,8 @@ public class MyMessageRecyclerViewAdapter extends RecyclerView.Adapter<MyMessage
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).id);
-        holder.mContentView.setText(mValues.get(position).content);
+        holder.mIdView.setText(mValues.get(position).isFromUser ? "You" : "PiLexa");
+        holder.mContentView.setText(mValues.get(position).body);
 
 //        holder.mView.setOnClickListener(new View.OnClickListener() {
 //            @Override

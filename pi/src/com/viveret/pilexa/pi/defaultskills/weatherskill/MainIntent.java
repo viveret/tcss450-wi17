@@ -1,11 +1,10 @@
 package com.viveret.pilexa.pi.defaultskills.weatherskill;
 
-import com.viveret.pilexa.pi.PiLexaService;
 import com.viveret.pilexa.pi.invocation.Invocation;
 import com.viveret.pilexa.pi.sayable.Phrase;
 import com.viveret.pilexa.pi.sayable.Sayable;
 import com.viveret.pilexa.pi.skill.JsonQueryIntent;
-import org.json.simple.JSONObject;
+import org.json.JSONObject;
 
 /**
  * Created by Daniel on 2/25/17.
@@ -19,10 +18,10 @@ public class MainIntent extends JsonQueryIntent {
             return (Sayable) tmp;
         } else {
             JSONObject weatherJSON = ((JSONObject) tmp);
-            JSONObject currentObservation = (JSONObject) weatherJSON.get("current_observation");
-            String weatherLocation = ((JSONObject) currentObservation.get("display_location")).get("city").toString();
-            String currentWeatherCondition = ((String) currentObservation.get("weather"));
-            Double currentWeatherTemp = ((Double) currentObservation.get("temp_f"));
+            JSONObject currentObservation = weatherJSON.getJSONObject("current_observation");
+            String weatherLocation = currentObservation.getJSONObject("display_location").getString("city");
+            String currentWeatherCondition = currentObservation.getString("weather");
+            Double currentWeatherTemp = currentObservation.getDouble("temp_f");
 
 //            getConnectedPilexaService().DispatchIntent(null);
 

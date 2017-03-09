@@ -6,7 +6,15 @@
             android:title="@string/action_settings"
             app:showAsAction="never" />
     <item
+            android:id="@+id/action_forget_conn"
+            android:title="@string/action_forget_conn"
+            app:showAsAction="never" />
+    <item
             android:id="@+id/action_logout"
             android:title="@string/action_logout"
+            app:showAsAction="never" />
+    <item
+            android:id="@+id/action_clear_msgs"
+            android:title="@string/action_clear_msgs"
             app:showAsAction="never" />
 </menu>

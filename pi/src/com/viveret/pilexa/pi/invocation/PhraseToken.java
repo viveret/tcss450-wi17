@@ -1,13 +1,12 @@
 package com.viveret.pilexa.pi.invocation;
 
+import com.viveret.pilexa.pi.util.Math;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.ling.CoreLabel;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-
-import com.viveret.pilexa.pi.util.Math;
 
 /**
  * Created by viveret on 1/26/17.
@@ -60,6 +59,9 @@ public class PhraseToken {
                             break;
                         case "int":
                             tmpRes = new MatchResult(1, "NUMBER".equals(ne) || "DURATION".equals(ne), exts);
+                            break;
+                        case "phone_number":
+                            tmpRes = new MatchResult(1, "NUMBER".equals(ne) && text.length() >= 7, exts);
                             break;
                         case "duration":
                             tmpRes = new MatchResult(1, "DURATION".equals(ne), exts);

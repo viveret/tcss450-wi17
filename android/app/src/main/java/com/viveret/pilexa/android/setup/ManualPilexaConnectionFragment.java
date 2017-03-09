@@ -51,7 +51,7 @@ public class ManualPilexaConnectionFragment extends Fragment {
                         PiLexaProxyConnection testConn = null;
                         try {
                             String myHost = hostET.getText().toString();
-                            int myPort = Integer.parseInt(portET.getText().toString());
+                            int myPort = Integer.parseInt(portET.getText().toString().trim().length() > 0 ? portET.getText().toString() : "11823");
                             testConn = PiLexaProxyConnection.attachTo(myHost, myPort);
                             if (testConn != null) {
                                 myListener.onPilexaServiceSelected(testConn);

@@ -27,7 +27,11 @@ public class AbstractInvocation implements Invocation {
 
     @Override
     public List<CoreLabel> getValue(String key) {
-        return myTokens.get(key).getData();
+        if (myTokens.containsKey(key)) {
+            return myTokens.get(key).getData();
+        } else {
+            return null;
+        }
     }
 
     @Override

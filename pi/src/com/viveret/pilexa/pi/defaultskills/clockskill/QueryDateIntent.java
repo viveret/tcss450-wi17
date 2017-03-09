@@ -6,8 +6,8 @@ import com.viveret.pilexa.pi.sayable.Sayable;
 import com.viveret.pilexa.pi.skill.JsonFromFileIntent;
 import com.viveret.pilexa.pi.util.Math;
 import com.viveret.pilexa.pi.util.NLPHelper;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.FileNotFoundException;
 import java.util.Iterator;
@@ -44,9 +44,9 @@ public class QueryDateIntent extends JsonFromFileIntent {
 
                 for(Iterator iterator = arRoot.keySet().iterator(); iterator.hasNext();) {
                     String key = (String) iterator.next();
-                    JSONArray holidaysOnDate = (JSONArray) arRoot.get(key);
+                    JSONArray holidaysOnDate = arRoot.getJSONArray(key);
 
-                    for (int j = 0; j < holidaysOnDate.size() && closestHolidayDiff != 0; j++) {
+                    for (int j = 0; j < holidaysOnDate.length() && closestHolidayDiff != 0; j++) {
                         JSONObject tmpHoliday = (JSONObject) holidaysOnDate.get(j);
                         int tmpDist = Math.strRawDiff(((String) tmpHoliday.get("name")).toLowerCase(), holiday);
 

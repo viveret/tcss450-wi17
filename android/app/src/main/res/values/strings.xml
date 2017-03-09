@@ -65,7 +65,7 @@
         <item>3</item>
     </string-array>
 
-    <string-array name="multi_select_list_preference_default_value" />
+    <string-array name="multi_select_list_preference_default_value"/>
 
     <string name="pref_title_system_sync_settings">System sync settings</string>
 
@@ -90,7 +90,7 @@
     <string name="manual">Manual</string>
     <string name="easy">Easy</string>
     <string name="find_pilexa_title">Select a pilexa service on your local network:</string>
-    <string name="searching">Searching...</string>
+    <string name="searching">Searching... (This may take a minute)</string>
     <string name="prompt_username">Username:</string>
     <string name="prompt_password">Password:</string>
     <string name="submit">Submit</string>
@@ -102,4 +102,6 @@
     <string name="prompt_host">Host address:</string>
     <string name="prompt_port">Port:</string>
     <string name="port_hint">(leave empty for default)</string>
+    <string name="action_forget_conn">Forget Connection</string>
+    <string name="action_clear_msgs">Clear Messages</string>
 </resources>
