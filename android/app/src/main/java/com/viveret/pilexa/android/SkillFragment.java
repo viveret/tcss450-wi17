@@ -217,7 +217,7 @@ public class SkillFragment extends Fragment {
                             String newUrl = firstPartOfUrl;
                             newUrl = newUrl.concat(skillLink);
                             newUrl = newUrl.concat(lastPartOfUrl);
-                            System.out.println(newUrl);
+//                            System.out.println(newUrl);
                             try {
                                 URL urlObject2 = new URL(newUrl);
                                 urlConnection2 = (HttpURLConnection) urlObject2.openConnection();
@@ -283,9 +283,9 @@ public class SkillFragment extends Fragment {
             } else {
                 System.out.println("skillList empty!");
             }
-            for(Skill skl: skillList) {
-                System.out.println(skl.getSkillName() + ": " + skl.getLongDescription());
-            }
+//            for(Skill skl: skillList) {
+//                System.out.println(skl.getSkillName() + ": " + skl.getLongDescription());
+//            }
         }
     }
 }

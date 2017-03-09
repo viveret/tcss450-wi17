@@ -6,8 +6,9 @@
     "com.viveret.pilexa.pi.defaultskills.salutationskill",
     "com.viveret.pilexa.pi.defaultskills.debugskill",
     "com.viveret.pilexa.pi.defaultskills.weatherskill",
+    "com.viveret.pilexa.pi.defaultskills.quoteskill",
+    "com.viveret.pilexa.pi.defaultskills.coinskill"
     "com.viveret.pilexa.pi.defaultskills.androidskill"
-
   ],
   "input-methods": [
     "com.viveret.pilexa.pi.inputmethods.DaemonProxy",
