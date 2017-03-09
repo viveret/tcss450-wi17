@@ -1,0 +1,24 @@
+Brief introduction to your project:
+Our project is called Pilexa - a portmanteau of the Raspberry Pi and
+Amazon's Alexa. These ideas carry through to the current state of our project
+which includes an application intended to run on a Raspberry Pi with a
+microphone and speaker that can interpret someone's speech and perform tasks,
+as well as an Android companion app to perform tasks and configure the Pilexa.
+
+The third slide:
+We unfortunately were not able to get the calendar skill implemented, or have
+a screen in the companion App to create new composite skills. We also were not
+able to put in a way to add new skills. The most challenging part was creating
+a plugin-based system for skills where we could define skills in a JSON file
+and do the minimal amount of programming for when the skill was actually invoked.
+Another major hurdle was getting the companion App and Pilexa to communicate
+correctly with Java sockets. Fortunately once we had a base the rest was easy.
+
+The last slide:
+Viv - I learned a lot more about AI - specifically natural language processing,
+voice to text, and behavioral programming by creating Pilexa's backbone and also
+from simulatneously taking an AI class which helped. If I could do anything
+differently, I would have focused on what Android can do first and designed Pilexa
+around that since smartphones have a lot more processing power than Raspberry Pis,
+and because most of the functionality stems from things you can already do with
+your phone, just through a different interface.
