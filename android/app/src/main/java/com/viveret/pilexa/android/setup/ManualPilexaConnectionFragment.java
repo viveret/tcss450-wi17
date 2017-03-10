@@ -21,16 +21,18 @@ import com.viveret.pilexa.android.util.AppHelper;
 import java.net.MalformedURLException;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Used to manually connect to a PiLexa. Useful for if you already know the IP or if the finder doesn't work.
  */
 public class ManualPilexaConnectionFragment extends Fragment {
     private OnPilexaServiceSelected myListener;
 
-
+    /**
+     * Mandatory empty constructor for the fragment manager to instantiate the
+     * fragment (e.g. upon screen orientation changes).
+     */
     public ManualPilexaConnectionFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

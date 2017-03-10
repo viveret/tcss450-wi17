@@ -21,7 +21,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 /**
- * A fragment representing a list of Items.
+ * Used to locate running PiLexa instances on a local network that the user can select from.
  * <p/>
  * Activities containing this fragment MUST implement the {@link PiLexaFinder.OnPilexaServiceFinderListener}
  * interface.
@@ -66,6 +66,10 @@ public class FindPilexaServiceFragment extends Fragment implements PiLexaFinder.
         return view;
     }
 
+    /**
+     * Creates a new pilexa finder to search on local network.
+     * @param view root view for fragment
+     */
     private void createPilexaFinder(View view) {
         EditText portET = (EditText) view.findViewById(R.id.port);
         String portStr = portET.getText().toString();
@@ -78,6 +82,10 @@ public class FindPilexaServiceFragment extends Fragment implements PiLexaFinder.
         myFinder = new PiLexaFinder(Integer.parseInt(portStr), localAddress, getActivity(), this);
     }
 
+    /**
+     * Finds and returns the ip of the device on the local network.
+     * @return the ip of the device on the local network.
+     */
     private String findLocalAddress() {
         try {
             Enumeration<NetworkInterface> interfaces;

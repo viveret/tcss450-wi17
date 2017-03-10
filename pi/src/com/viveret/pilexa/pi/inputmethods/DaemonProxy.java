@@ -180,12 +180,7 @@ public class DaemonProxy extends AbstractPiLexaServiceProxy implements InputSour
                                             jin.getString("username"),
                                             jin.getString("password"),
                                             jin.getString("mac"));
-                                    if (user != null) {
-                                        jout.put("user", user.getRoot());
-                                    } else {
-                                        msg = "User was null";
-                                        status = 1;
-                                    }
+                                    jout.put("user", user.getRoot());
                                 } else {
                                     msg = "Missing username or password.";
                                     status = 1;
@@ -198,12 +193,7 @@ public class DaemonProxy extends AbstractPiLexaServiceProxy implements InputSour
                                                 jin.getString("username"),
                                                 jin.getString("password"),
                                                 jin.getString("mac"));
-                                        if (user != null) {
-                                            jout.put("user", user.getRoot());
-                                        } else {
-                                            msg = "User was null";
-                                            status = 1;
-                                        }
+                                        jout.put("user", user.getRoot());
                                     } else {
                                         msg = "Missing username and/or password";
                                         status = 1;

@@ -11,8 +11,11 @@ import com.viveret.pilexa.android.pilexa.UserAccount;
 import com.viveret.pilexa.android.setup.*;
 import com.viveret.pilexa.android.util.AppHelper;
 
+import java.net.MalformedURLException;
+
 public class SetupWizardActivity extends Activity implements OnPilexaServiceSelected,
-        WelcomeToTheWizardFragment.OnWelcomeInteractionListener, PiLexaProxyConnection.PiLexaProxyConnectionHolder {
+        WelcomeToTheWizardFragment.OnWelcomeInteractionListener, PiLexaProxyConnection.PiLexaProxyConnectionHolder,
+        LoginOrCreateAcctFragment.OnLoginOrCreateAcctListener {
 
     private int myStepAt;
     private boolean myIsManual = false;
@@ -25,7 +28,28 @@ public class SetupWizardActivity extends Activity implements OnPilexaServiceSele
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup_wizard);
 
-        myStepAt = 0;
+        final AppHelper appHelper = new AppHelper(PreferenceManager.getDefaultSharedPreferences(this));
+        if (appHelper.hasSavedConnection()) {
+            try {
+                Thread t = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            myPilexa = appHelper.makeConnection();
+                        } catch (MalformedURLException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                t.start();
+                t.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            myStepAt = 2;
+        } else {
+            myStepAt = 0;
+        }
         switchToStep();
     }
 
@@ -58,6 +82,10 @@ public class SetupWizardActivity extends Activity implements OnPilexaServiceSele
                 }
                 break;
             case 2:
+                new AppHelper(PreferenceManager.getDefaultSharedPreferences(this)).logout();
+                f = new LoginOrCreateAcctFragment();
+                break;
+            case 3:
                 f = new DoneFragment();
                 Thread t = new Thread(new Runnable() {
                     @Override
@@ -116,5 +144,12 @@ public class SetupWizardActivity extends Activity implements OnPilexaServiceSele
     @Override
     public PiLexaProxyConnection getPilexa() {
         return myPilexa;
+    }
+
+    @Override
+    public void onUserLogin(UserAccount user) {
+        AppHelper appHelper = new AppHelper(PreferenceManager.getDefaultSharedPreferences(this));
+        appHelper.saveUser(user);
+        nextStep();
     }
 }

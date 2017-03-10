@@ -14,17 +14,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by viveret on 3/7/17.
+ * Factory class for UserAccounts to abstract getting a user from the devices cache or from logging in or
+ * registering with the PiLexa instance.
  */
 public class UserAccountFactory {
     private static final String LOGTAG = "UserAccountFactory";
 
     private final PiLexaProxyConnection myConnection;
 
+    /**
+     * Creates a new factory from an active PiLexa connection.
+     * @param myConnection the connection for the PiLexa
+     */
     public UserAccountFactory(PiLexaProxyConnection myConnection) {
         this.myConnection = myConnection;
     }
 
+    /**
+     * Gets a user from the devices cache.
+     * @param prefs the shared preferences where the data is stored
+     * @return  a user from the devices cache.
+     * @throws Exception if the user does not exist in the cache.
+     */
     public static UserAccount getCachedUser(SharedPreferences prefs) throws Exception {
         if (prefs.contains("userId")) {
             int userId = prefs.getInt("userId", -1);
@@ -38,6 +49,11 @@ public class UserAccountFactory {
         }
     }
 
+    /**
+     * Returns if there is a saved instance of a user in the devices cache preferences.
+     * @param prefs the shared preferences where the data is stored
+     * @return if there is a saved instance of a user in the devices cache preferences.
+     */
     public static boolean hasCachedUser(SharedPreferences prefs) {
         try {
             return getCachedUser(prefs) != null;
@@ -46,6 +62,11 @@ public class UserAccountFactory {
         }
     }
 
+    /**
+     * Attempts to login using a user's credentials.
+     * @param acct the user that has the credentials
+     * @return if the login succeeded
+     */
     public boolean tryLogin(UserAccount acct) {
         JSONObject params = new JSONObject();
         try {
@@ -75,6 +96,14 @@ public class UserAccountFactory {
         }
     }
 
+    /**
+     * Logs into and returns the user by logging into the PiLexa with a username, password, and device mac.
+     * @param username the username of the user
+     * @param password the password of the user
+     * @param mac the mac address of the device
+     * @return the user's info if successfully logged in, otherwise null
+     * @throws Exception if there was an error while trying to perform the request
+     */
     public UserAccount loginWithUsernameAndPassword(String username, String password, String mac) throws Exception {
         JSONObject params = new JSONObject();
         try {
@@ -90,6 +119,14 @@ public class UserAccountFactory {
         return getAccountFromRes(myConnection.sendRequest(params));
     }
 
+    /**
+     * Registers and returns the user by registering the user on the PiLexa with a username, password, and device mac.
+     * @param username the username of the user
+     * @param password the password of the user
+     * @param macAddress the mac address of the device
+     * @return the user's info if successfully registered in, otherwise null
+     * @throws Exception if there was an error while trying to perform the request
+     */
     public UserAccount registerWithUsernameAndPassword(String username, String password, String macAddress) throws Exception {
         JSONObject params = new JSONObject();
         try {
@@ -105,6 +142,12 @@ public class UserAccountFactory {
         return getAccountFromRes(myConnection.sendRequest(params));
     }
 
+    /**
+     * Decodes a user account object from a JSON object
+     * @param res the JSON object the data is contained in
+     * @return a user account object from a JSON object
+     * @throws Exception if there was an error while decoding
+     */
     private UserAccount getAccountFromRes(JSONObject res) throws Exception {
         try {
             if (res != null ) {
@@ -122,6 +165,12 @@ public class UserAccountFactory {
         }
     }
 
+    /**
+     * Decodes a user account object from a JSON object
+     * @param user the JSON object the data is contained in
+     * @return a user account object from a JSON object
+     * @throws Exception if there was an error while decoding
+     */
     private UserAccount createAccountFromJson(JSONObject user) throws JSONException {
         int userId = user.getInt("id");
         String name = user.getString("name");

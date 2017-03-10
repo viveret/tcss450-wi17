@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Created by viveret on 3/8/17.
+ * Helper class to store Messages in a Sqlite database to achieve persistence.
  */
 public class MessageCache extends SQLiteOpenHelper {
     public static final int DATABASE_VERSION = 1;
@@ -27,10 +27,13 @@ public class MessageCache extends SQLiteOpenHelper {
 
     private static final String SQL_DELETE_ENTRIES = "DROP TABLE IF EXISTS `" + TABLE_NAME + "`;";
 
+    /**
+     * Creates a new message cache given a context.
+     * @param context the application context.
+     */
     public MessageCache(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
-
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -43,6 +46,10 @@ public class MessageCache extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    /**
+     * Inserts a new message into the cache.
+     * @param m the message to cache.
+     */
     public void insert(Message m) {
         SQLiteDatabase db = getWritableDatabase();
 
@@ -53,11 +60,18 @@ public class MessageCache extends SQLiteOpenHelper {
         m.setId(db.insert(TABLE_NAME, null, values));
     }
 
+    /**
+     * Clears all the messages from the cache.
+     */
     public void clearMessages() {
         SQLiteDatabase db = getWritableDatabase();
         db.delete(TABLE_NAME, "1=1", new String[]{});
     }
 
+    /**
+     * Gets all the messages in the cache.
+     * @return all the messages in the cache.
+     */
     public List<Message> getMessages() {
         final String[] cols = new String[]{"id", "body", "isFromUSer"};
         SQLiteDatabase db = getReadableDatabase();

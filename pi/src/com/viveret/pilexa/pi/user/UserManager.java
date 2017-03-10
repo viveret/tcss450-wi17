@@ -61,6 +61,11 @@ public class UserManager {
     }
 
     public UserAccount createNewUser(String username, String password, String mac) {
+        if (username.trim().length() == 0 || usernameExists(username.trim())) {
+            throw new IllegalArgumentException("Invalid username");
+        } else if (password.trim().length() == 0) {
+            throw new IllegalArgumentException("Invalid password");
+        }
         myMaxId++;
         UserAccount ret = new UserAccount(myMaxId);
         ret.setUsername(username);
@@ -70,8 +75,10 @@ public class UserManager {
             ret.save();
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
 
+        myUsers.put(ret.getId(), username);
         return ret;
     }
 
@@ -79,12 +86,18 @@ public class UserManager {
         for (Map.Entry<Integer, String> e : myUsers.entrySet()) {
             if (e.getValue().equals(username)) {
                 UserAccount acct = new UserAccount(e.getKey());
-                for (UserAccount.UserDevice d : acct.getDevices()) {
-                    if (d.getMacAddress().equals(mac)) {
-                        return acct;
+
+                // Check if password matches
+                if (acct.passwordMatches(password)) {
+                    for (UserAccount.UserDevice d : acct.getDevices()) {
+                        if (d.getMacAddress().equals(mac)) {
+                            return acct;
+                        }
                     }
+                    throw new IllegalArgumentException("Mac not found: " + mac);
+                } else {
+                    throw new IllegalArgumentException("Invalid password");
                 }
-                throw new IllegalArgumentException("Mac not found: " + mac);
             }
         }
         throw new IllegalArgumentException("User not found: " + username);

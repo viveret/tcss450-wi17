@@ -53,16 +53,7 @@ public class LoginOrCreateAcctFragment extends Fragment {
                                     usernameET.getText().toString(),
                                     passwordET.getText().toString(),
                                     AppHelper.getMacAddress(getActivity()));
-                            if (account != null) {
-                                mListener.onUserLogin(account);
-                            } else {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(getActivity(), "Account was null", Toast.LENGTH_LONG).show();
-                                    }
-                                });
-                            }
+                            mListener.onUserLogin(account);
                         } catch (final Exception e) {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override
@@ -90,16 +81,7 @@ public class LoginOrCreateAcctFragment extends Fragment {
                                     usernameET.getText().toString(),
                                     passwordET.getText().toString(),
                                     AppHelper.getMacAddress(getActivity()));
-                            if (account != null) {
-                                mListener.onUserLogin(account);
-                            } else {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(getActivity(), "Account was null", Toast.LENGTH_LONG).show();
-                                    }
-                                });
-                            }
+                            mListener.onUserLogin(account);
                         } catch (final Exception e) {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override

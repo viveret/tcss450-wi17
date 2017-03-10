@@ -13,11 +13,15 @@ import org.json.JSONObject;
 import static java.net.Proxy.Type.HTTP;
 
 /**
- * Created by viveret on 3/8/17.
+ * Implementation of an EvenPollProcessor that integrates the Android intents with events from the PiLexa.
  */
 public class DefaultEventPollProcessor extends EventPollProcessor {
     private final Activity myActivity;
 
+    /**
+     * Create a new DefaultEventPollProcessor.
+     * @param myActivity the activity this is being used in.
+     */
     public DefaultEventPollProcessor(Activity myActivity) {
         this.myActivity = myActivity;
     }

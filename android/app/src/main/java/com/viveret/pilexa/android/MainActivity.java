@@ -16,12 +16,8 @@ public class MainActivity extends Activity {
         AppHelper appHelper = new AppHelper(PreferenceManager.getDefaultSharedPreferences(this));
 
         Intent i;
-        if (appHelper.hasSavedConnection()) {
-            if (appHelper.hasSavedUser()) {
-                i = new Intent(this, HomeActivity.class);
-            } else {
-                i = new Intent(this, LoginOrRegisterActivity.class);
-            }
+        if (appHelper.hasSavedConnection() && appHelper.hasSavedUser()) {
+            i = new Intent(this, HomeActivity.class);
         } else {
             i = new Intent(this, SetupWizardActivity.class);
         }

@@ -27,7 +27,7 @@
     "numThreadsPerCore": 2,
     "voice": "default",
     "headless": true,
-    "voiceless": false,
+    "voiceless": true,
     "name": "PiLexa TCSS 450",
     "location": "cyborg dreams",
     "_initiallyConfigured": false
@@ -38,8 +38,7 @@
       "ssplit",
       "pos",
       "lemma",
-      "parse",
-      "ner"
+      "parse"
     ],
     "_annotators-available": [
       "ner", "natlog", "sentiment"

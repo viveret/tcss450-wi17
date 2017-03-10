@@ -8,10 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Helper class for providing sample body for user interfaces created by
- * Android template wizards.
- * <p>
- * TODO: Replace all uses of this class before publishing your app.
+ * Container for individual skill data.
+ * Definition of skill: Skills are collections of intents. They are essentially a feature set that PiLexa understands.
  */
 public class Skill implements Serializable {
     public static final String NAME = "name", SHORT_DESC = "shortDesc",
@@ -23,6 +21,12 @@ public class Skill implements Serializable {
     String longDescription;
 
 
+    /**
+     * Creates a new skill from a name, short description, and long description.
+     * @param skillName the name of the skill
+     * @param shortDesciption the short description of the skill
+     * @param longDescription the long description of the skill
+     */
     public Skill(String skillName, String shortDesciption, String longDescription) {
         this.longDescription = longDescription;
         this.skillName = skillName;
@@ -30,6 +34,12 @@ public class Skill implements Serializable {
         tempSkillList = new ArrayList<Skill>();
     }
 
+    /**
+     *
+     * @param skillDetailList
+     * @param skillList
+     * @return
+     */
     public static String parseSkillJSON(List<String> skillDetailList, List<Skill> skillList) {
         String resultOfParse = "";
         for (String skillDetails : skillDetailList) {

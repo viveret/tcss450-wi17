@@ -20,9 +20,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by viveret on 2/15/17.
+ * Proxy for the Daemon input interface for a PiLexa service.
+ * Also a helper class to perform common actions.
  */
-
 public class PiLexaProxyConnection implements Serializable {
     private static final String LOGTAG = "PiLexaProxy";
     private static final int DEFAULT_TIMEOUT = 20000; // 20 seconds
@@ -33,18 +33,35 @@ public class PiLexaProxyConnection implements Serializable {
     private final String myHost;
     private final int myPort;
 
+    /**
+     * Create a new connection to a protocol specific host.
+     * @param theHost the host location to connect to
+     * @throws MalformedURLException if theHost is not a valid URL
+     */
     private PiLexaProxyConnection(URL theHost) throws MalformedURLException {
         myUrl = theHost;
         myHost = myUrl.toExternalForm();
         myPort = myUrl.getPort();
     }
 
-    public PiLexaProxyConnection(String host, int port) throws MalformedURLException  {
+    /**
+     * Create a new connection to a PiLexa socket location.
+     * @param host the ip address or host to connect to.
+     * @param port the port to connect to, default is 11283
+     * @throws MalformedURLException if the host or port are invalid
+     */
+    private PiLexaProxyConnection(String host, int port) throws MalformedURLException  {
         myUrl = null;
         myHost = host;
         myPort = port;
     }
 
+    /**
+     * Attach the host url to a new PiLexa instance that is running.
+     * @param url the host location to connect to
+     * @return a PiLexa connection that is connected
+     * @throws MalformedURLException if the host is not a valid URL.
+     */
     public static PiLexaProxyConnection attachTo(URL url) throws MalformedURLException {
         PiLexaProxyConnection ret = new PiLexaProxyConnection(url);
         if (ret.canConnect()) {
@@ -54,6 +71,13 @@ public class PiLexaProxyConnection implements Serializable {
         }
     }
 
+    /**
+     * Attach the host url to a new PiLexa instance that is running.
+     * @param host the host location to connect to
+     * @param port the port to connect to, default is 11283
+     * @return a PiLexa connection that is connected
+     * @throws MalformedURLException if the host is not a valid URL.
+     */
     public static PiLexaProxyConnection attachTo(String host, int port) throws MalformedURLException  {
         PiLexaProxyConnection ret = new PiLexaProxyConnection(host, port);
         if (ret.canConnect()) {
@@ -68,16 +92,34 @@ public class PiLexaProxyConnection implements Serializable {
         }
     }
 
+    /**
+     * Returns the host of the PiLexa connection.
+     * @return the host of the PiLexa connection.
+     */
     public String getHost() {
         return myHost;
     }
 
+    /**
+     * Returns the port of the PiLexa connection.
+     * @return the port of the PiLexa connection.
+     */
     public int getPort() {
         return myPort;
     }
 
+    /**
+     * Returns if the connection is through HTTP.
+     * @return if the connection is through HTTP.
+     */
     public boolean isHttp() { return myUrl != null; }
 
+    /**
+     * Sets a configuration option in the PiLexa instance.
+     * @param key the key of the variable
+     * @param val the new value for the variable
+     * @throws Exception if an issue occurred while connecting or sending or receiving data
+     */
     public void setConfig(String key, String val) throws Exception {
         JSONObject j = null;
         try {
@@ -99,6 +141,12 @@ public class PiLexaProxyConnection implements Serializable {
         }
     }
 
+    /**
+     * Gets a configuration option in the PiLexa instance.
+     * @param key the key of the variable
+     * @return a configuration option in the PiLexa instance.
+     * @throws Exception if an issue occurred while connecting or sending or receiving data
+     */
     public String getConfigString(String key) throws Exception {
         if (myConfigCache.containsKey(key)) {
             return (String) myConfigCache.get(key);
@@ -122,6 +170,11 @@ public class PiLexaProxyConnection implements Serializable {
         }
     }
 
+    /**
+     * Gets the entire configuration collection from the PiLexa instance.
+     * @return the entire configuration collection from the PiLexa instance.
+     * @throws Exception if an issue occurred while connecting or sending or receiving data
+     */
     public JSONObject getEntireConfig() throws Exception {
         try {
             JSONObject args = new JSONObject();
@@ -139,6 +192,11 @@ public class PiLexaProxyConnection implements Serializable {
         }
     }
 
+    /**
+     * Polls waiting events from the PiLexa event queue.
+     * @param processor the processor to add the events that need processing to
+     * @throws Exception if an issue occurred while connecting or sending or receiving data
+     */
     public void processPollEvents(EventPollProcessor processor) throws Exception {
         try {
             JSONObject args = new JSONObject();
@@ -156,6 +214,10 @@ public class PiLexaProxyConnection implements Serializable {
         }
     }
 
+    /**
+     * Returns if the proxy connection can successfully communicate with the host PiLexa instance.
+     * @return if the proxy connection can successfully communicate with the host PiLexa instance.
+     */
     public boolean canConnect() {
         try {
             JSONObject args = new JSONObject();
@@ -169,6 +231,11 @@ public class PiLexaProxyConnection implements Serializable {
         }
     }
 
+    /**
+     * Sends a request to the host of the PiLexa instance.
+     * @param params the parameters to send (through the specified connection protocol)
+     * @return the received message from the PiLexa instance regarding the parameters sent.
+     */
     public JSONObject sendRequest(JSONObject params) {
         if (isHttp()) {
             return sendRequestHttp(params);
@@ -177,6 +244,11 @@ public class PiLexaProxyConnection implements Serializable {
         }
     }
 
+    /**
+     * Sends a request to the host of the PiLexa instance through HTTP.
+     * @param params the parameters to send
+     * @return the received message from the PiLexa instance regarding the parameters sent.
+     */
     private JSONObject sendRequestHttp(JSONObject params) {
         try {
             String content = params.toString();
@@ -225,6 +297,11 @@ public class PiLexaProxyConnection implements Serializable {
         }
     }
 
+    /**
+     * Sends a request to the host of the PiLexa instance using the PiLexa protocol.
+     * @param params the parameters to send
+     * @return the received message from the PiLexa instance regarding the parameters sent.
+     */
     private JSONObject sendRequestPilexaProtocol(JSONObject params) {
         try {
             Socket socket = new Socket(getHost(), getPort());
@@ -270,6 +347,12 @@ public class PiLexaProxyConnection implements Serializable {
         }
     }
 
+    /**
+     * Send a message to the PiLexa that should be interpreted.
+     * @param msg the message to tell the PiLexa
+     * @return what the PiLexa responded back with
+     * @throws Exception if an issue occurred while connecting or sending or receiving data
+     */
     public String sendMessage(String msg) throws Exception {
         try {
             JSONObject args = new JSONObject();
@@ -289,7 +372,14 @@ public class PiLexaProxyConnection implements Serializable {
         }
     }
 
+    /**
+     * Interface for Objects to get instances of PiLexa proxy connections.
+     */
     public interface PiLexaProxyConnectionHolder {
+        /**
+         * Returns the current PiLexa connection the implementing Object has.
+         * @return the current PiLexa connection the implementing Object has.
+         */
         PiLexaProxyConnection getPilexa();
     }
 }

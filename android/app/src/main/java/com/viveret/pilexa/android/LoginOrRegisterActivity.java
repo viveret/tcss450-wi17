@@ -37,9 +37,6 @@ public class LoginOrRegisterActivity extends Activity implements LoginOrCreateAc
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        getFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, new LoginOrCreateAcctFragment()).commit();
     }
 
     @Override

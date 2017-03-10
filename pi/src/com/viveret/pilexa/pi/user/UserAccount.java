@@ -38,11 +38,16 @@ public class UserAccount extends ConfigFile {
     public List<UserDevice> getDevices() {
         if (myDevices == null) {
             myDevices = new ArrayList<>();
-            JSONArray devices = (JSONArray) get("devices");
-            if (devices != null) {
-                for (int i = 0; i < devices.length(); i++) {
-                    myDevices.add(new UserDevice(devices.getJSONObject(i)));
-                }
+
+            JSONArray devices;
+            if (getRoot().has("devices")) {
+                devices = (JSONArray) get("devices");
+            } else {
+                devices = new JSONArray();
+                getRoot().put("devices", devices);
+            }
+            for (int i = 0; i < devices.length(); i++) {
+                myDevices.add(new UserDevice(devices.getJSONObject(i)));
             }
         }
         return myDevices;
@@ -70,21 +75,7 @@ public class UserAccount extends ConfigFile {
 
     public void updatePassword(String password) {
         // Need to hash password
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] hash = md.digest(password.getBytes("UTF-8"));
-            StringBuilder hashStr = new StringBuilder(hash.length * 2);
-            for (byte b : hash) {
-                hashStr.append(String.format("%02X", b));
-            }
-
-            set("password", hashStr.toString());
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return;
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
+        set("password", hashPassword(password));
     }
 
     public void setMac(String mac) {
@@ -92,15 +83,32 @@ public class UserAccount extends ConfigFile {
     }
 
     public void addDevice(UserDevice device) {
-        myDevices.add(device);
-        JSONArray ar;
-        if (getRoot().has("devices")) {
-            ar = getRoot().getJSONArray("devices");
-        } else {
-            ar = new JSONArray();
-            getRoot().put("devices", ar);
+        if (myDevices == null) {
+            getDevices();
         }
-        ar.put(device.toJson());
+        myDevices.add(device);
+        getRoot().getJSONArray("devices").put(device.toJson());
+    }
+
+    public boolean passwordMatches(String other) {
+        return getString("password").equals(hashPassword(other));
+    }
+
+    private static String hashPassword(String thePassword) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            byte[] hash = md.digest(thePassword.getBytes("UTF-8"));
+            StringBuilder hashStr = new StringBuilder(hash.length * 2);
+            for (byte b : hash) {
+                hashStr.append(String.format("%02X", b));
+            }
+
+            return hashStr.toString();
+        } catch (UnsupportedEncodingException | NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     public static class UserDevice {
