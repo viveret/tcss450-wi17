@@ -36,7 +36,8 @@
                 style="@android:style/Widget.DeviceDefault.Light.ProgressBar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="invisible"/>
+                android:visibility="visible"/>
+        <!-- change the visibility to invisible if tests dont work -->
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -3,20 +3,19 @@
 ## Building
 1. Run `gradle build` inside directory.
     This will also install dependencies.
-2. Run `gradle run` to check if can start properly.
-3. Before the next step, look over the [configuration file](res/pilexa-config.json) and the [publish script](publish.sh) and edit to fit your needs.
+3. Before the next step, look over the [configuration file](res/pilexa-config.json) and edit to fit your needs.
+4. For instance, if you want to add voice recognition, add
+`"com.viveret.pilexa.pi.inputmethods.GoogleSpeechPiLexaProxy"` to the input methods.
 
 ### Running locally
-Just run `gradle run`. Maybe add some of the input methods available in the [configuration file](res/pilexa-config.json) if you want voice input or a verbal response. 
+1. Just run `gradle run` on Windows and Linux machines (or `gradle runMac` on iOS).
+2. Wait for `Done starting inputs` to appear in the console.
+3. You can now use the app or do the following step.
+4. Maybe add some of the input methods available in the [configuration file](res/pilexa-config.json) if you want voice input or a verbal response.
 
-### Testing locally
+### Testing locally without app
 Run `echo '{"op":"interpret", "msg":"tell me the time"}' | netcat 127.0.0.1 <port, default is 11823>` to test if PiLexa
 gets network messages. 
-
-### Publishing to a remote location
-1. Run `./publish.sh --cssgate` to publish code to your cssgate.insttech public_html folder. This may take a while.
-2. `ssh` into your cssgate.insttech account and `cd` into `public_html/pi` to run `./run.sh`. This will start the pilexa daemon. Don't close out until you are done with testing.
-3. If there are any memory issues, play around with the [run script](run.sh)'s jvm arguments.
 
 ## Definitions
 ### Skills

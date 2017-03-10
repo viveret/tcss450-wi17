@@ -90,12 +90,11 @@ Pilexa to send text messages to other people.
 
 
 ## How to build / run
-1. Follow instructions [here](pi/README.md) to setup the pi / server.
+1. Follow instructions [here](pi/README.md) to setup and run the PiLexa instance.
 2. Open up the android project with Android Studio.
-3. Build & install onto device.
-4. Open app and go to Settings > General and edit Host Address to where the pi package was published to.
-5. Exit and restart app.
-6. Try sending messages "tell me a joke" or "tell me the time".
-
-## References
-https://www.google.com/search?q=bb8+programmable&safe=off&tbm=isch&tbs=rimg:CWSCwxFzcHXPIjhdPwYA068ohAJvS_1keYlRXUKOEJOGKFf-v81Hoa3jIb9JAC3n18-BDdXoBpsMBtY6uzo95Zt9_12SoSCV0_1BgDTryiEEcCw4g1ihFOZKhIJAm9L-R5iVFcRYqzpaMtCTfMqEglQo4Qk4YoV_1xF3OuQB6dN31SoSCa_1zUehreMhvEZOEk0m34gf9KhIJ0kALefXz4EMRL5xFObyVTbsqEgl1egGmwwG1jhGCv9mtAaKuXioSCa7Oj3lm33_1ZERs-1rfVLTsx&tbo=u&sa=X&ved=0ahUKEwjE3K7Z0dnRAhUIs1QKHcR_BSoQ9C8ICQ&biw=1368&bih=645&dpr=1#imgrc=67GzdcPmB46drM%3A
+3. Build, install onto device, and open the app.
+4. If you know the IP of the PiLexa instance, choose manual and don't edit the port. Otherwise choose easy.
+5. If you chose easy, wait for the PiLexa instance to appear. If it doesn't appear within 2 minutes, go back and 
+add it manually. You will need the IP adress of the device that is running the PiLexa instance.
+6. You can register a new account or login with u: viveret, p: test
+7. Try sending messages "tell me a joke" or "play Frank Ocean".
